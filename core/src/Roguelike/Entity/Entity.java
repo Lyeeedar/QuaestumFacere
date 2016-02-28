@@ -553,8 +553,6 @@ public abstract class Entity implements IGameObject
 	public int extraUIHP = 0;
 	public float extraUIHPAccumulator = 0;
 
-	public int essence = 0;
-
 	// ----------------------------------------------------------------------
 	public boolean canTakeDamage = true;
 

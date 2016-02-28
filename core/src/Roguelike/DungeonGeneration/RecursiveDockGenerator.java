@@ -13,6 +13,7 @@ import Roguelike.DungeonGeneration.DungeonFileParser.CorridorStyle.PathStyle;
 import Roguelike.DungeonGeneration.Room.RoomDoor;
 import Roguelike.Pathfinding.AStarPathfind;
 import Roguelike.Pathfinding.PathfindingTile;
+import Roguelike.Quests.Quest;
 import Roguelike.Save.SaveLevel;
 import Roguelike.Tiles.Point;
 import Roguelike.Util.EnumBitflag;
@@ -167,9 +168,10 @@ public class RecursiveDockGenerator extends AbstractDungeonGenerator
 
 	// ----------------------------------------------------------------------
 	@Override
-	public void setup( SaveLevel level, DungeonFileParser dfp )
+	public void setup( SaveLevel level, Quest quest, DungeonFileParser dfp )
 	{
 		this.saveLevel = level;
+		this.quest = quest;
 		this.dfp = dfp;
 
 		width = dfp.minWidth;

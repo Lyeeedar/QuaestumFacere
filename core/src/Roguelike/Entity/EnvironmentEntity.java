@@ -1,33 +1,19 @@
 package Roguelike.Entity;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Random;
 
 import Roguelike.AssetManager;
 import Roguelike.Entity.ActivationAction.*;
 import Roguelike.Global;
-import Roguelike.Global.Direction;
 import Roguelike.Global.Passability;
 import Roguelike.Global.Statistic;
-import Roguelike.Items.TreasureGenerator;
-import Roguelike.Levels.LevelManager;
-import Roguelike.RoguelikeGame;
-import Roguelike.RoguelikeGame.ScreenEnum;
-import Roguelike.DungeonGeneration.DungeonFileParser;
-import Roguelike.DungeonGeneration.DungeonFileParser.DFPRoom;
 import Roguelike.GameEvent.GameEventHandler;
-import Roguelike.Levels.Level;
-import Roguelike.Save.SaveLevel;
-import Roguelike.Screens.LoadingScreen;
 import Roguelike.Sprite.TilingSprite;
 import Roguelike.Sprite.Sprite;
 import Roguelike.StatusEffect.StatusEffect;
 import Roguelike.Tiles.GameTile;
-import Roguelike.Tiles.Point;
 import Roguelike.Util.EnumBitflag;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
@@ -124,61 +110,6 @@ public class EnvironmentEntity extends Entity
 		}
 
 		return handlers;
-	}
-
-	// ----------------------------------------------------------------------
-	private static EnvironmentEntity CreateTransition( final Element data, LevelManager.LevelData levelData )
-	{
-		String dest = data.get( "Destination" );
-
-		String text = "Go Onward";
-		if (!levelData.levelName.equals( dest ))
-		{
-			text = "Enter the " + Global.LevelManager.getLevel( levelData, dest ).levelTitle;
-		}
-
-		ActivationActionGroup group = new ActivationActionGroup(text);
-		group.actions.add( new ActivationActionChangeLevel( dest ) );
-
-		Sprite stairs = null;
-
-		Element spriteElement = data.getChildByName( "Sprite" );
-		if ( spriteElement != null )
-		{
-			stairs = AssetManager.loadSprite( spriteElement );
-		}
-		else
-		{
-			stairs = AssetManager.loadSprite( "Oryx/uf_split/uf_terrain/floor_set_grey_9" );
-		}
-
-		final EnvironmentEntity entity = new EnvironmentEntity();
-		entity.size = data.getInt( "Size", 1 );
-
-		entity.passableBy = Passability.parse( data.get( "Passable", "true" ) );
-
-		if ( data.get( "Opaque", null ) != null )
-		{
-			boolean opaque = data.getBoolean( "Opaque", false );
-
-			if ( opaque )
-			{
-				entity.passableBy.clearBit( Passability.LIGHT );
-			}
-			else
-			{
-				entity.passableBy.setBit( Passability.LIGHT );
-			}
-		}
-
-		entity.sprite = stairs;
-		entity.canTakeDamage = false;
-		entity.onActivateActions.add( group );
-		entity.tile = new GameTile[entity.size][entity.size];
-		stairs.size[0] = entity.size;
-		stairs.size[1] = entity.size;
-
-		return entity;
 	}
 
 	// ----------------------------------------------------------------------
@@ -328,7 +259,7 @@ public class EnvironmentEntity extends Entity
 	}
 
 	// ----------------------------------------------------------------------
-	public static EnvironmentEntity load( Element xml, LevelManager.LevelData levelData )
+	public static EnvironmentEntity load( Element xml )
 	{
 		EnvironmentEntity entity = null;
 
@@ -337,10 +268,6 @@ public class EnvironmentEntity extends Entity
 		if ( type.equalsIgnoreCase( "Door" ) )
 		{
 			entity = CreateDoor( xml );
-		}
-		else if ( type.equalsIgnoreCase( "Transition" ) )
-		{
-			entity = CreateTransition( xml, levelData );
 		}
 		else
 		{

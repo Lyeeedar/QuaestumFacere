@@ -1,10 +1,12 @@
 package Roguelike.Quests;
 
+import Roguelike.AssetManager;
 import Roguelike.DungeonGeneration.DungeonFileParser;
 import Roguelike.Global;
 import Roguelike.Quests.Input.AbstractQuestInput;
 import Roguelike.Quests.Output.AbstractQuestOutputCondition;
 import Roguelike.Quests.Output.QuestOutput;
+import Roguelike.Sprite.Sprite;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -17,12 +19,19 @@ import java.io.IOException;
  */
 public class Quest
 {
+	public String name;
+	public String description;
+	public Sprite icon;
+	public int reward;
+	public String faction;
+	public String level;
 	public Global.Rarity rarity;
+	public int difficulty;
+
 	public String path;
 	public Array<AbstractQuestInput> inputs = new Array<AbstractQuestInput>(  );
 	public Array<QuestOutput> outputs = new Array<QuestOutput>(  );
 	public Array<DungeonFileParser.DFPRoom> rooms = new Array<DungeonFileParser.DFPRoom>(  );
-	public ObjectSet<String> allowedLevels = new ObjectSet<String>(  );
 
 	public boolean evaluateInputs()
 	{
@@ -39,14 +48,34 @@ public class Quest
 
 	public void evaluateOutputs()
 	{
+		int reward = 0;
+		String message = null;
+
 		for (QuestOutput output : outputs)
 		{
-			output.evaluate();
+			boolean succeed = output.evaluate();
+
+			if (succeed)
+			{
+				if (output.reward > reward)
+				{
+					reward = output.reward;
+					message = output.message;
+				}
+			}
 		}
 	}
 
 	public void parse( XmlReader.Element xml )
 	{
+		name = xml.get("Name");
+		description = xml.get( "Description" );
+		icon = AssetManager.loadSprite( xml.getChildByName( "Icon" ) );
+		reward = xml.getInt( "Reward" );
+		faction = xml.get( "Faction" );
+		level = xml.get( "Level" );
+		difficulty = xml.getInt( "Difficulty" );
+
 		rarity = Global.Rarity.valueOf( xml.get("Rarity", "Common").toUpperCase() );
 
 		XmlReader.Element inputsElement = xml.getChildByName( "Inputs" );
@@ -81,8 +110,6 @@ public class Quest
 
 			rooms.add( room );
 		}
-
-		allowedLevels.addAll(xml.get( "AllowedLevels", "any" ).split( "," ));
 	}
 
 	public static Quest load(String name)

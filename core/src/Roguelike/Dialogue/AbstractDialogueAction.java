@@ -21,7 +21,7 @@ public abstract class AbstractDialogueAction
 	// ----------------------------------------------------------------------
 	public boolean processCondition( String condition, String[] reliesOn )
 	{
-		return manager.processCondition( condition, reliesOn );
+		return manager.processCondition( manager.data, condition, reliesOn );
 	}
 
 	// ----------------------------------------------------------------------

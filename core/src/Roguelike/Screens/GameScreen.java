@@ -17,7 +17,6 @@ import Roguelike.Global;
 import Roguelike.Global.Direction;
 import Roguelike.Items.Item;
 import Roguelike.Levels.Level;
-import Roguelike.Levels.TownCreator;
 import Roguelike.RoguelikeGame;
 import Roguelike.RoguelikeGame.ScreenEnum;
 import Roguelike.Sound.SoundInstance;
@@ -47,9 +46,7 @@ import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
@@ -204,29 +201,13 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 			}
 		}
 
-		if (Global.CharGenMode)
-		{
-			for (int i = 0; i < Global.CurrentLevel.player.slottedAbilities.size; i++)
-			{
-				AbilityTree tree = Global.CurrentLevel.player.slottedAbilities.get( i );
-
-				if (tree != null)
-				{
-					if (tree.current.current instanceof ActiveAbility)
-					{
-						((ActiveAbility)tree.current.current).hasValidTargets = true;
-					}
-				}
-			}
-		}
-
 		Global.BGM.update( delta );
 
 		if ( !examineMode && !lockContextMenu )
 		{
 			Level level = Global.CurrentLevel;
 
-			if (Global.CurrentDialogue == null && !Global.CharGenMode)
+			if (Global.CurrentDialogue == null)
 			{
 				if ( !level.isInTurn() && level.canStartTurn() )
 				{
@@ -456,41 +437,22 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 		{
 			Sprite sprite = Global.CurrentLevel.background;
 
-			temp.set( Global.CurrentLevel.Ambient ).mul( Global.DayNightFactor );
+			temp.set( Global.CurrentLevel.Ambient );
 			temp.a = 1;
 
 			batch.setColor( temp );
 
-			if ( Global.CurrentLevel.isVisionRestricted )
+			for ( Point pos : Global.CurrentLevel.visibilityData.getCurrentShadowCast() )
 			{
-				for ( Point pos : Global.CurrentLevel.visibilityData.getCurrentShadowCast() )
+				if ( pos.x < 0 || pos.y < 0 || pos.x >= Global.CurrentLevel.width || pos.y >= Global.CurrentLevel.height )
 				{
-					if ( pos.x < 0 || pos.y < 0 || pos.x >= Global.CurrentLevel.width || pos.y >= Global.CurrentLevel.height )
-					{
-						int x = pos.x;
-						int y = pos.y;
+					int x = pos.x;
+					int y = pos.y;
 
-						int cx = x * Global.TileSize + offsetx;
-						int cy = y * Global.TileSize + offsety;
+					int cx = x * Global.TileSize + offsetx;
+					int cy = y * Global.TileSize + offsety;
 
-						sprite.render( batch, cx, cy, Global.TileSize, Global.TileSize );
-					}
-				}
-			}
-			else
-			{
-				int px = Global.CurrentLevel.player.tile[ 0 ][ 0 ].x * Global.TileSize + offsetx;
-				int py = Global.CurrentLevel.player.tile[ 0 ][ 0 ].y * Global.TileSize + offsety;
-
-				int sx = px - ( (int) roundTo( px, Global.TileSize ) ) - Global.TileSize;
-				int sy = py - ( (int) roundTo( py, Global.TileSize ) ) - Global.TileSize;
-
-				for ( int cx = sx; cx < Global.Resolution[ 0 ]; cx += Global.TileSize )
-				{
-					for ( int cy = sy; cy < Global.Resolution[ 1 ]; cy += Global.TileSize )
-					{
-						sprite.render( batch, cx, cy, Global.TileSize, Global.TileSize );
-					}
+					sprite.render( batch, cx, cy, Global.TileSize, Global.TileSize );
 				}
 			}
 		}
@@ -748,41 +710,6 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 							}
 
 							queueSprite( border, Color.GOLD, drawX, drawY, Global.TileSize, Global.TileSize, offsetx, offsety, RenderLayer.ITEM, 1 );
-						}
-
-						if ( gtile.orbs.size > 0 && gtile.spriteEffects.size == 0 )
-						{
-							int index = 0;
-							for ( GameTile.OrbType type : GameTile.OrbType.values() )
-							{
-								if ( gtile.orbs.containsKey( type ) )
-								{
-									int val = gtile.orbs.get( type );
-
-									int cx = x * Global.TileSize + offsetx;
-									int cy = y * Global.TileSize + offsety;
-
-									float scale = 0.5f + 0.5f * ( MathUtils.clamp( val, 10.0f, 1000.0f ) / 1000.0f );
-
-									float size = Global.TileSize * scale;
-									cx = (int) (( cx + Global.TileSize / 2 ) - size / 2);
-									cy = (int) (( cy + Global.TileSize / 2 ) - size / 2);
-
-									Direction dir = Direction.values()[index++];
-
-									cx += dir.getX() * (size/2);
-									cy += dir.getY() * (size/2);
-
-									Sprite sprite = orbs.get( type );
-									if (sprite == null)
-									{
-										sprite = AssetManager.loadSprite( type.spriteName );
-										orbs.put( type, sprite );
-									}
-
-									queueSprite( sprite, gtile.light, cx, cy, (int) size, (int) size, offsetx, offsety, RenderLayer.ESSENCE, 0 );
-								}
-							}
 						}
 					}
 				}
@@ -1181,124 +1108,17 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 					}
 				} );
 
-				TextButton sellButton = new TextButton( "Sell", skin );
-				sellButton.addListener( new ClickListener()
-				{
-					public void clicked( InputEvent event, float x, float y )
-					{
-						clearContextMenu( true );
-
-						Global.CurrentLevel.player.inventory.upgradeStones += item.quality;
-						Global.CurrentLevel.player.pendingMessages.add(new Message( "Gained " + item.quality + " Upgrade Stones", Color.GOLD ));
-					}
-				} );
-
 				Table buttons = new Table();
 				buttons.defaults().pad( 10 );
 
 				buttons.add( equipButton );
 				buttons.add( dropButton );
-				buttons.add( sellButton );
 
 				table.add( buttons );
 
 				table.pack();
 
 				ButtonKeyboardHelper keyboardHelper = new ButtonKeyboardHelper(  );
-				keyboardHelper.add( equipButton, dropButton, sellButton );
-
-				queueContextMenu( table, keyboardHelper );
-			}
-			else if ( item.ability != null )
-			{
-				if ( item.ability.current.current instanceof ActiveAbility )
-				{
-					item.ability.current.current.setCaster( Global.CurrentLevel.player );
-				}
-
-				// Is ability
-				Table table = new Table();
-
-				table.add( item.ability.current.current.createTable( skin, Global.CurrentLevel.player ) ).expand().fill();
-				table.row();
-
-				table.add( new Seperator( skin, false ) ).expandX().fillX().pad( 10 );
-				table.row();
-
-				table.add( new Label( "Pick a slot to equip into", skin ) ).expandX().center();
-				table.row();
-
-				ButtonKeyboardHelper keyboardHelper = new ButtonKeyboardHelper(  );
-				Table buttonTable = new Table(  );
-
-				for (int i = 0; i < Global.NUM_ABILITY_SLOTS; i++)
-				{
-					Button button = new Button(skin);
-
-					final int index = i;
-					final AbilityTree current = index < Global.CurrentLevel.player.slottedAbilities.size ? Global.CurrentLevel.player.slottedAbilities.removeIndex( index ) : null;
-
-					button.addListener( new ClickListener(  )
-					{
-						public void clicked( InputEvent event, float x, float y )
-						{
-							for (int i = 0; i < index; i++)
-							{
-								if (i < Global.CurrentLevel.player.slottedAbilities.size-1)
-								{
-									Global.CurrentLevel.player.slottedAbilities.add( null );
-								}
-							}
-							Global.CurrentLevel.player.slottedAbilities.insert( index, item.ability );
-
-							if (current != null)
-							{
-								Item item = new Item();
-								item.ability = current;
-								Global.CurrentLevel.player.tile[ 0 ][ 0 ].items.add( item );
-							}
-
-							clearContextMenu( true );
-						}
-					} );
-
-					AbilityTree abilityTree = i < Global.CurrentLevel.player.slottedAbilities.size ? Global.CurrentLevel.player.slottedAbilities.get( i ) : null;
-					if (abilityTree != null)
-					{
-						SpriteWidget sprite = new SpriteWidget( abilityTree.current.current.getIcon(), 32, 32 );
-						button.add( sprite );
-					}
-					else
-					{
-						button.add( new Table() ).width( 32 ).height( 32 );
-					}
-
-					buttonTable.add( button ).expandX();
-
-					keyboardHelper.add( button, 0, 0 );
-				}
-
-				table.add( buttonTable ).expand().fill();
-				table.row();
-
-				table.add( new Label( "Or", skin ) ).expandX().center();
-				table.row();
-
-				TextButton dropButton = new TextButton( "Drop", skin );
-				dropButton.addListener( new ClickListener()
-				{
-					public void clicked( InputEvent event, float x, float y )
-					{
-						clearContextMenu( true );
-						Global.CurrentLevel.player.tile[ 0 ][ 0 ].items.add( item );
-					}
-				} );
-
-				table.add( dropButton );
-
-				table.pack();
-
-				keyboardHelper.add( dropButton );
 
 				queueContextMenu( table, keyboardHelper );
 			}
@@ -1469,10 +1289,6 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 
 				selectedAbilityTile = abilityTiles.get( selectedAbilityTileIndex );
 			}
-		}
-		else if ( Global.Controls.isKey( Controls.Keys.UPGRADE, keycode ))
-		{
-			displayUpgradeMenu();
 		}
 		else if ( Global.Controls.isKey( Controls.Keys.WEAPON_RANGE, keycode ))
 		{
@@ -1896,8 +1712,6 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 	// ----------------------------------------------------------------------
 	public void prepareAbility( ActiveAbility aa )
 	{
-		if (Global.CharGenMode) { return; }
-
 		preparedAbility = aa;
 
 		if (preparedAbility == null)
@@ -2152,31 +1966,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 	// ----------------------------------------------------------------------
 	public void displayGameOverMessage()
 	{
-		Global.lives++;
-		Global.LevelManager.evaluateQuestOutput();
-		for (ObjectMap.Entry<String, String> entry : Global.QuestManager.deferredFlags.entries())
-		{
-			Global.WorldFlags.put( entry.key, entry.value );
-		}
-		Global.QuestManager.deferredFlags.clear();
-
-		// Sell treasure
-		for (Item item : Global.CurrentLevel.player.inventory.m_items)
-		{
-			if ( item.category == Item.ItemCategory.TREASURE)
-			{
-				if (item.value > 0)
-				{
-					Global.RunFlags.put( "SoldTreasure", "" );
-
-					int current = Integer.parseInt( Global.WorldFlags.get( "startingfunds" ) );
-					current += item.value;
-					Global.WorldFlags.put( "startingfunds", ""+current );
-				}
-			}
-		}
-
-		Global.save();
+		Global.delete();
 
 		Table table = new Table();
 		table.defaults().pad( 5 );
@@ -2206,102 +1996,19 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 		table.add( new Seperator(skin) ).expandX().fillX();
 		table.row();
 
-		TextButton button = new TextButton( "Begin Life Anew", skin );
+		TextButton button = new TextButton( "Main Menu", skin );
 		button.addListener( new ClickListener()
 		{
 			public void clicked( InputEvent event, float x, float y )
 			{
 				clearContextMenu( true );
 
-				TownCreator townCreator = new TownCreator();
-				townCreator.create();
+				RoguelikeGame.Instance.switchScreen( ScreenEnum.MAINMENU );
 			}
 		} );
 		table.add( button ).expandX().center();
 
 		displayContextMenu( table, true, new ButtonKeyboardHelper( button ) );
-	}
-
-	// ----------------------------------------------------------------------
-	public void displayUpgradeMenu()
-	{
-		int stones = Global.CurrentLevel.player.inventory.upgradeStones;
-
-		ButtonKeyboardHelper keyboardHelper = new ButtonKeyboardHelper(  );
-
-		Table table = new Table();
-		table.defaults().pad( 5 );
-
-		table.add( new Label("You have " + stones + " upgrade stones.", skin) ).colspan( 2 );
-		table.row();
-		table.add( new Seperator( skin ) ).colspan( 2 ).expandX().fillX();
-		table.row();
-
-		for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
-		{
-			final Item equip = Global.CurrentLevel.player.inventory.getEquip( slot );
-
-			if ( equip != null )
-			{
-				final int required = 2 * equip.upgradeCount;
-
-				if (required <= stones)
-				{
-					TextButton button = new TextButton(equip.getName(), skin);
-					button.addListener( new ClickListener()
-					{
-						public void clicked( InputEvent event, float x, float y )
-						{
-							GameScreen.Instance.clearContextMenu( true );
-
-							Global.CurrentLevel.player.inventory.upgradeStones -= required;
-							equip.upgrade();
-
-							Global.CurrentLevel.player.isVariableMapDirty = true;
-							for ( int i = 0; i < Global.CurrentLevel.player.slottedAbilities.size; i++ )
-							{
-								AbilityTree tree = Global.CurrentLevel.player.slottedAbilities.get( i );
-								if (tree != null)
-								{
-									tree.current.current.setCaster( Global.CurrentLevel.player );
-								}
-							}
-						}
-					} );
-					table.add( button ).expandX().left();
-
-					keyboardHelper.add( button );
-				}
-				else
-				{
-					table.add( new Label(equip.getName(), skin) ).expandX().left();
-				}
-
-				table.add( new Label( "Requires " + required + " stones", skin ) ).expandX().left();
-
-				table.row();
-			}
-		}
-
-		table.add( new Seperator( skin ) ).colspan( 2 ).expandX().fillX();
-		table.row();
-
-		TextButton cancel = new TextButton( "Cancel", skin );
-		cancel.addListener( new ClickListener()
-		{
-			public void clicked( InputEvent event, float x, float y )
-			{
-				GameScreen.Instance.clearContextMenu( true );
-			}
-		} );
-
-		table.add( cancel ).colspan( 2 );
-		table.row();
-
-		keyboardHelper.add( cancel );
-		keyboardHelper.cancel = cancel;
-
-		queueContextMenu( table, keyboardHelper );
 	}
 
 	// ----------------------------------------------------------------------
@@ -2364,47 +2071,6 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 		keyboardHelper.add( quitButton );
 
 		displayContextMenu( table, true, keyboardHelper );
-	}
-
-	// ----------------------------------------------------------------------
-	public void displayLevelEntryMessage(String title, String message)
-	{
-		if ( !created )
-		{
-			create();
-			created = true;
-		}
-
-		Table table = new Table();
-		table.defaults().pad( 5 );
-
-		Label titleLabel = new Label( title, skin, "title" );
-		table.add( titleLabel ).expandX().left();
-		table.row();
-
-		table.add( new Seperator(skin) ).expandX().fillX();
-		table.row();
-
-		Label messageLabel = new Label(message, skin);
-		messageLabel.setWrap( true );
-
-		table.add( messageLabel ).expand().fill().left().top();
-		table.row();
-
-		table.add( new Seperator(skin) ).expandX().fillX();
-		table.row();
-
-		TextButton button = new TextButton( "Continue", skin );
-		button.addListener( new ClickListener()
-		{
-			public void clicked( InputEvent event, float x, float y )
-			{
-				clearContextMenu( true );
-			}
-		} );
-		table.add( button ).expandX().center();
-
-		displayContextMenu( table, true, new ButtonKeyboardHelper( button ) );
 	}
 
 	// ----------------------------------------------------------------------
@@ -2496,20 +2162,6 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 		stage.addActor( table );
 		table.setVisible( true );
 	}
-	// ----------------------------------------------------------------------
-	public void addFullScreenMessage( String message )
-	{
-		Label label = new Label( message, skin, "title" );
-		label.setColor( Color.WHITE );
-
-		int cx = 50;
-		int cy = Global.Resolution[ 1 ] - 50;
-
-		label.addAction( new SequenceAction( Actions.moveTo( cx + 25, cy, 2.5f ), Actions.removeActor() ) );
-		label.setPosition( cx, cy );
-		stage.addActor( label );
-		label.setVisible( true );
-	}
 
 	// endregion Public Methods
 	// ####################################################################//
@@ -2595,7 +2247,6 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 	private TextureRegion blank;
 	private TextureRegion white;
 	private Sprite bag;
-	private EnumMap<GameTile.OrbType, Sprite> orbs = new EnumMap<GameTile.OrbType, Sprite>( GameTile.OrbType.class );
 	private TextureRegion speechBubbleArrow;
 	private NinePatch speechBubbleBackground;
 	private float frametime;

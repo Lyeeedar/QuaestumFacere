@@ -320,28 +320,9 @@ public class DungeonFileParser
 			return s;
 		}
 
-		public int processCondition( int depth, Random ran, boolean isBoss )
+		public int processCondition( Random ran )
 		{
-			if ( Global.isNumber( spawnEquation ) )
-			{
-				return Integer.parseInt( spawnEquation );
-			}
-			else
-			{
-				ExpressionBuilder expB = EquationHelper.createEquationBuilder( spawnEquation, ran );
-				expB.variable( "depth" );
-				expB.variable( "boss" );
-
-				Expression exp = EquationHelper.tryBuild( expB );
-				if ( exp == null ) { return 0; }
-
-				exp.setVariable( "depth", depth );
-				exp.setVariable( "boss", isBoss ? 1 : 0 );
-
-				int val = (int) exp.evaluate();
-
-				return val;
-			}
+			return EquationHelper.evaluate( spawnEquation, ran );
 		}
 
 		public void fillRoom( Room room, Random ran, DungeonFileParser dfp )
@@ -402,12 +383,6 @@ public class DungeonFileParser
 	public Array<DFPRoom> rooms = new Array<DFPRoom>();
 
 	// ----------------------------------------------------------------------
-	public Array<Faction> majorFactions = new Array<Faction>();
-
-	// ----------------------------------------------------------------------
-	public Array<Faction> minorFactions = new Array<Faction>();
-
-	// ----------------------------------------------------------------------
 	public Color ambient;
 
 	// ----------------------------------------------------------------------
@@ -415,9 +390,6 @@ public class DungeonFileParser
 
 	// ----------------------------------------------------------------------
 	public char[][] roomDef;
-
-	// ----------------------------------------------------------------------
-	public boolean affectedByDayNight = false;
 
 	// ----------------------------------------------------------------------
 	public String BGM;
@@ -437,9 +409,6 @@ public class DungeonFileParser
 	// ----------------------------------------------------------------------
 	public int minWidth;
 	public int minHeight;
-
-	// ----------------------------------------------------------------------
-	public boolean visionRestricted = true;
 
 	// ----------------------------------------------------------------------
 	public HashMap<String, DFPRoom[]> entranceRooms = new HashMap<String, DFPRoom[]>(  );
@@ -487,13 +456,13 @@ public class DungeonFileParser
 	}
 
 	// ----------------------------------------------------------------------
-	public Array<DFPRoom> getRooms( int depth, Random ran, boolean isBoss, FactionParser majorFaction, Array<FactionParser> minorFactions )
+	public Array<DFPRoom> getRooms( Random ran, FactionParser majorFaction )
 	{
 		Array<DFPRoom> outRooms = new Array<DFPRoom>();
 
 		for ( DFPRoom room : rooms )
 		{
-			int count = room.processCondition( depth, ran, isBoss );
+			int count = room.processCondition( ran );
 			for ( int i = 0; i < count; i++ )
 			{
 				outRooms.add( room.copy() );
@@ -504,7 +473,7 @@ public class DungeonFileParser
 		{
 			for ( DFPRoom room : majorFaction.rooms )
 			{
-				int count = room.processCondition( depth, ran, isBoss );
+				int count = room.processCondition( ran );
 				for ( int i = 0; i < count; i++ )
 				{
 					DFPRoom cpy = room.copy();
@@ -514,75 +483,7 @@ public class DungeonFileParser
 			}
 		}
 
-		for (FactionParser faction : minorFactions)
-		{
-			if (ran.nextInt( 3 ) == 0)
-			{
-				Array<DFPRoom> validRooms = new Array<DFPRoom>(  );
-
-				for (DFPRoom room : faction.rooms)
-				{
-					int count = room.processCondition( depth, ran, false );
-					for ( int i = 0; i < count; i++ )
-					{
-						DFPRoom cpy = room.copy();
-						cpy.faction = faction.name;
-						validRooms.add( cpy );
-					}
-				}
-
-				if (validRooms.size > 0)
-				{
-					outRooms.add( validRooms.get( ran.nextInt( validRooms.size ) ) );
-				}
-			}
-		}
-
 		return outRooms;
-	}
-
-	// ----------------------------------------------------------------------
-	public String getMajorFaction( Random ran )
-	{
-		int totalWeight = 0;
-		for ( Faction fac : majorFactions )
-		{
-			totalWeight += fac.weight;
-		}
-
-		int ranVal = ran.nextInt( totalWeight );
-
-		int currentWeight = 0;
-		for ( Faction fac : majorFactions )
-		{
-			currentWeight += fac.weight;
-
-			if ( currentWeight >= ranVal ) { return fac.name; }
-		}
-
-		return null;
-	}
-
-	// ----------------------------------------------------------------------
-	public String getMinorFaction( Random ran )
-	{
-		int totalWeight = 0;
-		for ( Faction fac : minorFactions )
-		{
-			totalWeight += fac.weight;
-		}
-
-		int ranVal = ran.nextInt( totalWeight );
-
-		int currentWeight = 0;
-		for ( Faction fac : minorFactions )
-		{
-			currentWeight += fac.weight;
-
-			if ( currentWeight >= ranVal ) { return fac.name; }
-		}
-
-		return null;
 	}
 
 	// ----------------------------------------------------------------------
@@ -658,32 +559,6 @@ public class DungeonFileParser
 			preprocessor.generator = AbstractRoomGenerator.load( preprocessorElement.getChild( 0 ) );
 		}
 
-		Element factionsElement = xmlElement.getChildByName( "Factions" );
-		if ( factionsElement != null )
-		{
-			Element majorFacElement = factionsElement.getChildByName( "Major" );
-			for ( int i = 0; i < majorFacElement.getChildCount(); i++ )
-			{
-				Element facElement = majorFacElement.getChild( i );
-
-				String facname = facElement.getName();
-				int weight = Integer.parseInt( facElement.getText() );
-
-				majorFactions.add( new Faction( facname, weight ) );
-			}
-
-			Element minorFacElement = factionsElement.getChildByName( "Minor" );
-			for ( int i = 0; i < minorFacElement.getChildCount(); i++ )
-			{
-				Element facElement = minorFacElement.getChild( i );
-
-				String facname = facElement.getName();
-				int weight = Integer.parseInt( facElement.getText() );
-
-				minorFactions.add( new Faction( facname, weight ) );
-			}
-		}
-
 		Element symbolsElement = xmlElement.getChildByName( "Symbols" );
 		for ( int i = 0; i < symbolsElement.getChildCount(); i++ )
 		{
@@ -717,7 +592,6 @@ public class DungeonFileParser
 
 		Element ae = xmlElement.getChildByName( "Ambient" );
 		ambient = new Color( ae.getFloat( "Red", 1 ), ae.getFloat( "Blue", 1 ), ae.getFloat( "Green", 1 ), ae.getFloat( "Alpha", 1 ) );
-		affectedByDayNight = ae.getBoolean( "AffectedByDayNight", false );
 
 		Element soundElement = xmlElement.getChildByName( "Sound" );
 		BGM = soundElement.get( "BGM" );
@@ -730,8 +604,6 @@ public class DungeonFileParser
 				ambientSounds.add( RepeatingSoundEffect.parse( ambientSound ) );
 			}
 		}
-
-		visionRestricted = xmlElement.getBoolean( "VisionRestricted", true );
 
 		Element rowsElement = xmlElement.getChildByName( "Rows" );
 		if ( rowsElement != null )

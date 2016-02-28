@@ -14,11 +14,9 @@ import com.badlogic.gdx.utils.Array;
 public final class SaveLevel extends SaveableObject<Level>
 {
 	public String fileName;
-	public int depth;
 	public long seed;
 	public String UID;
 	public boolean created = false;
-	public boolean isBossLevel = false;
 
 	public Array<DFPRoom> requiredRooms = new Array<DFPRoom>();
 
@@ -26,7 +24,6 @@ public final class SaveLevel extends SaveableObject<Level>
 	public Array<SaveLevelItem> items = new Array<SaveLevelItem>();
 	public Array<SaveEnvironmentEntity> environmentEntities = new Array<SaveEnvironmentEntity>();
 	public Array<SaveField> fields = new Array<SaveField>();
-	public Array<SaveOrb> orbs = new Array<SaveOrb>();
 
 	public boolean[][] seenState;
 
@@ -43,7 +40,6 @@ public final class SaveLevel extends SaveableObject<Level>
 	public SaveLevel( String fileName, int depth, Array<DFPRoom> requiredRooms, long seed )
 	{
 		this.fileName = fileName;
-		this.depth = depth;
 		if ( requiredRooms != null )
 		{
 			this.requiredRooms = requiredRooms;
@@ -55,7 +51,7 @@ public final class SaveLevel extends SaveableObject<Level>
 
 	public void createUID()
 	{
-		UID = "Level " + fileName + ": Depth " + depth + ": ID " + this.hashCode();
+		UID = "Level " + fileName + ": ID " + this.hashCode();
 	}
 
 	@Override
@@ -63,7 +59,6 @@ public final class SaveLevel extends SaveableObject<Level>
 	{
 		created = true;
 		fileName = obj.fileName;
-		depth = obj.depth;
 		seed = obj.seed;
 		UID = obj.UID;
 
@@ -88,7 +83,6 @@ public final class SaveLevel extends SaveableObject<Level>
 			}
 		}
 
-		orbs.clear();
 		items.clear();
 		for ( int x = 0; x < obj.width; x++ )
 		{
@@ -98,11 +92,6 @@ public final class SaveLevel extends SaveableObject<Level>
 				for ( Item item : tile.items )
 				{
 					items.add( new SaveLevelItem( tile, item ) );
-				}
-
-				if ( tile.orbs.size > 0 )
-				{
-					orbs.add( new SaveOrb( tile ) );
 				}
 			}
 		}
@@ -190,12 +179,6 @@ public final class SaveLevel extends SaveableObject<Level>
 			tile.addEnvironmentEntity( entity.create() );
 		}
 
-		for ( SaveOrb orb : orbs )
-		{
-			GameTile tile = level.getGameTile( orb.pos );
-			tile.orbs = orb.orbs.copy();
-		}
-
 		if (seenState != null)
 		{
 			for ( int x = 0; x < seenState.length; x++ )
@@ -214,24 +197,6 @@ public final class SaveLevel extends SaveableObject<Level>
 					level.updateUnseenBitflag( x, y );
 				}
 			}
-		}
-	}
-
-	public static final class SaveOrb
-	{
-		public FastEnumMap<GameTile.OrbType, Integer> orbs;
-		public Point pos = new Point();
-
-		public SaveOrb()
-		{
-
-		}
-
-		public SaveOrb( GameTile tile )
-		{
-			orbs = tile.orbs.copy();
-			pos.x = tile.x;
-			pos.y = tile.y;
 		}
 	}
 

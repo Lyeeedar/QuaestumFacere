@@ -1,12 +1,10 @@
 package Roguelike.DungeonGeneration;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import Roguelike.Global.Direction;
 import Roguelike.Global.Passability;
 import Roguelike.Entity.EnvironmentEntity;
-import Roguelike.Levels.LevelManager;
 import Roguelike.Pathfinding.PathfindingTile;
 import Roguelike.Tiles.TileData;
 import Roguelike.Util.EnumBitflag;
@@ -63,11 +61,11 @@ public final class Symbol implements PathfindingTile
 		return environmentData != null;
 	}
 
-	public EnvironmentEntity getEnvironmentEntity( LevelManager.LevelData levelData )
+	public EnvironmentEntity getEnvironmentEntity( )
 	{
 		if ( environmentData != null )
 		{
-			EnvironmentEntity ee = EnvironmentEntity.load( environmentData, levelData );
+			EnvironmentEntity ee = EnvironmentEntity.load( environmentData );
 			return ee;
 		}
 

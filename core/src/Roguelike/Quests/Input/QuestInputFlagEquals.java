@@ -11,15 +11,9 @@ public class QuestInputFlagEquals extends AbstractQuestInput
 	@Override
 	public boolean evaluate()
 	{
-		if ( Global.WorldFlags.containsKey( key ) )
+		if ( Global.QuestManager.flags.containsKey( key ) )
 		{
-			String val = Global.WorldFlags.get( key );
-
-			return !not && val.equalsIgnoreCase( value );
-		}
-		else if ( Global.RunFlags.containsKey( key ) )
-		{
-			String val = Global.RunFlags.get( key );
+			String val = Global.QuestManager.flags.get( key );
 
 			return !not && val.equalsIgnoreCase( value );
 		}

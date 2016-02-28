@@ -30,7 +30,6 @@ import Roguelike.Items.Inventory;
 import Roguelike.Items.Item;
 import Roguelike.Items.Item.EquipmentSlot;
 import Roguelike.Items.Item.ItemCategory;
-import Roguelike.Levels.LevelManager;
 import Roguelike.Lights.Light;
 import Roguelike.Pathfinding.ShadowCastCache;
 import Roguelike.Quests.Input.QuestInputFlagEquals;
@@ -40,8 +39,8 @@ import Roguelike.Quests.Output.QuestOutput;
 import Roguelike.Quests.Output.QuestOutputConditionActionEnabled;
 import Roguelike.Quests.Output.QuestOutputConditionEntityAlive;
 import Roguelike.Quests.Quest;
+import Roguelike.Quests.QuestManager;
 import Roguelike.Save.SaveLevel.SaveLevelItem;
-import Roguelike.Save.SaveLevel.SaveOrb;
 import Roguelike.Sound.SoundInstance;
 import Roguelike.Sprite.Sprite;
 import Roguelike.Sprite.Sprite.AnimationMode;
@@ -52,7 +51,6 @@ import Roguelike.Sprite.SpriteAnimation.MoveAnimation;
 import Roguelike.Sprite.SpriteAnimation.StretchAnimation;
 import Roguelike.Sprite.TilingSprite;
 import Roguelike.StatusEffect.StatusEffect;
-import Roguelike.Tiles.GameTile;
 import Roguelike.Tiles.Point;
 import Roguelike.Util.EnumBitflag;
 import Roguelike.Util.FastEnumMap;
@@ -76,14 +74,7 @@ public final class SaveFile
 {
 	private static Kryo kryo;
 
-	public LevelManager levelManager;
-	public ObjectSet<String> usedQuests;
-	public ObjectMap<String, String> worldFlags;
-	public ObjectMap<String, String> worldFlagsCopy;
-	public ObjectMap<String, String> runFlags;
-	public ObjectMap<String, String> deferredFlags;
-	public boolean isDead;
-	public int lives;
+	public QuestManager questManager;
 
 	public void save()
 	{
@@ -101,14 +92,7 @@ public final class SaveFile
 			e.printStackTrace();
 		}
 
-		kryo.writeObject( output, levelManager );
-		kryo.writeObject( output, usedQuests );
-		kryo.writeObject( output, worldFlags );
-		kryo.writeObject( output, worldFlagsCopy );
-		kryo.writeObject( output, runFlags );
-		kryo.writeObject( output, deferredFlags );
-		output.writeBoolean( isDead );
-		output.writeInt( lives );
+		kryo.writeObject( output, questManager );
 
 		output.close();
 
@@ -135,14 +119,7 @@ public final class SaveFile
 			e.printStackTrace();
 		}
 
-		levelManager = kryo.readObject( input, LevelManager.class );
-		usedQuests = kryo.readObject( input, ObjectSet.class );
-		worldFlags = kryo.readObject( input, ObjectMap.class );
-		worldFlagsCopy = kryo.readObject( input, ObjectMap.class );
-		runFlags = kryo.readObject( input, ObjectMap.class );
-		deferredFlags = kryo.readObject( input, ObjectMap.class );
-		isDead = input.readBoolean();
-		lives = input.readInt();
+		questManager = kryo.readObject( input, QuestManager.class );
 
 		input.close();
 	}
@@ -467,7 +444,6 @@ public final class SaveFile
 		kryo.register( SaveLevel.class );
 		kryo.register( SaveAbilityTree.class );
 		kryo.register( SaveAbilityTree.SaveAbilityStage.class );
-		kryo.register( SaveOrb.class );
 		kryo.register( SaveLevelItem.class );
 
 		kryo.register( Point.class );
@@ -490,9 +466,7 @@ public final class SaveFile
 		kryo.register( DFPRoom.Placement.class );
 		kryo.register( AnimationState.class );
 		kryo.register( AnimationMode.class );
-		kryo.register( LevelManager.class );
-		kryo.register( LevelManager.LevelData.class );
-		kryo.register( LevelManager.BranchData.class );
+		kryo.register( QuestManager.class );
 		kryo.register( TilingSprite.class );
 
 		kryo.register( HashMap.class );
@@ -520,7 +494,6 @@ public final class SaveFile
 		kryo.register( Statistic.class );
 		kryo.register( Direction.class );
 		kryo.register( Global.Rarity.class );
-		kryo.register( GameTile.OrbType.class );
 		kryo.register( Item.WeaponDefinition.HitType.class );
 		kryo.register( ActiveAbility.CooldownType.class );
 
@@ -555,7 +528,6 @@ public final class SaveFile
 		kryo.register( ActivationActionGroup.class );
 		kryo.register( ActivationActionAbility.class );
 		kryo.register( ActivationActionAddItem.class );
-		kryo.register( ActivationActionChangeLevel.class );
 		kryo.register( ActivationActionSetEnabled.class );
 		kryo.register( ActivationActionSetPassable.class );
 		kryo.register( ActivationActionSetSprite.class );

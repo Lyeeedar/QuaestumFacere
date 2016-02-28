@@ -20,7 +20,6 @@ public class Controls
 		CANCEL,
 		ACCEPT,
 		WAIT,
-		UPGRADE,
 		TOGGLE_AUTOATTACK,
 		WEAPON_RANGE,
 		ABILITY_1,
@@ -48,7 +47,6 @@ public class Controls
 		keyMap.put( Keys.CANCEL, Input.Keys.ESCAPE );
 		keyMap.put( Keys.ACCEPT, Input.Keys.ENTER );
 		keyMap.put( Keys.WAIT, Input.Keys.SPACE );
-		keyMap.put( Keys.UPGRADE, Input.Keys.U );
 		keyMap.put( Keys.TOGGLE_AUTOATTACK, Input.Keys.F );
 		keyMap.put( Keys.WEAPON_RANGE, Input.Keys.R );
 		keyMap.put( Keys.ABILITY_1, Input.Keys.NUM_1 );
@@ -67,7 +65,6 @@ public class Controls
 		keyMap.put( Keys.CANCEL, Input.Keys.ESCAPE );
 		keyMap.put( Keys.ACCEPT, Input.Keys.ENTER );
 		keyMap.put( Keys.WAIT, Input.Keys.SPACE );
-		keyMap.put( Keys.UPGRADE, Input.Keys.U );
 		keyMap.put( Keys.TOGGLE_AUTOATTACK, Input.Keys.F );
 		keyMap.put( Keys.WEAPON_RANGE, Input.Keys.R );
 		keyMap.put( Keys.ABILITY_1, Input.Keys.NUM_1 );
@@ -86,7 +83,6 @@ public class Controls
 		keyMap.put( Keys.CANCEL, Input.Keys.PERIOD );
 		keyMap.put( Keys.ACCEPT, Input.Keys.ENTER );
 		keyMap.put( Keys.WAIT, Input.Keys.NUMPAD_5 );
-		keyMap.put( Keys.UPGRADE, Input.Keys.PLUS );
 		keyMap.put( Keys.TOGGLE_AUTOATTACK, Input.Keys.MINUS );
 		keyMap.put( Keys.WEAPON_RANGE, Input.Keys.STAR );
 		keyMap.put( Keys.ABILITY_1, Input.Keys.NUM_1 );

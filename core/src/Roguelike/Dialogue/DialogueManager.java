@@ -40,7 +40,7 @@ public class DialogueManager
 	public ExclamationManager exclamationManager;
 
 	// ----------------------------------------------------------------------
-	private boolean checkEntityAlive( String name )
+	private static boolean checkEntityAlive( String name )
 	{
 		Array<GameEntity> entities = new Array<GameEntity>(  );
 		Global.CurrentLevel.getAllEntities( entities );
@@ -57,7 +57,7 @@ public class DialogueManager
 	}
 
 	// ----------------------------------------------------------------------
-	public boolean processCondition( String condition, String[] reliesOn )
+	public static boolean processCondition( HashMap<String, Integer> data, String condition, String[] reliesOn )
 	{
 		if (condition == null)
 		{
@@ -75,13 +75,9 @@ public class DialogueManager
 			}
 
 			String flag = "";
-			if ( Global.WorldFlags.containsKey( name ) )
+			if ( Global.QuestManager.flags.containsKey( name ) )
 			{
-				flag = Global.WorldFlags.get( name );
-			}
-			else if ( Global.RunFlags.containsKey( name ) )
-			{
-				flag = Global.RunFlags.get( name );
+				flag = Global.QuestManager.flags.get( name );
 			}
 			else if ( Global.CurrentLevel.player.inventory.getItemCount(name) > 0 )
 			{
@@ -136,7 +132,7 @@ public class DialogueManager
 		{
 			for ( int i = 0; i < dialogueChunks.size; i++ )
 			{
-				if ( processCondition( dialogueChunks.get( i ).condition, dialogueChunks.get( i ).reliesOn ) )
+				if ( processCondition( data, dialogueChunks.get( i ).condition, dialogueChunks.get( i ).reliesOn ) )
 				{
 					currentDialogue = i;
 					Global.CurrentDialogue = entity;

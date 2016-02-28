@@ -5,7 +5,6 @@ import Roguelike.Entity.GameEntity;
 import Roguelike.GameEvent.Damage.DamageObject;
 import Roguelike.GameEvent.GameEventHandler;
 import Roguelike.Levels.Level;
-import Roguelike.Levels.LevelManager;
 import Roguelike.Lights.Light;
 import Roguelike.Quests.QuestManager;
 import Roguelike.RoguelikeGame.ScreenEnum;
@@ -26,6 +25,8 @@ import Roguelike.UI.Tooltip.TooltipStyle;
 import Roguelike.Util.Controls;
 import Roguelike.Util.EnumBitflag;
 import Roguelike.Util.FastEnumMap;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -55,9 +56,6 @@ public class Global
 {
 	// ----------------------------------------------------------------------
 	public static final boolean CanMoveDiagonal = false;
-
-	// ----------------------------------------------------------------------
-	public static final int NUM_ABILITY_SLOTS = 5;
 
 	// ----------------------------------------------------------------------
 	public static boolean MovementTypePathfind = false;
@@ -102,29 +100,13 @@ public class Global
 	public static int TileSize = 32;
 
 	// ----------------------------------------------------------------------
-	public static LevelManager LevelManager;
 	public static QuestManager QuestManager;
 
 	// ----------------------------------------------------------------------
 	public static Level CurrentLevel;
 
 	// ----------------------------------------------------------------------
-	public static ObjectMap<String, String> WorldFlags = new ObjectMap<String, String>();
-	public static ObjectMap<String, String> RunFlags = new ObjectMap<String, String>();
-	public static ObjectMap<String, String> WorldFlagsCopy = new ObjectMap<String, String>(  );
-
-	// ----------------------------------------------------------------------
-	public static boolean CharGenMode = false;
-
-	// ----------------------------------------------------------------------
 	public static Mixer BGM;
-
-	// ----------------------------------------------------------------------
-	public static float AUT = 0;
-	public static int lives;
-
-	// ----------------------------------------------------------------------
-	public static float DayNightFactor = 1;
 
 	// ----------------------------------------------------------------------
 	public static Pool<Point> PointPool = Pools.get( Point.class, Integer.MAX_VALUE );
@@ -165,17 +147,16 @@ public class Global
 			return null;
 		}
 
-		Global.QuestManager = new QuestManager();
-		Global.QuestManager.usedQuests = save.usedQuests;
-		Global.QuestManager.deferredFlags = save.deferredFlags;
-		Global.WorldFlags = save.worldFlags;
-		Global.WorldFlagsCopy = save.worldFlagsCopy;
-		Global.RunFlags = save.runFlags;
-		Global.lives = save.lives;
-
-		LevelManager = save.levelManager;
+		Global.QuestManager = save.questManager;
 
 		return save;
+	}
+
+	// ----------------------------------------------------------------------
+	public static void delete()
+	{
+		FileHandle actualFile = Gdx.files.local( "save.dat" );
+		actualFile.delete();
 	}
 
 	// ----------------------------------------------------------------------
@@ -183,24 +164,8 @@ public class Global
 	{
 		SaveFile save = new SaveFile();
 
-		save.levelManager = LevelManager;
-		save.usedQuests = QuestManager.usedQuests;
-		save.worldFlags = WorldFlags;
-		save.worldFlagsCopy = WorldFlagsCopy;
-		save.runFlags = RunFlags;
-		save.deferredFlags = QuestManager.deferredFlags;
-
-		save.lives = lives;
-
-		if ( CurrentLevel != null && LevelManager.current != null && LevelManager.current.currentLevel != null )
-		{
-			LevelManager.current.currentLevel.store( Global.CurrentLevel );
-			save.isDead = CurrentLevel.player.HP <= 0;
-		}
-		else
-		{
-			save.isDead = true;
-		}
+		save.questManager = QuestManager;
+		save.questManager.currentLevel.store( Global.CurrentLevel );
 
 		save.save();
 	}
@@ -208,79 +173,13 @@ public class Global
 	// ----------------------------------------------------------------------
 	public static void newWorld()
 	{
-		lives = 0;
-
-		LevelManager = new LevelManager();
 		QuestManager = new QuestManager();
-		AUT = 0;
-		WorldFlags.clear();
-		WorldFlagsCopy.clear();
-		RunFlags.clear();
-
-		Global.WorldFlags.put( "tavern", "1" );
-		Global.WorldFlags.put( "startingfunds", "50" );
-
-		GameScreen.Instance.queueMessage( "Welcome to A Skin of Others",
-										  "For as long as anyone in your village can remember creatures have been attacking out from beneath Melet mountain." +
-										  "At night they spring from the darkness and snatch the unwary and unvigilant, dragging them away to who knows where. " +
-										  "The imperial capital has been unwilling to send aid, despite numerous requests, so the task of saving the village falls to you. " +
-										  "Strike out into the forest, save those within, and fight your way down into the depths of the mountain to seal the portal the creatures" +
-										  " are coming from.");
 
 		GameScreen.Instance.queueMessage( "Controls",
 										  "Click in a direction to move there (or use the arrow keys)." +
 										  " Click on your character to pass a turn (or press space). " +
 										  "Move into an enemy to attack them, or into an NPC to talk to them." +
 										  " Click an ability on the left to ready it, then on a blue target to use it.");
-	}
-
-	// ----------------------------------------------------------------------
-	public static void testWorld()
-	{
-		LevelManager = new LevelManager();
-		LevelManager.current = LevelManager.root.getLabelledLevel( "EnchantedForest" );
-
-		QuestManager = new QuestManager();
-		AUT = 0;
-		WorldFlags.clear();
-		WorldFlagsCopy.clear();
-		RunFlags.clear();
-
-		Global.WorldFlags.put( "tavern", "1" );
-		Global.WorldFlags.put( "startingfunds", "50" );
-
-		SaveLevel firstLevel = new SaveLevel( "EnchantedForest", 1, LevelManager.current.getExtraRooms( "Forest", 1, new Random() ), MathUtils.random( Long.MAX_VALUE - 1 ) );
-		LevelManager.current.currentLevel = firstLevel;
-
-		Array<ClassList.ClassDesc> classes = ClassList.parse();
-		GameEntity player = classes.get( 0 ).male;
-
-		for (Statistic stat : Statistic.BaseValues)
-		{
-			player.statistics.put( stat, 100 );
-		}
-		player.isVariableMapDirty = true;
-
-		LoadingScreen.Instance.set( firstLevel, player, "PlayerSpawn", null );
-		RoguelikeGame.Instance.switchScreen( ScreenEnum.LOADING );
-	}
-
-	// ----------------------------------------------------------------------
-	public static void newGame( GameEntity player )
-	{
-		LevelManager = new LevelManager();
-		QuestManager = new QuestManager();
-		AUT = 0;
-		DayNightFactor = (float) ( 0.1f + ( ( ( Math.sin( AUT / 100.0f ) + 1.0f ) / 2.0f ) * 0.9f ) );
-		RunFlags.clear();
-
-		SaveLevel firstLevel = new SaveLevel( LevelManager.current.levelName, 1, LevelManager.current.getExtraRooms( "NewGame", 1, new Random() ), MathUtils.random( Long.MAX_VALUE - 1 ) );
-		LevelManager.current.currentLevel = firstLevel;
-
-		GameScreen.Instance.displayLevelEntryMessage( LevelManager.current.levelTitle, LevelManager.current.levelDescription );
-
-		LoadingScreen.Instance.set( firstLevel, player, "PlayerSpawn", null );
-		RoguelikeGame.Instance.switchScreen( ScreenEnum.LOADING );
 	}
 
 	// ----------------------------------------------------------------------
@@ -437,8 +336,7 @@ public class Global
 	// ----------------------------------------------------------------------
 	public static int getQuality()
 	{
-		int quality = Math.max( 1, Global.LevelManager.totalDepth / 5 + Math.max( 0, (int)(MathUtils.random.nextFloat() * MathUtils.random.nextFloat() * MathUtils.random.nextFloat() * 2.0f) ) );
-		return quality;
+		return QuestManager.difficulty;
 	}
 
 	// ----------------------------------------------------------------------
@@ -479,13 +377,9 @@ public class Global
 			{
 				output += split[i];
 			}
-			else if ( WorldFlags.containsKey( split[i].toLowerCase() ) )
+			else if ( QuestManager.flags.containsKey( split[i].toLowerCase() ) )
 			{
-				output += WorldFlags.get( split[i].toLowerCase() );
-			}
-			else if ( RunFlags.containsKey( split[i].toLowerCase() ) )
-			{
-				output += RunFlags.get( split[i].toLowerCase() );
+				output += QuestManager.flags.get( split[i].toLowerCase() );
 			}
 
 			skip = !skip;

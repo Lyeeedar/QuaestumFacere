@@ -1,6 +1,7 @@
 package Roguelike.DungeonGeneration;
 
 import Roguelike.Global;
+import Roguelike.Quests.Quest;
 import Roguelike.Save.SaveLevel;
 import Roguelike.Tiles.Point;
 import Roguelike.Util.EnumBitflag;
@@ -22,9 +23,10 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 
 	// ----------------------------------------------------------------------
 	@Override
-	public void setup( SaveLevel level, DungeonFileParser dfp )
+	public void setup( SaveLevel level, Quest quest, DungeonFileParser dfp )
 	{
 		this.saveLevel = level;
+		this.quest = quest;
 		this.dfp = dfp;
 
 		width = dfp.minWidth;

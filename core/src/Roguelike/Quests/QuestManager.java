@@ -2,6 +2,7 @@ package Roguelike.Quests;
 
 import Roguelike.Global;
 import Roguelike.Quests.Input.AbstractQuestInput;
+import Roguelike.Save.SaveLevel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.XmlReader;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -17,9 +19,16 @@ import java.util.Random;
 public class QuestManager
 {
 	public Array<Quest> availableQuests = new Array<Quest>(  );
-	public ObjectSet<String> usedQuests = new ObjectSet<String>(  );
 
-	public ObjectMap<String, String> deferredFlags = new ObjectMap<String, String>(  );
+	public ObjectMap<String, String> flags = new ObjectMap<String, String>();
+
+	public int difficulty;
+
+	public SaveLevel currentLevel;
+
+	public int seed;
+
+	public Quest currentQuest;
 
 	public QuestManager()
 	{
@@ -43,68 +52,50 @@ public class QuestManager
 		}
 	}
 
-	public Quest getQuest( String level, Random ran )
+	public Array<Quest> getQuests( )
 	{
+		Random ran = new Random( seed );
+
 		Array<Quest> validQuests = new Array<Quest>(  );
 		for (Quest quest : availableQuests)
 		{
-			if (!usedQuests.contains(quest.path) &&
-				(quest.allowedLevels.contains( "all" ) || quest.allowedLevels.contains( level )) &&
-				quest.evaluateInputs())
+			if (Math.abs( quest.difficulty - difficulty ) <= 1 && quest.evaluateInputs())
 			{
-				validQuests.add( quest );
+				int rarity = (Global.Rarity.values().length - quest.rarity.ordinal()) + 1;
+				for (int i = 0; i < rarity; i++)
+				{
+					validQuests.add( quest );
+				}
 			}
 		}
 
 		if (validQuests.size == 0)
 		{
-			return null;
+			throw new RuntimeException( "No Valid quests! For difficulty "  +difficulty );
 		}
 
-		Array<Quest> worldQuests = new Array<Quest>(  );
-		Array<Quest> runQuests = new Array<Quest>(  );
-		for (Quest quest : validQuests)
-		{
-			boolean run = false;
+		Array<Quest> chosen = new Array<Quest>(  );
 
-			for ( AbstractQuestInput input : quest.inputs )
+		int count = 3 + ran.nextInt( 2 );
+		for (int i = 0; i < count; i++)
+		{
+			Quest picked = validQuests.get( ran.nextInt( validQuests.size ) );
+			chosen.add( picked );
+
+			Iterator<Quest> itr = validQuests.iterator();
+			while (itr.hasNext())
 			{
-				if ( Global.RunFlags.containsKey( input.key ) )
+				if (itr.next() == picked)
 				{
-					run = true;
-					break;
+					itr.remove();
 				}
 			}
 
-			Array<Quest> chosenList = null;
-			if (run)
+			if (validQuests.size == 0)
 			{
-				chosenList = runQuests;
-			}
-			else
-			{
-				chosenList = worldQuests;
-			}
-
-			// do rarity
-			int rarity = (Global.Rarity.values().length - quest.rarity.ordinal()) + 1;
-			for (int i = 0; i < rarity; i++)
-			{
-				chosenList.add( quest );
+				break;
 			}
 		}
-
-		Quest chosen = null;
-		if (runQuests.size > 0)
-		{
-			chosen = runQuests.get( ran.nextInt( runQuests.size ) );
-		}
-		else
-		{
-			chosen = worldQuests.get( ran.nextInt( worldQuests.size ) );
-		}
-
-		usedQuests.add( chosen.path );
 
 		return chosen;
 	}

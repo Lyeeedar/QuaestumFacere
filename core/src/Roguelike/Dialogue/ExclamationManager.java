@@ -269,36 +269,7 @@ public class ExclamationManager
 		// ----------------------------------------------------------------------
 		public boolean processCondition( HashMap<String, Integer> data, String condition, String[] reliesOn )
 		{
-			for ( String name : reliesOn )
-			{
-				if ( !data.containsKey( name ) )
-				{
-					String flag = "";
-					if ( Global.WorldFlags.containsKey( name ) )
-					{
-						flag = Global.WorldFlags.get( name );
-					}
-					else if ( Global.RunFlags.containsKey( name ) )
-					{
-						flag = Global.RunFlags.get( name );
-					}
-					else
-					{
-						flag = "0";
-					}
-
-					if (Global.isNumber( flag ))
-					{
-						data.put( name, Integer.parseInt( flag ) );
-					}
-					else
-					{
-						data.put( name, 1 );
-					}
-				}
-			}
-
-			return EquationHelper.evaluate( condition, data ) > 0;
+			return DialogueManager.processCondition( data, condition, reliesOn );
 		}
 
 		public void parse( Element xml )

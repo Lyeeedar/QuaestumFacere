@@ -2,7 +2,6 @@ package Roguelike.Screens;
 
 import Roguelike.AssetManager;
 import Roguelike.Global;
-import Roguelike.Levels.TownCreator;
 import Roguelike.RoguelikeGame;
 import Roguelike.RoguelikeGame.ScreenEnum;
 
@@ -14,9 +13,9 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -34,6 +33,9 @@ public class MainMenuScreen implements Screen, InputProcessor
 	private void create()
 	{
 		skin = Global.loadSkin();
+
+		background = AssetManager.loadTexture( "Sprites/GUI/background.png" );
+		background.setWrap( Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat );
 
 		stage = new Stage( new ScreenViewport() );
 		batch = new SpriteBatch();
@@ -67,36 +69,19 @@ public class MainMenuScreen implements Screen, InputProcessor
 					save = Global.load();
 				}
 
-				if (save.isDead)
+				if (save.questManager.currentLevel != null)
 				{
-					TownCreator townCreator = new TownCreator();
-					townCreator.create();
+					LoadingScreen.Instance.set( save.questManager.currentLevel, save.questManager.currentQuest, null, null, null );
+					RoguelikeGame.Instance.switchScreen( ScreenEnum.LOADING );
 				}
 				else
 				{
-					LoadingScreen.Instance.set( save.levelManager.current.currentLevel, null, null, null );
-					RoguelikeGame.Instance.switchScreen( ScreenEnum.LOADING );
+					RoguelikeGame.Instance.switchScreen( ScreenEnum.HUB );
 				}
 			}
 		} );
 		mainTable.add( beginbutton ).expandX().fillX().padTop( 20 );
 		mainTable.row();
-
-		TextButton testbutton = null;
-		if (!Global.RELEASE)
-		{
-			testbutton = new TextButton( "Test Game - Lake", skin, "big" );
-			testbutton.addListener( new ClickListener()
-			{
-				public void clicked( InputEvent event, float x, float y )
-				{
-
-					Global.testWorld();
-				}
-			} );
-			mainTable.add( testbutton ).expandX().fillX().padTop( 20 );
-			mainTable.row();
-		}
 
 		TextButton obutton = new TextButton( "Options", skin, "big" );
 		obutton.addListener( new ClickListener()
@@ -134,12 +119,6 @@ public class MainMenuScreen implements Screen, InputProcessor
 
 		keyboardHelper = new ButtonKeyboardHelper();
 		keyboardHelper.add( beginbutton );
-
-		if (testbutton != null)
-		{
-			keyboardHelper.add( testbutton );
-		}
-
 		keyboardHelper.add( obutton );
 		keyboardHelper.add( cbutton );
 		keyboardHelper.add( qbutton );
@@ -188,6 +167,8 @@ public class MainMenuScreen implements Screen, InputProcessor
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 
 		batch.begin();
+
+		batch.draw( background, 0, 0, stage.getWidth(), stage.getHeight(), 0, 0, stage.getWidth() / background.getWidth(), stage.getHeight() / background.getHeight() );
 
 		// batch.draw( background, 0, 0, Global.Resolution[0],
 		// Global.Resolution[1] );
@@ -292,6 +273,8 @@ public class MainMenuScreen implements Screen, InputProcessor
 
 	ButtonKeyboardHelper keyboardHelper;
 	InputMultiplexer inputMultiplexer;
+
+	Texture background;
 
 	@Override
 	public boolean keyDown( int keycode )

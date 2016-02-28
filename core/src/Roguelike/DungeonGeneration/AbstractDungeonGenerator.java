@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
-import Roguelike.Dialogue.DialogueManager;
 import Roguelike.Fields.Field;
 import Roguelike.Global;
 import Roguelike.Global.Direction;
@@ -13,7 +12,7 @@ import Roguelike.DungeonGeneration.DungeonFileParser.DFPRoom;
 import Roguelike.Entity.EnvironmentEntity;
 import Roguelike.Entity.GameEntity;
 import Roguelike.Levels.Level;
-import Roguelike.Levels.LevelManager;
+import Roguelike.Quests.Quest;
 import Roguelike.Save.SaveLevel;
 import Roguelike.Tiles.GameTile;
 
@@ -21,7 +20,6 @@ import Roguelike.Tiles.Point;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 public abstract class AbstractDungeonGenerator
 {
@@ -29,6 +27,7 @@ public abstract class AbstractDungeonGenerator
 	public String generationText = "Selecting Rooms";
 	protected int generationIndex = 0;
 	protected SaveLevel saveLevel;
+	protected Quest quest;
 
 	protected DungeonFileParser dfp;
 	protected Array<DFPRoom> additionalRooms = new Array<DFPRoom>();
@@ -38,8 +37,6 @@ public abstract class AbstractDungeonGenerator
 	protected Array<Room> placedRooms = new Array<Room>();
 
 	protected FactionParser majorFaction;
-	protected Array<FactionParser> minorFactions = new Array<FactionParser>();
-	private HashMap<FactionParser, Point> factions = new HashMap<FactionParser, Point>();
 
 	protected Level level;
 	protected Random ran;
@@ -49,7 +46,7 @@ public abstract class AbstractDungeonGenerator
 	protected static final boolean DEBUG_OUTPUT = false;
 
 	// ----------------------------------------------------------------------
-	public abstract void setup( SaveLevel level, DungeonFileParser dfp );
+	public abstract void setup( SaveLevel level, Quest quest, DungeonFileParser dfp );
 
 	// ----------------------------------------------------------------------
 	public abstract boolean generate();
@@ -63,42 +60,9 @@ public abstract class AbstractDungeonGenerator
 	// ----------------------------------------------------------------------
 	protected void selectFactions()
 	{
-		if (dfp.majorFactions.size == 0) { return; }
-
-		String majorFactionName = dfp.getMajorFaction( ran );
+		String majorFactionName = quest.faction;
 
 		majorFaction = FactionParser.load( majorFactionName );
-
-		int numMinor = 2;//ran.nextInt( 2 ) + 1; // 1 - 3 minor
-
-		for (int i = 0; i < numMinor; i++)
-		{
-			String minorFactionName = dfp.getMinorFaction( ran );
-
-			boolean added = false;
-
-			if ( majorFactionName.equals( minorFactionName ) )
-			{
-				added = true;
-			}
-
-			if (!added)
-			{
-				for ( FactionParser fp : minorFactions )
-				{
-					if ( fp.name.equals( minorFactionName ) )
-					{
-						added = true;
-						break;
-					}
-				}
-			}
-
-			if (!added)
-			{
-				minorFactions.add( FactionParser.load( minorFactionName ) );
-			}
-		}
 	}
 
 	// ----------------------------------------------------------------------
@@ -106,7 +70,7 @@ public abstract class AbstractDungeonGenerator
 	{
 		selectFactions();
 
-		for ( DFPRoom r : dfp.getRooms( saveLevel.depth, ran, saveLevel.isBossLevel, majorFaction, minorFactions ) )
+		for ( DFPRoom r : dfp.getRooms( ran, majorFaction ) )
 		{
 			Room room = new Room();
 			r.fillRoom( room, ran, dfp );
@@ -283,129 +247,28 @@ public abstract class AbstractDungeonGenerator
 			}
 		}
 
-		Array<FactionParser> unplacedMinorFactions = new Array<FactionParser>( minorFactions );
-
-		factions.put( majorFaction, new Point( largest.x + largest.width / 2, largest.y + largest.height / 2 ) );
-
-		class Pair implements Comparable<Pair>
-		{
-			int dist;
-			Room room;
-
-			public Pair( int dist, Room room )
-			{
-				this.dist = dist;
-				this.room = room;
-			}
-
-			@Override
-			public int compareTo( Pair arg0 )
-			{
-				return ( (Integer) dist ).compareTo( arg0.dist );
-			}
-		}
-
-		Array<Pair> unassignedRooms = new Array<Pair>(  );
-
-		Array<Pair> sortedRooms = new Array<Pair>();
 		for ( Room room : placedRooms )
 		{
+			FactionParser faction = null;
 			if ( room.faction == null )
 			{
-				int dist = Math.abs( room.x - largest.x ) + Math.abs( room.y - largest.y );
-
-				Pair pair = new Pair( dist, room );
-				sortedRooms.add( pair );
-				unassignedRooms.add( pair );
+				faction = majorFaction;
 			}
 			else if ( !room.faction.equalsIgnoreCase( "none" ) )
 			{
-				FactionParser fp = null;
-
 				if (room.faction.equals( majorFaction.name ))
 				{
-					fp = majorFaction;
-				}
-				else
-				{
-					for (FactionParser minor : minorFactions)
-					{
-						if ( minor.name.equals( room.faction ) )
-						{
-							fp = minor;
-							unplacedMinorFactions.removeValue( minor, true );
-							break;
-						}
-					}
+					faction = majorFaction;
 				}
 
-				if (fp == null)
+				if (faction == null)
 				{
-					fp = FactionParser.load( room.faction );
-				}
-
-				if ( fp != null && fp != majorFaction )
-				{
-					int influence = ran.nextInt( 50 ) + 30;
-					room.addFeatures( ran, dfp, fp, influence, false );
-
-					factions.put( fp, new Point( room.x + room.width / 2, room.y + room.height / 2 ) );
-				}
-				else
-				{
-					int dist = Math.abs( room.x - largest.x ) + Math.abs( room.y - largest.y );
-					sortedRooms.add( new Pair( dist, room ) );
+					faction = FactionParser.load( room.faction );
 				}
 			}
-		}
-		sortedRooms.sort();
 
-		while (unplacedMinorFactions.size > 0 && unassignedRooms.size > 0)
-		{
-			Pair pair = unassignedRooms.removeIndex( unassignedRooms.size - 1 );
-			sortedRooms.removeValue( pair, true );
-
-			int influence = ran.nextInt( 80 ) + 10;
-
-			FactionParser fp = unplacedMinorFactions.removeIndex( 0 );
-
-			pair.room.addFeatures( ran, dfp, fp, influence, false );
-
-			factions.put( fp, new Point( pair.room.x + pair.room.width / 2, pair.room.y + pair.room.height / 2 ) );
-		}
-
-		for (FactionParser fp : unplacedMinorFactions)
-		{
-			int x = ran.nextInt( width );
-			int y = ran.nextInt( height );
-
-			factions.put( fp, new Point( x, y ) );
-		}
-
-		// Add features
-		boolean spawnMiniboss = !saveLevel.isBossLevel;
-		for ( int i = 0; i < sortedRooms.size; i++ )
-		{
-			Pair pair = sortedRooms.get( i );
-
-			int influence = pair.dist;
-			if ( influence > 0 )
-			{
-				float fract = influence / (float) ( width + height );
-
-				influence = (int) ( fract * 100 );
-			}
-
-			influence = 100 - influence;
-
-			System.out.println(influence);
-
-			boolean spawnedMiniboss = pair.room.addFeatures( ran, dfp, majorFaction, influence, spawnMiniboss );
-
-			if (spawnedMiniboss)
-			{
-				spawnMiniboss = false;
-			}
+			int influence = ran.nextInt( 50 ) + 30;
+			room.addFeatures( ran, dfp, faction, influence, ran.nextInt( 5 ) == 0 );
 		}
 	}
 
@@ -429,23 +292,17 @@ public abstract class AbstractDungeonGenerator
 			DEBUG_printGrid( symbolGrid );
 		}
 
-		LevelManager.LevelData levelData = Global.LevelManager.getLevel( Global.LevelManager.current, saveLevel.fileName );
-
 		GameTile[][] actualTiles = new GameTile[width][height];
 		Level level = new Level( actualTiles );
 		level.Ambient = dfp.ambient;
-		// level.affectedByDayNight = dfp.affectedByDayNight;
 		level.bgmName = dfp.BGM;
 		level.ambientSounds.addAll( dfp.ambientSounds );
 
-		level.depth = saveLevel.depth;
 		level.fileName = saveLevel.fileName;
 		level.seed = saveLevel.seed;
 		level.requiredRooms = additionalRooms;
 
 		level.background = dfp.background;
-
-		level.isVisionRestricted = dfp.visionRestricted;
 
 		for ( int x = 0; x < width; x++ )
 		{
@@ -474,7 +331,7 @@ public abstract class AbstractDungeonGenerator
 				if ( !saveLevel.created && symbol.hasEnvironmentEntity() )
 				{
 					GameTile newTile = actualTiles[x][y];
-					EnvironmentEntity entity = symbol.getEnvironmentEntity( levelData );
+					EnvironmentEntity entity = symbol.getEnvironmentEntity( );
 
 					if ( entity.attachToWall )
 					{
@@ -603,13 +460,9 @@ public abstract class AbstractDungeonGenerator
 						newTile.addGameEntity( e );
 						e.spawnPos = new Point( newTile );
 
-						if (Global.LevelManager != null && Global.LevelManager.totalDepth > 0)
-						{
-							// Add stat scaling
-							e.applyDepthScaling();
-							e.isVariableMapDirty = true;
-							e.HP = e.getMaxHP();
-						}
+						e.applyDepthScaling();
+						e.isVariableMapDirty = true;
+						e.HP = e.getMaxHP();
 					}
 				}
 			}
@@ -617,7 +470,6 @@ public abstract class AbstractDungeonGenerator
 
 		saveLevel.addSavedLevelContents( level );
 
-		level.depth = saveLevel.depth;
 		level.UID = saveLevel.UID;
 
 		level.calculateAmbient();
@@ -626,9 +478,9 @@ public abstract class AbstractDungeonGenerator
 	}
 
 	// ----------------------------------------------------------------------
-	public static AbstractDungeonGenerator load( SaveLevel level )
+	public static AbstractDungeonGenerator load( SaveLevel level, Quest quest )
 	{
-		DungeonFileParser dfp = DungeonFileParser.load( level.fileName + "/" + level.fileName );
+		DungeonFileParser dfp = DungeonFileParser.load( quest.level + "/" + quest.level );
 
 		Class<AbstractDungeonGenerator> c = ClassMap.get( dfp.generator.toUpperCase() );
 		AbstractDungeonGenerator type = null;
@@ -642,7 +494,7 @@ public abstract class AbstractDungeonGenerator
 			e.printStackTrace();
 		}
 
-		type.setup( level, dfp );
+		type.setup( level, quest, dfp );
 
 		return type;
 	}

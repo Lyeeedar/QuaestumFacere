@@ -260,20 +260,9 @@ public class Level
 
 				if ( e.canTakeDamage && e != player && e.HP <= 0 && !hasActiveEffects( e ) )
 				{
-					int quality = Global.getQuality();
-
-					if ( e.quality > 1 )
-					{
-						e.inventory.m_items.addAll( TreasureGenerator.generateLoot( quality + (e.quality-1), "random", MathUtils.random ) );
-					}
-					else if ( e.essence > 0 && MathUtils.random( 4 ) == 0 )
-					{
-						e.inventory.m_items.addAll( TreasureGenerator.generateLoot( quality, "random", MathUtils.random ) );
-					}
-
 					entityDeathSound.play( e.tile[0][0] );
 
-					dropItems( e.getInventory(), e.tile[0][0], e.essence, e );
+					dropItems( e.getInventory(), e.tile[0][0], e );
 					e.removeFromTile();
 				}
 				else if ( e == player && e.HP <= 0 && !hasActiveEffects( e ) )
@@ -301,7 +290,7 @@ public class Level
 
 				if ( e.forceKill || ( e.canTakeDamage && e.HP <= 0 && !hasActiveEffects( e ) ) )
 				{
-					dropItems( e.getInventory(), e.tile[0][0], e.essence, e );
+					dropItems( e.getInventory(), e.tile[0][0], e );
 
 					for ( ActivationActionGroup group : e.onDeathActions)
 					{
@@ -322,7 +311,7 @@ public class Level
 		}
 	}
 
-	private void dropItems( Inventory inventory, GameTile source, int essence, Object obj )
+	private void dropItems( Inventory inventory, GameTile source, Object obj )
 	{
 		Array<Point> possibleTiles = new Array<Point>();
 		for (Direction dir : Direction.values())
@@ -340,28 +329,6 @@ public class Level
 		}
 
 		float delay = 0;
-
-		if (essence > 0)
-		{
-			delay = dropOrbs( essence, delay, GameTile.OrbType.EXPERIENCE, source, possibleTiles );
-
-			if ( MathUtils.random( 5 ) <= Global.LevelManager.hpDropCounter )
-			{
-				Global.LevelManager.hpDropCounter -= 3;
-				int amount = Math.max( 10, player.getMaxHP() / 4 );
-				delay += dropOrbs( amount, delay, GameTile.OrbType.HEALTH, source, possibleTiles );
-			}
-			else
-			{
-				Global.LevelManager.hpDropCounter++;
-			}
-
-			if ( obj instanceof GameEntity && ((GameEntity)obj).quality > 1 )
-			{
-				int amount = Math.max( 10, player.getMaxHP() / 3 );
-				delay += dropOrbs( amount, delay, GameTile.OrbType.HEALTH, source, possibleTiles );
-			}
-		}
 
 		for ( Item i : inventory.m_items )
 		{
@@ -390,68 +357,6 @@ public class Level
 		}
 
 		Global.PointPool.freeAll( possibleTiles );
-
-		pickupOrbs();
-	}
-
-	private float dropOrbs( int val, float delay, GameTile.OrbType type, GameTile source, Array<Point> possibleTiles)
-	{
-		if ( val > 0 )
-		{
-			if ( possibleTiles.size > 0 )
-			{
-				int blockSize = MathUtils.clamp( val / 10, 10, 100 );
-
-				while ( val > 0 )
-				{
-					int block = Math.min( blockSize, val );
-					val -= block;
-
-					Point target = possibleTiles.random();
-					GameTile tile = getGameTile( target );
-
-					int existingVal = tile.orbs.containsKey( type ) ? tile.orbs.get( type ) : 0;
-					tile.orbs.put( type, existingVal + block );
-
-					int[] diff = tile.getPosDiff( source );
-
-					Sprite sprite = AssetManager.loadSprite( type.spriteName );
-					MoveAnimation anim = new MoveAnimation( 0.2f, diff, MoveEquation.LEAP );
-					anim.leapHeight = 3;
-					sprite.spriteAnimation = anim;
-					sprite.renderDelay = delay;
-					delay += 0.02f;
-
-					float scale = 0.5f + 0.5f * ( MathUtils.clamp( block, 10.0f, 1000.0f ) / 1000.0f );
-					sprite.baseScale[0] = scale;
-					sprite.baseScale[1] = scale;
-
-					tile.spriteEffects.add( new SpriteEffect( sprite, Direction.CENTER, null ) );
-				}
-			}
-			else
-			{
-				int existingVal = source.orbs.containsKey( type ) ? source.orbs.get( type ) : 0;
-				source.orbs.put( type, existingVal + val );
-
-				int[] diff = new int[] { 0, 0 };
-
-				Sprite sprite = AssetManager.loadSprite( type.spriteName );
-				MoveAnimation anim = new MoveAnimation( 0.2f, diff, MoveEquation.LEAP );
-				anim.leapHeight = 3;
-				sprite.spriteAnimation = anim;
-				sprite.renderDelay = delay;
-				delay += 0.02f;
-
-				float scale = 0.5f + 0.5f * ( MathUtils.clamp( val, 10.0f, 1000.0f ) / 1000.0f );
-				sprite.baseScale[0] = scale;
-				sprite.baseScale[1] = scale;
-
-				source.spriteEffects.add( new SpriteEffect( sprite, Direction.CENTER, null ) );
-			}
-		}
-
-		return delay;
 	}
 
 	private void clearEffectsForTile( GameTile tile )
@@ -497,60 +402,43 @@ public class Level
 	// ----------------------------------------------------------------------
 	public void updateVisibleTiles()
 	{
-		if ( !isVisionRestricted )
+		for ( int x = 0; x < width; x++ )
 		{
-			for ( int x = 0; x < width; x++ )
+			for ( int y = 0; y < height; y++ )
 			{
-				for ( int y = 0; y < height; y++ )
-				{
-					Grid[x][y].visible = true;
-					Grid[x][y].seen = true;
+				Grid[x][y].tempVisible = Grid[x][y].visible;
+				Grid[x][y].visible = false;
+			}
+		}
 
-					Grid[x][y].seenBitflag.setAll( Direction.class );
-					Grid[x][y].unseenBitflag.setAll( Direction.class );
+		shadowCastStore.clear();
+		shadowCastStore.addAll( visibilityData.getCurrentShadowCast() );
+		Array<Point> output = visibilityData.getShadowCast( Grid, player.tile[0][0].x, player.tile[0][0].y, player.getVariable( Statistic.PERCEPTION ), player, true );
+
+		for ( Point tilePos : output )
+		{
+			GameTile tile = getGameTile( tilePos );
+			if ( tile != null )
+			{
+				tile.visible = true;
+
+				if (!tile.seen)
+				{
+					tile.seen = true;
+					updateUnseenBitflag( tilePos.x, tilePos.y );
 				}
 			}
 		}
-		else
+
+		for ( int x = 0; x < width; x++ )
 		{
-			for ( int x = 0; x < width; x++ )
+			for ( int y = 0; y < height; y++ )
 			{
-				for ( int y = 0; y < height; y++ )
+				GameTile tile = Grid[x][y];
+
+				if (tile.tempVisible != tile.visible)
 				{
-					Grid[x][y].tempVisible = Grid[x][y].visible;
-					Grid[x][y].visible = false;
-				}
-			}
-
-			shadowCastStore.clear();
-			shadowCastStore.addAll( visibilityData.getCurrentShadowCast() );
-			Array<Point> output = visibilityData.getShadowCast( Grid, player.tile[0][0].x, player.tile[0][0].y, player.getVariable( Statistic.PERCEPTION ), player, true );
-
-			for ( Point tilePos : output )
-			{
-				GameTile tile = getGameTile( tilePos );
-				if ( tile != null )
-				{
-					tile.visible = true;
-
-					if (!tile.seen)
-					{
-						tile.seen = true;
-						updateUnseenBitflag( tilePos.x, tilePos.y );
-					}
-				}
-			}
-
-			for ( int x = 0; x < width; x++ )
-			{
-				for ( int y = 0; y < height; y++ )
-				{
-					GameTile tile = Grid[x][y];
-
-					if (tile.tempVisible != tile.visible)
-					{
-						updateSeenBitflag( x, y );
-					}
+					updateSeenBitflag( x, y );
 				}
 			}
 		}
@@ -904,9 +792,6 @@ public class Level
 
 		float actionCost = task.cost * player.getActionDelay();
 
-		Global.AUT += actionCost;
-		Global.DayNightFactor = (float) ( 0.1f + ( ( ( Math.sin( Global.AUT / 100.0f ) + 1.0f ) / 2.0f ) * 0.9f ) );
-
 		player.update( actionCost );
 
 		// Advance all entity accumulators and build list
@@ -945,8 +830,6 @@ public class Level
 			}
 		}
 
-		pickupOrbs();
-
 		if ( task instanceof TaskMove && player.tile[0][0].items.size > 0 )
 		{
 			for ( Item item : player.tile[0][0].items )
@@ -973,53 +856,6 @@ public class Level
 		{
 			player.AI.setData( "Pos", null );
 			player.AI.setData( "Rest", null );
-		}
-	}
-
-	public void pickupOrbs()
-	{
-		if ( player.tile[ 0 ][ 0 ].orbs.size > 0 )
-		{
-			for ( GameTile.OrbType type : GameTile.OrbType.values() )
-			{
-				if ( player.tile[ 0 ][ 0 ].orbs.containsKey( type ) )
-				{
-					int val = player.tile[ 0 ][ 0 ].orbs.get( type );
-
-					if ( type == GameTile.OrbType.EXPERIENCE )
-					{
-						player.pendingMessages.add( new Message( "+" + val + " xp", Color.YELLOW ) );
-						for (AbilityTree tree : player.slottedAbilities)
-						{
-							if (tree != null)
-							{
-								tree.current.gainExp( val );
-							}
-						}
-						pickupXPSound.play( player.tile[ 0 ][ 0 ] );
-
-						player.tile[ 0 ][ 0 ].orbs.remove( type );
-					}
-					else if ( type == GameTile.OrbType.HEALTH )
-					{
-						int healthMissing = player.getMaxHP() - player.HP;
-
-						int restored = Math.min( healthMissing, val );
-
-						if (restored > 0)
-						{
-							player.applyHealing( restored );
-							pickupHPSound.play( player.tile[ 0 ][ 0 ] );
-							player.tile[ 0 ][ 0 ].orbs.remove( type );
-
-							if (val - restored > 0)
-							{
-								player.tile[ 0 ][ 0 ].orbs.put( GameTile.OrbType.HEALTH, val - restored );
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 
@@ -1556,11 +1392,7 @@ public class Level
 				cleanUpDeadForTile( tile );
 
 				tile.light.set( tile.ambientColour );
-				if ( affectedByDayNight )
-				{
-					tile.light.mul( Global.DayNightFactor );
-					tile.light.a = 1;
-				}
+
 				getLightsForTile( tile, lightList, playerViewRange );
 			}
 		}
@@ -1642,7 +1474,6 @@ public class Level
 
 	public String bgmName;
 	public String fileName;
-	public int depth;
 	public long seed;
 	public Array<DFPRoom> requiredRooms;
 
@@ -1650,7 +1481,6 @@ public class Level
 	public GameEntity player;
 	public boolean inTurn = false;
 
-	public boolean isVisionRestricted = true;
 	public Color Ambient = new Color( 0.1f, 0.1f, 0.3f, 1.0f );
 	public Sprite background;
 

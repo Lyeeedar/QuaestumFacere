@@ -58,9 +58,6 @@ public class EquipmentPanel extends TilePanel
 				tileData.add( item );
 			}
 		}
-
-		int upgradeStone = Global.CurrentLevel.player.inventory.upgradeStones;
-		tileData.add( upgradeStone );
 	}
 
 	@Override
@@ -82,10 +79,6 @@ public class EquipmentPanel extends TilePanel
 			{
 				GameScreen.Instance.displayWeaponHitPattern();
 			}
-		}
-		else if ( data instanceof Integer )
-		{
-			GameScreen.Instance.displayUpgradeMenu();
 		}
 	}
 

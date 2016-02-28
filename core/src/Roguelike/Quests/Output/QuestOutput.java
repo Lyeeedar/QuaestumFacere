@@ -9,47 +9,37 @@ import com.badlogic.gdx.utils.XmlReader;
  */
 public class QuestOutput
 {
-	public boolean runFlag;
+	public int reward;
+	public String message;
+
 	public String key;
 	public String data;
 
-	public boolean defer;
-
 	public Array<AbstractQuestOutputCondition> conditions = new Array<AbstractQuestOutputCondition>(  );
 
-	public void evaluate()
+	public boolean evaluate()
 	{
 		for (AbstractQuestOutputCondition condition : conditions)
 		{
 			if (!condition.evaluate())
 			{
-				return;
+				return false;
 			}
 		}
 
-		if (defer)
-		{
-			Global.QuestManager.deferredFlags.put( key, data );
-			System.out.println("Setting defered flag: '" + key + "' to '" + data+"'");
-		}
-		else if (runFlag)
-		{
-			Global.RunFlags.put( key, data );
-			System.out.println("Setting run flag: '" + key + "' to '" + data+"'");
-		}
-		else
-		{
-			Global.WorldFlags.put( key, data );
-			System.out.println("Setting world flag: '" + key + "' to '" + data+"'");
-		}
+		Global.QuestManager.flags.put( key, data );
+		System.out.println("Setting world flag: '" + key + "' to '" + data+"'");
+
+		return true;
 	}
 
 	public void parse( XmlReader.Element xml )
 	{
+		reward = xml.getInt( "Reward" );
+		message = xml.get( "Message" );
+
 		key = xml.getName().toLowerCase();
 		data = xml.get( "Data", "true" ).toLowerCase();
-		runFlag = xml.getBooleanAttribute( "RunFlag", false );
-		defer = xml.getBooleanAttribute( "Defer", true );
 
 		XmlReader.Element conditionsElement = xml.getChildByName( "Conditions" );
 		if (conditionsElement != null)

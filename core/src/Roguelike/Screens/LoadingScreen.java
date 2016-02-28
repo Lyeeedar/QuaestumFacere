@@ -1,6 +1,8 @@
 package Roguelike.Screens;
 
+import Roguelike.AssetManager;
 import Roguelike.Global;
+import Roguelike.Quests.Quest;
 import Roguelike.RoguelikeGame;
 import Roguelike.RoguelikeGame.ScreenEnum;
 import Roguelike.DungeonGeneration.AbstractDungeonGenerator;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -33,6 +36,9 @@ public class LoadingScreen implements Screen
 	private void create()
 	{
 		skin = Global.loadSkin();
+
+		background = AssetManager.loadTexture( "Sprites/GUI/background.png" );
+		background.setWrap( Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat );
 
 		stage = new Stage( new ScreenViewport() );
 		batch = new SpriteBatch();
@@ -91,6 +97,10 @@ public class LoadingScreen implements Screen
 
 		Gdx.gl.glClearColor( 0.3f, 0.3f, 0.3f, 1 );
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+
+		batch.begin();
+		batch.draw( background, 0, 0, stage.getWidth(), stage.getHeight(), 0, 0, stage.getWidth() / background.getWidth(), stage.getHeight() / background.getHeight() );
+		batch.end();
 
 		stage.draw();
 
@@ -201,14 +211,15 @@ public class LoadingScreen implements Screen
 	{
 	}
 
-	public boolean set( SaveLevel level, GameEntity player, Object travelData, PostGenerateEvent event )
+	public boolean set( SaveLevel level, Quest quest, GameEntity player, Object travelData, PostGenerateEvent event )
 	{
 		this.player = player;
 		this.travelData = travelData;
 		this.event = event;
 		this.level = level;
+		this.quest = quest;
 
-		generator = AbstractDungeonGenerator.load( level );
+		generator = AbstractDungeonGenerator.load( level, quest );
 
 		this.percent = generator.percent;
 		this.generationString = generator.generationText;
@@ -233,10 +244,13 @@ public class LoadingScreen implements Screen
 	String generationString;
 	int percent = 0;
 	SaveLevel level;
+	Quest quest;
 	GameEntity player;
 	Object travelData;
 	AbstractDungeonGenerator generator;
 	PostGenerateEvent event;
+
+	Texture background;
 
 	public static abstract class PostGenerateEvent
 	{

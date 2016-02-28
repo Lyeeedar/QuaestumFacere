@@ -54,7 +54,7 @@ public class GameEntity extends Entity
 		{
 			int current = statistics.get( stat );
 
-			float scaleVal = (float) Math.sqrt( Global.LevelManager.totalDepth );
+			float scaleVal = (float) Math.sqrt( Global.QuestManager.difficulty );
 			scaleVal /= 10.0f;
 			scaleVal += 1;
 
@@ -251,8 +251,6 @@ public class GameEntity extends Entity
 				dialogue = DialogueManager.load( dialogueElement.getText() );
 			}
 		}
-
-		essence = xmlElement.getInt( "Essence", MathUtils.random( HP ) );
 
 		Element statusesElement = xmlElement.getChildByName( "Statuses" );
 		if ( statusesElement != null )

@@ -42,7 +42,6 @@ public class GameTile implements PathfindingTile
 	public Level level;
 	public Array<SpriteEffect> spriteEffects = new Array<SpriteEffect>();
 	public Array<Item> items = new Array<Item>( false, 16 );
-	public FastEnumMap<OrbType, Integer> orbs = new FastEnumMap<OrbType, Integer>( OrbType.class );
 	public String metaValue;
 	public boolean visible;
 	public boolean tempVisible;
@@ -323,19 +322,6 @@ public class GameTile implements PathfindingTile
 
 			tempColour.mul( pair.getValue().intensity );
 			light.add( tempColour );
-		}
-	}
-
-	public enum OrbType
-	{
-		EXPERIENCE("Oryx/uf_split/uf_items/crystal_sun"),
-		HEALTH("Oryx/uf_split/uf_items/crystal_blood");
-
-		public final String spriteName;
-
-		OrbType(String spriteName)
-		{
-			this.spriteName = spriteName;
 		}
 	}
 

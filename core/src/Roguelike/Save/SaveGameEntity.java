@@ -21,7 +21,6 @@ public final class SaveGameEntity extends SaveableObject<GameEntity>
 	public Array<XmlReader.Element> xmlData;
 
 	public int hp;
-	public int essence;
 	public Point pos = new Point();
 	public boolean isPlayer = false;
 	public int quality = 1;
@@ -40,7 +39,6 @@ public final class SaveGameEntity extends SaveableObject<GameEntity>
 		xmlData = obj.xmlData;
 
 		hp = obj.HP;
-		essence = obj.essence;
 		pos.set( obj.tile[0][0].x, obj.tile[0][0].y );
 		for ( StatusEffect status : obj.statusEffects )
 		{
@@ -80,7 +78,6 @@ public final class SaveGameEntity extends SaveableObject<GameEntity>
 		GameEntity entity = fileName != null ? GameEntity.load( fileName ) : GameEntity.load( xmlData );
 		entity.spawnPos = spawnPoint;
 
-		entity.essence = essence;
 		entity.HP = hp;
 		entity.statusEffects.clear();
 		for ( StatusEffect saveStatus : statuses )

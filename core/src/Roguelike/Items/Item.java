@@ -85,14 +85,11 @@ public final class Item extends GameEventHandler
 	// ----------------------------------------------------------------------
 	public static Item load( String recipe, Element xml )
 	{
-		String material = xml.get( "Material" );
 		int quality = xml.getInt( "Quality" );
 
-		Item materialItem = TreasureGenerator.getMaterial( material, quality, MathUtils.random );
-		Element itemTemplate = TreasureGenerator.recipeList.getItemTemplate( recipe );
+		TreasureGenerator.RecipeData data = TreasureGenerator.recipeList.getData( recipe );
 
-		Item item = Recipe.createRecipe( itemTemplate, materialItem );
-		item.getIcon().colour.mul( materialItem.getIcon().colour );
+		Item item = Recipe.createRecipe( data.itemTemplate, quality, data.getName( quality ) );
 
 		Element prefixElement = xml.getChildByName( "Prefix" );
 		if ( prefixElement != null )
@@ -101,7 +98,7 @@ public final class Item extends GameEventHandler
 
 			for (String prefix : prefixes)
 			{
-				Recipe.applyModifer( item, prefix, materialItem.quality, true );
+				Recipe.applyModifer( item, prefix, quality, true );
 			}
 		}
 
@@ -112,7 +109,7 @@ public final class Item extends GameEventHandler
 
 			for (String suffix : suffixes)
 			{
-				Recipe.applyModifer( item, suffix, materialItem.quality, false );
+				Recipe.applyModifer( item, suffix, quality, false );
 			}
 		}
 
@@ -160,15 +157,25 @@ public final class Item extends GameEventHandler
 	{
 		Inventory inventory = entity != null ? entity.getInventory() : null;
 
+		return createTable( skin, slot != null ? inventory.getEquip( slot ) : null );
+	}
+
+	// ----------------------------------------------------------------------
+	public Table createTable( Skin skin )
+	{
+		return createTable( skin, this );
+	}
+
+	// ----------------------------------------------------------------------
+	public Table createTable( Skin skin, Item other )
+	{
 		if ( slot == EquipmentSlot.WEAPON )
 		{
-			Item other = inventory != null ? inventory.getEquip( EquipmentSlot.WEAPON ) : null;
-			return createWeaponTable( other, entity, skin );
+			return createWeaponTable( other, skin );
 		}
 		else if ( slot != null )
 		{
-			Item other = inventory != null ? inventory.getEquip( slot ) : null;
-			return createArmourTable( other, entity, skin );
+			return createArmourTable( other, skin );
 		}
 
 		Table table = new Table();
@@ -181,10 +188,89 @@ public final class Item extends GameEventHandler
 
 		table.row();
 
+		table.add( new Seperator( skin ) ).expandX().fillX();
+		table.row();
+
 		Label descLabel = new Label( description, skin );
 		descLabel.setWrap( true );
-		table.add( descLabel ).expand().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
+		table.add( descLabel ).expandX().fillX().left();
 		table.row();
+
+		return table;
+	}
+
+	// ----------------------------------------------------------------------
+	private Table createArmourTable( Item other, Skin skin )
+	{
+		Table table = new Table();
+		table.defaults().pad( 5 );
+
+		Table titleRow = new Table();
+
+		titleRow.add( new Label( name, skin, "title" ) ).expandX().left();
+
+		if ( type != null && type.length() > 0 )
+		{
+			Label label = new Label( type, skin );
+			label.setFontScale( 0.7f );
+			titleRow.add( label ).expandX().right();
+		}
+
+		table.add( titleRow ).expandX().fillX();
+		table.row();
+
+		table.add( new Seperator( skin, false ) ).expandX().fillX();
+		table.row();
+
+		Label descLabel = new Label( description, skin );
+		descLabel.setWrap( true );
+		table.add( descLabel ).expandX().fillX().left();
+		table.row();
+
+		table.add( new Seperator( skin, false ) ).expandX().fillX();
+		table.row();
+
+		for (Statistic stat : Statistic.values())
+		{
+			int val = getStatistic( Statistic.emptyMap, stat );
+			int otherVal = other != null ? other.getStatistic( Statistic.emptyMap, stat ) : 0;
+
+			if (val > 0 || val != otherVal)
+			{
+				String value = ""+val;
+
+				if (val < otherVal)
+				{
+					value = value + "[RED] " + (val - otherVal) + "[]";
+				}
+				else if (val > otherVal)
+				{
+					value = value + "[GREEN] +" + (val - otherVal) + "[]";
+				}
+
+				Label statLabel = new Label( Global.capitalizeString( stat.toString() ) + ": " + value, skin );
+				table.add( statLabel ).expandX().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
+				table.row();
+			}
+		}
+
+		Array<String> lines = toString( Statistic.emptyMap, true );
+		for (String line : lines)
+		{
+			if (line.equals( "---" ))
+			{
+				table.add( new Seperator( skin, false ) ).expandX().fillX();
+			}
+			else
+			{
+				Label lineLabel = new Label( line, skin );
+				lineLabel.setWrap( true );
+				table.add( lineLabel ).expandX().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
+				table.row();
+			}
+
+			table.row();
+		}
 
 		if (ability1 != null)
 		{
@@ -209,84 +295,11 @@ public final class Item extends GameEventHandler
 			}
 		}
 
-
 		return table;
 	}
 
 	// ----------------------------------------------------------------------
-	private Table createArmourTable( Item other, GameEntity entity, Skin skin )
-	{
-		Table table = new Table();
-
-		Table titleRow = new Table();
-
-		titleRow.add( new Label( name, skin, "title" ) ).expandX().left();
-
-		if ( type != null && type.length() > 0 )
-		{
-			Label label = new Label( type, skin );
-			label.setFontScale( 0.7f );
-			titleRow.add( label ).expandX().right();
-		}
-
-		table.add( titleRow ).expandX().fillX();
-		table.row();
-
-		Label descLabel = new Label( description, skin );
-		descLabel.setWrap( true );
-		table.add( descLabel ).expand().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
-		table.row();
-
-		table.add( new Seperator( skin, false ) ).expandX().fillX();
-		table.row();
-
-		for (Statistic stat : Statistic.values())
-		{
-			int val = getStatistic( entity.getVariableMap(), stat );
-			int otherVal = other != null ? other.getStatistic( entity.getVariableMap(), stat ) : 0;
-
-			if (val > 0 || val != otherVal)
-			{
-				String value = ""+val;
-
-				if (val < otherVal)
-				{
-					value = value + "[RED] " + (val - otherVal) + "[]";
-				}
-				else if (val > otherVal)
-				{
-					value = value + "[GREEN] +" + (val - otherVal) + "[]";
-				}
-
-				Label statLabel = new Label( Global.capitalizeString( stat.toString() ) + ": " + value, skin );
-				table.add( statLabel ).expandX().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
-				table.row();
-			}
-		}
-
-		Array<String> lines = toString( entity.getVariableMap(), true );
-		for (String line : lines)
-		{
-			if (line.equals( "---" ))
-			{
-				table.add( new Seperator( skin, false ) ).expandX().fillX();
-			}
-			else
-			{
-				Label lineLabel = new Label( line, skin );
-				lineLabel.setWrap( true );
-				table.add( lineLabel ).expandX().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
-				table.row();
-			}
-
-			table.row();
-		}
-
-		return table;
-	}
-
-	// ----------------------------------------------------------------------
-	private Table createWeaponTable( Item other, GameEntity entity, Skin skin )
+	private Table createWeaponTable( Item other, Skin skin )
 	{
 		Table table = new Table();
 		table.defaults().pad( 5 );
@@ -310,7 +323,7 @@ public final class Item extends GameEventHandler
 
 		Label descLabel = new Label( description, skin );
 		descLabel.setWrap( true );
-		table.add( descLabel ).expandX().fillX().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
+		table.add( descLabel ).expandX().fillX().left();
 		table.row();
 
 		table.add( new Seperator( skin, false ) ).expandX().fillX();
@@ -365,6 +378,29 @@ public final class Item extends GameEventHandler
 			}
 
 			table.row();
+		}
+
+		if (ability1 != null)
+		{
+			table.add( new Seperator( skin ) ).expandX().fillX();
+			table.row();
+
+			Table ability1Table = new Table(  );
+			ability1Table.add( new SpriteWidget( ability1.getIcon(), 24, 24 ) );
+			ability1Table.add( new Label( ability1.getName(), skin ) );
+
+			table.add( ability1Table ).expandX().left();
+			table.row();
+
+			if (ability2 != null)
+			{
+				Table ability2Table = new Table(  );
+				ability2Table.add( new SpriteWidget( ability2.getIcon(), 24, 24 ) );
+				ability2Table.add( new Label( ability2.getName(), skin ) );
+
+				table.add( ability2Table ).expandX().left();
+				table.row();
+			}
 		}
 
 		return table;
@@ -539,16 +575,21 @@ public final class Item extends GameEventHandler
 	{
 		WEAPON,
 		ARMOUR,
-		UTILITY1,
-		UTILITY2,
-		UTILITY3
+		UTILITY_1,
+		UTILITY_2,
+		UTILITY_3,
+		UTILITY_4;
+
+		public static EquipmentSlot[] UtilitySlots = { EquipmentSlot.UTILITY_1, EquipmentSlot.UTILITY_2, EquipmentSlot.UTILITY_3, EquipmentSlot.UTILITY_4 };
 	}
 
 	// ----------------------------------------------------------------------
 	public enum ItemCategory
 	{
-		ARMOUR,
 		WEAPON,
+		ARMOUR,
+		UTILITY,
+
 		TREASURE,
 		MISC
 	}

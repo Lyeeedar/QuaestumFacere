@@ -1,0 +1,38 @@
+<Recipe>
+
+    <ItemTemplate>
+        <Name>Exoskelton</Name>
+        <Description>Powered suit of heavy plate. Provides lots of protection.</Description>
+        <UtilitySlots>1</UtilitySlots>
+        <Type>Exoskeleton</Type>
+        <Value>120</Value>
+
+        <Slot>Armour</Slot>
+        <Category>Armour</Category>
+
+        <Icon>
+            <Name>Oryx/uf_split/uf_items/weapon_longbow</Name>
+        </Icon>
+
+        <Events>
+            <Constant>
+                <Defense>20 + 5 * quality</Defense>
+            </Constant>
+        </Events>
+    </ItemTemplate>
+
+    <Names>
+        <Exoskeleton></Exoskeleton>
+        <AssistedCarapace></AssistedCarapace>
+        <Exosuit></Exosuit>
+        <Power_Armour></Power_Armour>
+    </Names>
+
+    <AllowedAbilities>
+
+    </AllowedAbilities>
+
+    <AllowedModifiers>
+
+    </AllowedModifiers>
+</Recipe>

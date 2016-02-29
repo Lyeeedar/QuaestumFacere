@@ -6,6 +6,7 @@ import Roguelike.Entity.EnvironmentEntity;
 import Roguelike.Entity.GameEntity;
 import Roguelike.Global;
 import Roguelike.Global.Statistic;
+import Roguelike.Items.Item;
 import Roguelike.Tiles.GameTile;
 import Roguelike.Util.FastEnumMap;
 import com.badlogic.gdx.utils.Array;
@@ -20,6 +21,8 @@ public class EffectTypeDamage extends AbstractEffectType
 {
 	private FastEnumMap<Statistic, String> equations = new FastEnumMap<Statistic, String>( Statistic.class );
 	private String[] reliesOn;
+
+	private boolean scaled;
 
 	@Override
 	public void update( ActiveAbility aa, float time, GameTile tile, GameEntity entity, EnvironmentEntity envEntity )
@@ -45,6 +48,8 @@ public class EffectTypeDamage extends AbstractEffectType
 	{
 		reliesOn = xml.getAttribute( "ReliesOn", "" ).toLowerCase().split( "," );
 
+		scaled = xml.getBooleanAttribute( "Scaled", false );
+
 		for ( int i = 0; i < xml.getChildCount(); i++ )
 		{
 			Element sEl = xml.getChild( i );
@@ -60,6 +65,7 @@ public class EffectTypeDamage extends AbstractEffectType
 		EffectTypeDamage e = new EffectTypeDamage();
 		e.equations = equations;
 		e.reliesOn = reliesOn;
+		e.scaled = scaled;
 		return e;
 	}
 
@@ -117,6 +123,15 @@ public class EffectTypeDamage extends AbstractEffectType
 
 				stats.put( stat, raw );
 			}
+		}
+
+		if (scaled)
+		{
+			float atk = stats.get( Statistic.ATTACK );
+			float dam = aa.getVariableMap().get( Item.EquipmentSlot.WEAPON.toString() );
+			int damage = (int)(dam * (atk / 100.0f));
+
+			stats.put( Statistic.ATTACK, damage );
 		}
 
 		variableMap = Statistic.statsBlockToVariableBlock( stats );

@@ -12,30 +12,37 @@ import java.io.IOException;
  */
 public class AbilityLoader
 {
+	public static IAbility loadAbility( String name )
+	{
+		XmlReader reader = new XmlReader();
+		XmlReader.Element xmlElement = null;
+
+		try
+		{
+			xmlElement = reader.parse( Gdx.files.internal( "Abilities/" + name + ".xml" ) );
+		}
+		catch ( IOException e )
+		{
+			e.printStackTrace();
+		}
+
+		if (xmlElement.getName().equalsIgnoreCase( "Active" ))
+		{
+			return ActiveAbility.load( name );
+		}
+		else if (xmlElement.getName().equalsIgnoreCase( "Passive" ))
+		{
+			return PassiveAbility.load( name );
+		}
+
+		return null;
+	}
+
 	public static IAbility loadAbility( XmlReader.Element xml )
 	{
 		if (xml.getChildCount() == 0)
 		{
-			XmlReader reader = new XmlReader();
-			XmlReader.Element xmlElement = null;
-
-			try
-			{
-				xmlElement = reader.parse( Gdx.files.internal( "Abilities/" + xml.getText() + ".xml" ) );
-			}
-			catch ( IOException e )
-			{
-				e.printStackTrace();
-			}
-
-			if (xmlElement.getName().equalsIgnoreCase( "Active" ))
-			{
-				return ActiveAbility.load( xml.getText() );
-			}
-			else if (xmlElement.getName().equalsIgnoreCase( "Passive" ))
-			{
-				return PassiveAbility.load( xml.getText() );
-			}
+			return loadAbility( xml.getText() );
 		}
 		else
 		{

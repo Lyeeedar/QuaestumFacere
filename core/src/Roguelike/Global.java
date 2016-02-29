@@ -103,6 +103,7 @@ public class Global
 	// ----------------------------------------------------------------------
 	public static QuestManager QuestManager;
 	public static Array<Item> UnlockedItems = new Array<Item>(  );
+	public static int Funds = 0;
 
 	// ----------------------------------------------------------------------
 	public static Level CurrentLevel;
@@ -151,6 +152,7 @@ public class Global
 
 		Global.QuestManager = save.questManager;
 		Global.UnlockedItems = save.unlockedItems;
+		Global.Funds = save.funds;
 
 		return save;
 	}
@@ -169,6 +171,7 @@ public class Global
 
 		save.questManager = QuestManager;
 		save.unlockedItems = UnlockedItems;
+		save.funds = Funds;
 
 		if (save.questManager.currentLevel != null)
 		{

@@ -9,6 +9,7 @@ import Roguelike.Quests.Quest;
 import Roguelike.RoguelikeGame;
 import Roguelike.Sprite.Sprite;
 import Roguelike.UI.ButtonKeyboardHelper;
+import Roguelike.UI.Seperator;
 import Roguelike.UI.SpriteWidget;
 import Roguelike.UI.TabPanel;
 import Roguelike.Util.Controls;
@@ -70,74 +71,297 @@ public class HubScreen implements Screen, InputProcessor
 
 		tabPanel = new TabPanel( Global.loadSkin() );
 
-		Array<UIWrapper> quests = new Array<UIWrapper>(  );
-		Array<UIWrapper> items = new Array<UIWrapper>(  );
-
 		Array<Quest> chosenQuests = Global.QuestManager.getQuests( );
 
-		for (Quest quest : chosenQuests)
-		{
-			UIWrapper wrapper = new UIWrapper();
-			wrapper.obj = quest;
-
-			quests.add( wrapper );
-		}
+		market.clear();
 
 		for (int i = 0; i < 10; i++)
 		{
-			Item item = TreasureGenerator.generateWeapon( Global.QuestManager.difficulty, MathUtils.random ).get( 0 );
-
-			UIWrapper wrapper = new UIWrapper();
-			wrapper.obj = item;
-
-			items.add(wrapper);
+			Item item = TreasureGenerator.generateRandom( Global.QuestManager.difficulty, MathUtils.random ).get( 0 );
+			market.add(item);
 		}
 
-		createTab( null, "Missions", quests );
-		createTab( null, "Market", items );
+		createMissions( chosenQuests );
+		createMarket( market );
+		createStash();
+
+		Skin skin = Global.loadSkin();
+
+		ScrollPane missionScrollPane = new ScrollPane( missionList, skin );
+		missionScrollPane.setScrollingDisabled( true, false );
+		missionScrollPane.setVariableSizeKnobs( true );
+		missionScrollPane.setFadeScrollBars( false );
+		missionScrollPane.setScrollbarsOnTop( false );
+		missionScrollPane.setForceScroll( false, true );
+
+		ScrollPane marketScrollPane = new ScrollPane( marketList, skin );
+		marketScrollPane.setScrollingDisabled( true, false );
+		marketScrollPane.setVariableSizeKnobs( true );
+		marketScrollPane.setFadeScrollBars( false );
+		marketScrollPane.setScrollbarsOnTop( false );
+		marketScrollPane.setForceScroll( false, true );
+
+		ScrollPane stashScrollPane = new ScrollPane( stashList, skin );
+		stashScrollPane.setScrollingDisabled( true, false );
+		stashScrollPane.setVariableSizeKnobs( true );
+		stashScrollPane.setFadeScrollBars( false );
+		stashScrollPane.setScrollbarsOnTop( false );
+		stashScrollPane.setForceScroll( false, true );
+
+		Table missionTab = new Table(  );
+		missionTab.add( missionScrollPane ).expandY().fillY().width( Value.percentWidth( 0.4f, missionTab ) );
+		missionTab.add( missionContent ).expandY().fillY().width( Value.percentWidth( 0.6f, missionTab ) );
+		tabPanel.addTab( "Missions", missionTab );
+
+		Table marketTab = new Table(  );
+		marketTab.add( marketScrollPane ).expandY().fillY().width( Value.percentWidth( 0.4f, marketTab ) );
+		marketTab.add( marketContent ).expandY().fillY().width( Value.percentWidth( 0.6f, marketTab ) );
+		tabPanel.addTab( "Market", marketTab );
+
+		Table stashTab = new Table(  );
+		stashTab.add( stashScrollPane ).expandY().fill().width( Value.percentWidth( 0.4f, stashTab ) );
+		stashTab.add( stashContent ).expandY().fillY().width( Value.percentWidth( 0.6f, stashTab ) );
+		tabPanel.addTab( "Stash", stashTab );
 
 		table.add( tabPanel ).colspan( 2 ).expand().fill().pad( 25 );
 		table.row();
 	}
 
-	public void createTab(ButtonKeyboardHelper keyboardHelper, String title, Array<UIWrapper> items )
+	public void createMissions( Array<Quest> items )
 	{
-		Table tab = new Table(  );
-		Skin skin = Global.loadSkin();
+		final Skin skin = Global.loadSkin();
 
-		Table buttons = new Table(  );
-		final Table content = new Table(  );
-
-		for (final UIWrapper item : items)
+		for (final Quest item : items)
 		{
-			Button button = item.getButton();
+			Button button = new Button( skin );
+			button.defaults().pad( 5 );
+
+			SpriteWidget sprite = new SpriteWidget( item.icon, 24, 24 );
+			button.add( sprite );
+
+			Table right = new Table(  );
+			button.add( right ).expand().left();
+
+			right.add( new Label( item.name, skin ) ).left();
+			right.row();
+			right.add( new Label( ""+item.reward, skin ) ).left();
+			right.row();
 
 			button.addListener( new ClickListener(  )
 			{
 				public void clicked (InputEvent event, float x, float y)
 				{
-					content.clear();
-					content.add( item.getContent() ).expand().fill();
+					missionContent.clear();
+
+					missionContent.add( item.createTable( skin ) ).expand().fill();
+					missionContent.row();
+
+					TextButton embark = new TextButton( "Embark", skin );
+					embark.addListener( new ClickListener(  )
+					{
+						public void clicked (InputEvent event, float x, float y)
+						{
+							RoguelikeGame.Instance.switchScreen( RoguelikeGame.ScreenEnum.LOADOUT );
+						}
+					} );
+
+					missionContent.add( embark ).expandX().right();
+					missionContent.row();
 				}
 			} );
 
-			buttons.add( button ).expandX().fillX();
-			buttons.row();
+			missionList.add( button ).expandX().fillX();
+			missionList.row();
 		}
-
-		ScrollPane scrollPane = new ScrollPane( buttons, skin );
-		scrollPane.setScrollingDisabled( true, false );
-		scrollPane.setVariableSizeKnobs( true );
-		scrollPane.setFadeScrollBars( false );
-		scrollPane.setScrollbarsOnTop( false );
-		scrollPane.setForceScroll( false, true );
-		scrollPane.setFlickScroll( false );
-
-		tab.add( scrollPane ).width( Value.percentWidth( 0.4f, tab ) ).expandY().fillY();
-		tab.add( content ).width( Value.percentWidth( 0.6f, tab ) ).expandY().fillY();
-
-		tabPanel.addTab( title, tab );
 	}
+
+	public void createMarket( final Array<Item> items )
+	{
+		final Skin skin = Global.loadSkin();
+
+		marketList.clear();
+		marketContent.clear();
+
+		for ( Item.ItemCategory category : Item.ItemCategory.values() )
+		{
+			Array<Item> categoryItems = new Array<Item>(  );
+			for (Item item : items)
+			{
+				if (item.category == category)
+				{
+					categoryItems.add( item );
+				}
+			}
+
+			if (categoryItems.size > 0)
+			{
+				marketList.add( new Label( Global.capitalizeString( category.toString() ), skin ) ).expandX().left().pad( 10 );
+				marketList.row();
+			}
+
+			for (final Item item : categoryItems)
+			{
+				Button button = new Button( skin );
+				button.defaults().pad( 5 );
+
+				SpriteWidget sprite = new SpriteWidget( item.getIcon(), 24, 24 );
+				button.add( sprite );
+
+				Table right = new Table();
+				button.add( right ).expand().left();
+
+				right.add( new Label( item.getName(), skin ) ).left();
+				right.row();
+
+				Label valueLabel = new Label( "" + item.value, skin );
+
+				if ( Global.Funds < item.value )
+				{
+					valueLabel.setColor( Color.RED );
+				}
+
+				right.add( valueLabel ).left();
+				right.row();
+
+				button.addListener( new ClickListener()
+				{
+					public void clicked( InputEvent event, float x, float y )
+					{
+						marketContent.clear();
+
+						marketContent.add( item.createTable( skin ) ).expand().fill();
+						marketContent.row();
+
+						if ( Global.Funds >= item.value )
+						{
+							TextButton buy = new TextButton( "Purchase for " + item.value, skin );
+							buy.addListener( new ClickListener()
+							{
+								public void clicked( InputEvent event, float x, float y )
+								{
+									item.value /= 2;
+									items.removeValue( item, true );
+									Global.UnlockedItems.add( item );
+									Global.Funds -= item.value;
+
+									createMarket( items );
+									createStash();
+								}
+							} );
+
+							marketContent.add( buy ).expandX().right();
+							marketContent.row();
+						}
+					}
+				} );
+
+				marketList.add( button ).expandX().fillX();
+				marketList.row();
+			}
+		}
+	}
+
+	public void createStash()
+	{
+		final Skin skin = Global.loadSkin();
+
+		stashList.clear();
+		stashContent.clear();
+
+		for ( Item.ItemCategory category : Item.ItemCategory.values() )
+		{
+			Array<Item> categoryItems = new Array<Item>(  );
+			for (Item item : Global.UnlockedItems)
+			{
+				if (item.category == category)
+				{
+					categoryItems.add( item );
+				}
+			}
+
+			if (categoryItems.size > 0)
+			{
+				stashList.add( new Label( Global.capitalizeString( category.toString() ), skin ) ).expandX().left().pad( 10 );
+				stashList.row();
+			}
+
+			for (final Item item : categoryItems)
+			{
+				Button button = new Button( skin );
+				button.defaults().pad( 5 );
+
+				SpriteWidget sprite = new SpriteWidget( item.getIcon(), 24, 24 );
+				button.add( sprite );
+
+				Table right = new Table();
+				button.add( right ).expand().left();
+
+				right.add( new Label( item.getName(), skin ) ).left();
+				right.row();
+				right.add( new Label( "" + item.value, skin ) ).left();
+				right.row();
+
+				button.addListener( new ClickListener()
+				{
+					public void clicked( InputEvent event, float x, float y )
+					{
+						stashContent.clear();
+
+						stashContent.add( item.createTable( skin ) ).expand().fill();
+						stashContent.row();
+
+						TextButton sell = new TextButton( "Sell for " + item.value, skin );
+						sell.addListener( new ClickListener()
+						{
+							public void clicked( InputEvent event, float x, float y )
+							{
+								Global.UnlockedItems.removeValue( item, true );
+								Global.Funds += item.value;
+
+								createMarket( market );
+								createStash();
+							}
+						} );
+
+						stashContent.add( sell ).expandX().right();
+						stashContent.row();
+					}
+				} );
+
+				stashList.add( button ).expandX().fillX();
+				stashList.row();
+			}
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	public OrthographicCamera camera;
+
+	boolean created;
+
+	TabPanel tabPanel;
+	Table table;
+
+	Table missionList = new Table(  );
+	Table missionContent = new Table(  );
+
+	Table marketList = new Table(  );
+	Table marketContent = new Table(  );
+
+	Table stashList = new Table(  );
+	Table stashContent = new Table(  );
+
+	Stage stage;
+
+	SpriteBatch batch;
+
+	public InputMultiplexer inputMultiplexer;
+	public ButtonKeyboardHelper keyboardHelper;
+
+	Array<Item> market = new Array<Item>(  );
+
+	Texture background;
+
 
 	@Override
 	public void show()
@@ -263,22 +487,6 @@ public class HubScreen implements Screen, InputProcessor
 	{
 	}
 
-	// ----------------------------------------------------------------------
-	public OrthographicCamera camera;
-
-	boolean created;
-
-	TabPanel tabPanel;
-	Table table;
-
-	Stage stage;
-
-	SpriteBatch batch;
-
-	public InputMultiplexer inputMultiplexer;
-	public ButtonKeyboardHelper keyboardHelper;
-
-	Texture background;
 
 	@Override
 	public boolean keyDown( int keycode )
@@ -329,93 +537,4 @@ public class HubScreen implements Screen, InputProcessor
 		return false;
 	}
 
-	public class UIWrapper
-	{
-		public Object obj;
-
-		private Sprite getIcon()
-		{
-			if (obj instanceof Quest)
-			{
-				Quest quest = (Quest)obj;
-				return quest.icon;
-			}
-			else if (obj instanceof Item)
-			{
-				Item item = (Item)obj;
-				return item.getIcon();
-			}
-
-			return null;
-		}
-
-		private String getName()
-		{
-			if (obj instanceof Quest)
-			{
-				Quest quest = (Quest)obj;
-				return quest.name;
-			}
-			else if (obj instanceof Item)
-			{
-				Item item = (Item)obj;
-				return item.getName();
-			}
-
-			return "";
-		}
-
-		private int getValue()
-		{
-			if (obj instanceof Quest)
-			{
-				Quest quest = (Quest)obj;
-				return quest.reward;
-			}
-			else if (obj instanceof Item)
-			{
-				Item item = (Item)obj;
-				return item.value;
-			}
-
-			return 0;
-		}
-
-		public Button getButton()
-		{
-			Skin skin = Global.loadSkin();
-			Button button = new Button( skin );
-			button.defaults().pad( 5 );
-
-			SpriteWidget sprite = new SpriteWidget( getIcon(), 24, 24 );
-			button.add( sprite );
-
-			Table right = new Table(  );
-			button.add( right ).expand().left();
-
-			right.add( new Label( getName(), skin ) ).left();
-			right.row();
-			right.add( new Label( ""+getValue(), skin ) ).left();
-			right.row();
-
-			return button;
-		}
-
-		public Table getContent()
-		{
-			if (obj instanceof Quest)
-			{
-				Quest quest = (Quest)obj;
-
-				return quest.createTable( Global.loadSkin() );
-			}
-			else if (obj instanceof Item)
-			{
-				Item item = (Item)obj;
-				return item.createTable( Global.loadSkin(), null );
-			}
-
-			return new Table();
-		}
-	}
 }

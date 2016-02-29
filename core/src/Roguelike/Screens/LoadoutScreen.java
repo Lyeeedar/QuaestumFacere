@@ -12,6 +12,7 @@ import Roguelike.UI.ButtonKeyboardHelper;
 import Roguelike.UI.SpriteWidget;
 import Roguelike.UI.TabPanel;
 import Roguelike.Util.Controls;
+import Roguelike.Util.FastEnumMap;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -71,8 +73,6 @@ public class LoadoutScreen implements Screen, InputProcessor
 		keyboardHelper = new ButtonKeyboardHelper(  );
 
 		Table slots = new Table(  );
-		Table items = new Table(  );
-		Table desc = new Table(  );
 
 		ScrollPane slotsScrollPane = new ScrollPane( slots, skin );
 		slotsScrollPane.setScrollingDisabled( true, false );
@@ -89,14 +89,189 @@ public class LoadoutScreen implements Screen, InputProcessor
 		itemsScrollPane.setForceScroll( false, true );
 		itemsScrollPane.setFlickScroll( false );
 
-		table.add( slotsScrollPane ).expand().fill();
-		table.add( itemsScrollPane ).expand().fill();
-		table.add( desc ).expand().fill();
+		table.add( slotsScrollPane ).expandY().fillY().width( Value.percentWidth( 1.0f/3.0f, table ) );
+		table.add( itemsScrollPane ).expandY().fillY().width( Value.percentWidth( 1.0f/3.0f, table ) );
+		table.add( desc ).expandY().fillY().width( Value.percentWidth( 1.0f/3.0f, table ) );
 
-		for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
+		for ( final Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
 		{
+			Button button = new Button(skin);
 
+			slots.add( button ).expandX().fillX();
+			slots.row();
+
+			buttonMap.put( slot, button );
+
+			fillSlotButton(slot);
 		}
+
+		hideUtilities();
+	}
+
+	private void fillSlotButton( final Item.EquipmentSlot slot )
+	{
+		Skin skin = Global.loadSkin();
+		Button button = buttonMap.get( slot );
+		button.clear();
+
+		Label slotLabel = new Label( Global.capitalizeString( slot.toString() ), skin );
+		slotLabel.setFontScale( 0.5f );
+		button.add( slotLabel ).expandX(  ).left();
+		button.row();
+
+		final Item current = slotMap.get( slot );
+		Table itemTable = new Table(  );
+		itemTable.defaults().pad( 5 );
+
+		if (current != null)
+		{
+			SpriteWidget sprite = new SpriteWidget( current.getIcon(), 24, 24 );
+			itemTable.add( sprite );
+			itemTable.add( new Label( current.getName(), skin ) );
+			itemTable.row();
+		}
+
+		button.addListener( new InputListener()
+		{
+			public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor)
+			{
+				if (current != null)
+				{
+					fillDescriptionTable( current, slot );
+				}
+				else
+				{
+					desc.clear();
+				}
+			}
+		} );
+
+		button.addListener( new ClickListener(  )
+		{
+			public void clicked (InputEvent event, float x, float y)
+			{
+				activeSlot = slot;
+				fillItemTable();
+			}
+		} );
+
+		button.add( itemTable ).expandX().fillX().left().height( 32 );
+	}
+
+	private void fillDescriptionTable( Item item, Item.EquipmentSlot slot)
+	{
+		desc.clear();
+		desc.add( item.createTable( Global.loadSkin(), slotMap.get( slot ) ) ).expand().fill();
+	}
+
+	private void fillItemTable()
+	{
+		items.clear();
+
+		Skin skin = Global.loadSkin();
+
+		ButtonGroup<Button> group = new ButtonGroup<Button>(  );
+
+		for (final Item item : Global.UnlockedItems)
+		{
+			if (item.slot == activeSlot)
+			{
+				Button button = new Button( skin );
+				group.add( button );
+
+				button.addListener( new InputListener()
+				{
+					public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor)
+					{
+						fillDescriptionTable( item, activeSlot );
+					}
+				} );
+
+				button.addListener( new ClickListener(  )
+				{
+					public void clicked (InputEvent event, float x, float y)
+					{
+						slotMap.put( activeSlot, item );
+						fillSlotButton( activeSlot );
+						hideUtilities();
+					}
+				} );
+
+				SpriteWidget sprite = new SpriteWidget( item.getIcon(), 24, 24 );
+				button.add( sprite );
+				button.add( new Label( item.getName(), skin ) );
+				button.row();
+
+				items.add( button ).expandX().fillX();
+				items.row();
+
+				if (item == slotMap.get( activeSlot ))
+				{
+					button.setChecked( true );
+				}
+			}
+		}
+	}
+
+	private void hideUtilities()
+	{
+		int numUtilSlots = slotMap.get( Item.EquipmentSlot.ARMOUR ) != null ? slotMap.get( Item.EquipmentSlot.ARMOUR ).utilSlots : 0;
+		for (int i = 0; i < Item.EquipmentSlot.UtilitySlots.length; i++)
+		{
+			Item.EquipmentSlot slot = Item.EquipmentSlot.UtilitySlots[i];
+			if (i < numUtilSlots)
+			{
+				buttonMap.get( slot ).setVisible( true );
+			}
+			else
+			{
+				buttonMap.get( slot ).setVisible( false );
+			}
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	public OrthographicCamera camera;
+
+	boolean created;
+
+	Table table;
+
+	Stage stage;
+
+	SpriteBatch batch;
+
+	public InputMultiplexer inputMultiplexer;
+	public ButtonKeyboardHelper keyboardHelper;
+
+	Texture background;
+
+	FastEnumMap<Item.EquipmentSlot, Item> slotMap = new FastEnumMap<Item.EquipmentSlot, Item>( Item.EquipmentSlot.class );
+	FastEnumMap<Item.EquipmentSlot, Button> buttonMap = new FastEnumMap<Item.EquipmentSlot, Button>( Item.EquipmentSlot.class );
+	Item.EquipmentSlot activeSlot;
+
+	Table items = new Table(  );
+	Table desc = new Table(  );
+
+	@Override
+	public void render( float delta )
+	{
+		keyboardHelper.update( delta );
+		stage.act();
+
+		Gdx.gl.glClearColor( 0.3f, 0.3f, 0.3f, 1 );
+		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+
+		batch.begin();
+
+		batch.draw( background, 0, 0, stage.getWidth(), stage.getHeight(), 0, 0, stage.getWidth() / background.getWidth(), stage.getHeight() / background.getHeight() );
+
+		batch.end();
+
+		stage.draw();
+
+		// limit fps
+		sleep( Global.FPS );
 	}
 
 	@Override
@@ -126,24 +301,52 @@ public class LoadoutScreen implements Screen, InputProcessor
 	}
 
 	@Override
-	public void render( float delta )
+	public boolean keyDown( int keycode )
 	{
-		keyboardHelper.update( delta );
-		stage.act();
+		return false;
+	}
 
-		Gdx.gl.glClearColor( 0.3f, 0.3f, 0.3f, 1 );
-		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+	@Override
+	public boolean keyUp( int keycode )
+	{
+		return false;
+	}
 
-		batch.begin();
+	@Override
+	public boolean keyTyped( char character )
+	{
+		return false;
+	}
 
-		batch.draw( background, 0, 0, stage.getWidth(), stage.getHeight(), 0, 0, stage.getWidth() / background.getWidth(), stage.getHeight() / background.getHeight() );
+	@Override
+	public boolean touchDown( int screenX, int screenY, int pointer, int button )
+	{
+		return false;
+	}
 
-		batch.end();
+	@Override
+	public boolean touchUp( int screenX, int screenY, int pointer, int button )
+	{
+		return false;
+	}
 
-		stage.draw();
+	@Override
+	public boolean touchDragged( int screenX, int screenY, int pointer )
+	{
+		return false;
+	}
 
-		// limit fps
-		sleep( Global.FPS );
+	@Override
+	public boolean mouseMoved( int screenX, int screenY )
+	{
+//		keyboardHelper.clear();
+		return false;
+	}
+
+	@Override
+	public boolean scrolled( int amount )
+	{
+		return false;
 	}
 
 	// ----------------------------------------------------------------------
@@ -221,70 +424,5 @@ public class LoadoutScreen implements Screen, InputProcessor
 	@Override
 	public void dispose()
 	{
-	}
-
-	// ----------------------------------------------------------------------
-	public OrthographicCamera camera;
-
-	boolean created;
-
-	Table table;
-
-	Stage stage;
-
-	SpriteBatch batch;
-
-	public InputMultiplexer inputMultiplexer;
-	public ButtonKeyboardHelper keyboardHelper;
-
-	Texture background;
-
-	@Override
-	public boolean keyDown( int keycode )
-	{
-		return false;
-	}
-
-	@Override
-	public boolean keyUp( int keycode )
-	{
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped( char character )
-	{
-		return false;
-	}
-
-	@Override
-	public boolean touchDown( int screenX, int screenY, int pointer, int button )
-	{
-		return false;
-	}
-
-	@Override
-	public boolean touchUp( int screenX, int screenY, int pointer, int button )
-	{
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged( int screenX, int screenY, int pointer )
-	{
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved( int screenX, int screenY )
-	{
-//		keyboardHelper.clear();
-		return false;
-	}
-
-	@Override
-	public boolean scrolled( int amount )
-	{
-		return false;
 	}
 }

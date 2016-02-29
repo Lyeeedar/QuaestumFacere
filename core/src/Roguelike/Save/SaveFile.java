@@ -75,6 +75,7 @@ public final class SaveFile
 
 	public QuestManager questManager;
 	public Array<Item> unlockedItems;
+	public int funds;
 
 	public void save()
 	{
@@ -94,6 +95,7 @@ public final class SaveFile
 
 		kryo.writeObject( output, questManager );
 		kryo.writeObject( output, unlockedItems );
+		output.writeInt( funds );
 
 		output.close();
 
@@ -122,6 +124,7 @@ public final class SaveFile
 
 		questManager = kryo.readObject( input, QuestManager.class );
 		unlockedItems = kryo.readObject( input, Array.class );
+		funds = input.readInt();
 
 		input.close();
 	}

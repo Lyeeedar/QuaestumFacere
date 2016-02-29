@@ -1,0 +1,38 @@
+<Recipe>
+
+    <ItemTemplate>
+        <Name>Weave</Name>
+        <Description>Nano fabric designed to absorb and disperse wounding attacks along a series of hardened plates.</Description>
+        <UtilitySlots>2</UtilitySlots>
+        <Type>Weave</Type>
+        <Value>100</Value>
+
+        <Slot>Armour</Slot>
+        <Category>Armour</Category>
+
+        <Icon>
+            <Name>Oryx/uf_split/uf_items/weapon_longbow</Name>
+        </Icon>
+
+        <Events>
+            <Constant>
+                <Defense>15 + 4 * quality</Defense>
+            </Constant>
+        </Events>
+    </ItemTemplate>
+
+    <AllowedAbilities>
+
+    </AllowedAbilities>
+
+    <Names>
+        <Ballistic_Weave></Ballistic_Weave>
+        <Nano_weave></Nano_weave>
+        <Reactive_Weave></Reactive_Weave>
+        <Enhanced_Nano_Weave></Enhanced_Nano_Weave>
+    </Names>
+
+    <AllowedModifiers>
+
+    </AllowedModifiers>
+</Recipe>

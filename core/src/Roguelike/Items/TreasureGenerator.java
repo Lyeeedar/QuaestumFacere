@@ -1,5 +1,7 @@
 package Roguelike.Items;
 
+import Roguelike.Ability.AbilityLoader;
+import Roguelike.Ability.IAbility;
 import Roguelike.Sprite.Sprite;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -50,12 +52,6 @@ public class TreasureGenerator
 			else if ( type.equals( "random" ) )
 			{
 				items.addAll( TreasureGenerator.generateRandom( quality, ran ) );
-			}
-			else if ( type.startsWith( "item(" ) )
-			{
-				String[] parts = type.split( "[\\(\\)]" );
-
-				items.addAll( TreasureGenerator.generateItemFromMaterial( parts[1], quality, ran ) );
 			}
 		}
 
@@ -146,49 +142,11 @@ public class TreasureGenerator
 		return items;
 	}
 
-	public static Array<Item> generateItemFromMaterial( String materialType, int quality, Random ran )
-	{
-		Array<RecipeData> validRecipes = new Array<RecipeData>(  );
-
-		for (RecipeData recipe : recipeList.weaponRecipes)
-		{
-			if (recipe.acceptsMaterial( materialType ))
-			{
-				validRecipes.add( recipe );
-			}
-		}
-
-		for (RecipeData recipe : recipeList.armourRecipes)
-		{
-			if (recipe.acceptsMaterial( materialType ))
-			{
-				validRecipes.add( recipe );
-			}
-		}
-
-		Array<Item> items = new Array<Item>(  );
-
-		if (validRecipes.size == 0)
-		{
-			return items;
-		}
-
-		RecipeData chosen = validRecipes.get( ran.nextInt( validRecipes.size ) );
-		items.add( itemFromRecipe( chosen, quality, ran ) );
-
-		return items;
-	}
-
 	public static Item itemFromRecipe( RecipeData recipe, int quality, Random ran )
 	{
-		String materialType = recipe.getMaterial( quality, ran );
-		Item materialItem = getMaterial( materialType, quality, ran );
+		Item item = Recipe.createRecipe( recipe.itemTemplate, quality, recipe.getName( quality ) );
 
-		Item item = Recipe.createRecipe( recipe.itemTemplate, materialItem );
-
-		item.getIcon().colour = item.getIcon().colour.cpy().mul( materialItem.getIcon().colour );
-
-		int numModifiers = ran.nextInt( Math.max( 2, quality / 2 ) );
+		int numModifiers = ran.nextInt( Math.max( 1, quality / 2 ) );
 
 		for (int i = 0; i < numModifiers; i++)
 		{
@@ -200,68 +158,40 @@ public class TreasureGenerator
 			}
 		}
 
+		int numAbilities = (int)( Math.min( recipe.acceptedAbilities.size, 2 ) * ran.nextFloat() * ran.nextFloat() );
+
+		if (numAbilities > 0)
+		{
+			String ability = recipe.getAbility( quality, ran );
+
+			if (ability != null)
+			{
+				item.ability1 = AbilityLoader.loadAbility( ability );
+			}
+		}
+
+		if (numAbilities > 1)
+		{
+			String ability = recipe.getAbility( quality, ran );
+
+			if (ability != null)
+			{
+				IAbility ab = AbilityLoader.loadAbility( ability );
+
+				if (item.ability1 == null)
+				{
+					item.ability1 = ab;
+				}
+				else
+				{
+					item.ability2 = ab;
+				}
+			}
+		}
+
+		item.value = (int)( (float)item.value * ( 1.0f + (float)quality * 0.8f ) * (1.0f + 0.2f * (float)( numAbilities + numModifiers ) ) );
+
 		return item;
-	}
-
-	public static Item getMaterial( String materialType, int quality, Random ran )
-	{
-		if (!materialLists.containsKey( materialType ))
-		{
-			if (Gdx.files.internal( "Items/Material/" + materialType + ".xml" ).exists())
-			{
-				QualityMap materialMap = new QualityMap( "Items/Material/" + materialType + ".xml" );
-				materialLists.put( materialType, materialMap );
-			}
-			else
-			{
-				materialLists.put( materialType, null );
-			}
-		}
-
-		QualityMap materialMap = materialLists.get( materialType );
-		if (materialMap == null)
-		{
-			return null;
-		}
-
-		int materialQuality = Math.min( quality, materialMap.qualityData.size );
-
-		String material = null;
-		String colour = null;
-		{
-			int numChoices = materialMap.qualityData.get( materialQuality - 1 ).size;
-			int choice = ran.nextInt( numChoices );
-			QualityData qdata = materialMap.qualityData.get( materialQuality - 1 ).get( choice );
-			material = qdata.name;
-			colour = qdata.colour;
-		}
-
-		Item materialItem = null;
-		if ( Gdx.files.internal( "Items/Material/"+material+".xml" ).exists() )
-		{
-			materialItem = Item.load( "Material/" + material );
-		}
-		else
-		{
-			materialItem = new Item();
-			materialItem.name = material;
-			materialItem.quality = materialQuality;
-		}
-
-		if ( colour != null )
-		{
-			Color col = new Color();
-
-			String[] cols = colour.split( "," );
-			col.r = Float.parseFloat( cols[0] ) / 255.0f;
-			col.g = Float.parseFloat( cols[1] ) / 255.0f;
-			col.b = Float.parseFloat( cols[2] ) / 255.0f;
-			col.a = 1;
-
-			materialItem.getIcon().colour = col;
-		}
-
-		return materialItem;
 	}
 
 	public static final RecipeList recipeList = new RecipeList( "Items/Recipes/Recipes.xml" );
@@ -303,13 +233,13 @@ public class TreasureGenerator
 			}
 		}
 
-		public XmlReader.Element getItemTemplate( String recipe )
+		public RecipeData getData( String recipe )
 		{
 			for (RecipeData rd : armourRecipes)
 			{
 				if (rd.recipeName.equals( recipe ))
 				{
-					return rd.itemTemplate;
+					return rd;
 				}
 			}
 
@@ -317,7 +247,7 @@ public class TreasureGenerator
 			{
 				if (rd.recipeName.equals( recipe ))
 				{
-					return rd.itemTemplate;
+					return rd;
 				}
 			}
 
@@ -325,12 +255,12 @@ public class TreasureGenerator
 		}
 	}
 
-	private static class RecipeData
+	public static class RecipeData
 	{
 		public String recipeName;
 
 		public Array<RecipeDataItem> acceptedAbilities = new Array<RecipeDataItem>(  );
-		public Array<RecipeDataItem> acceptedMaterials = new Array<RecipeDataItem>(  );
+		public Array<String> names = new Array<String>(  );
 		public Array<RecipeDataItem> acceptedModifiers = new Array<RecipeDataItem>(  );
 
 		public XmlReader.Element itemTemplate;
@@ -353,12 +283,12 @@ public class TreasureGenerator
 
 			itemTemplate = xml.getChildByName( "ItemTemplate" );
 
-			XmlReader.Element matsElement = xml.getChildByName( "AllowedMaterials" );
-			for (int i = 0; i < matsElement.getChildCount(); i++)
+			XmlReader.Element namesElement = xml.getChildByName( "Names" );
+			for (int i = 0; i < namesElement.getChildCount(); i++)
 			{
-				XmlReader.Element matEl = matsElement.getChild( i );
+				XmlReader.Element nameEl = namesElement.getChild( i );
 
-				acceptedMaterials.add( new RecipeDataItem( matEl.getName(), matEl.getIntAttribute( "MinQuality", 0 ) ) );
+				names.add( nameEl.getName().replace( "_", " " ) );
 			}
 
 			XmlReader.Element modsElement = xml.getChildByName( "AllowedModifiers" );
@@ -378,31 +308,17 @@ public class TreasureGenerator
 			}
 		}
 
-		public boolean acceptsMaterial(String name)
+		public String getName( int quality )
 		{
-			for (RecipeDataItem item : acceptedMaterials)
+			quality = quality - 1;
+			if (quality >= names.size)
 			{
-				if (item.name.equals( name ))
-				{
-					return true;
-				}
+				return names.get( names.size-1 );
 			}
-
-			return false;
-		}
-
-		public String getMaterial( int quality, Random ran )
-		{
-			Array<String> temp = new Array<String>(  );
-			for (RecipeDataItem item : acceptedMaterials)
+			else
 			{
-				if (item.minQuality <= quality)
-				{
-					temp.add( item.name );
-				}
+				return names.get( quality );
 			}
-
-			return temp.get( ran.nextInt( temp.size ) );
 		}
 
 		public String getModifier( int quality, Random ran )
@@ -434,7 +350,7 @@ public class TreasureGenerator
 		}
 	}
 
-	private static class RecipeDataItem
+	public static class RecipeDataItem
 	{
 		public String name;
 		public int minQuality;

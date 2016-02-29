@@ -1,14 +1,13 @@
 <Recipe>
 
     <ItemTemplate>
-        <Name>Pistol</Name>
-        <Description>Pew Pew</Description>
+        <Name>Shotgun</Name>
+        <Description>This is my boomstick!</Description>
 
         <Slot>Weapon</Slot>
         <Category>Weapon</Category>
-        <Type>Pistol</Type>
-
-        <Value>100</Value>
+        <Type>Shotgun</Type>
+        <Value>120</Value>
 
         <Icon>
             <Name>Oryx/uf_split/uf_items/weapon_longbow</Name>
@@ -26,11 +25,10 @@
     </AllowedAbilities>
 
     <Names>
-        <Pistol></Pistol>
-        <Hand_Cannon></Hand_Cannon>
-        <Needler></Needler>
-        <Fletchet_Launcher></Fletchet_Launcher>
-        <Pocket_Accelerator></Pocket_Accelerator>
+        <Shotgun></Shotgun>
+        <Boomstick></Boomstick>
+        <Scatter_Blaster></Scatter_Blaster>
+        <Pulveriser></Pulveriser>
     </Names>
 
     <AllowedModifiers>

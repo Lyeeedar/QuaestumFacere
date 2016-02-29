@@ -1,0 +1,39 @@
+<Recipe>
+
+    <ItemTemplate>
+        <Name>Gel</Name>
+        <Description>Nanomachine laden gel. Damaging impacts cause the machines to form a temporary protective surface, dispersing the attack.</Description>
+        <UtilitySlots>3</UtilitySlots>
+        <Type>Gel</Type>
+        <Value>120</Value>
+
+        <Slot>Armour</Slot>
+        <Category>Armour</Category>
+
+        <Icon>
+            <Name>Oryx/uf_split/uf_items/weapon_longbow</Name>
+        </Icon>
+
+        <Events>
+            <Constant>
+                <Defense>10 + 3 * quality</Defense>
+            </Constant>
+        </Events>
+    </ItemTemplate>
+
+    <AllowedAbilities>
+
+    </AllowedAbilities>
+
+    <Names>
+        <Second_Skin></Second_Skin>
+        <Defensive_Skin></Defensive_Skin>
+        <Skin_Of_Life></Skin_Of_Life>
+        <Reactive_Nano_Gel></Reactive_Nano_Gel>
+        <Experimental_Nano_Gel></Experimental_Nano_Gel>
+    </Names>
+
+    <AllowedModifiers>
+
+    </AllowedModifiers>
+</Recipe>

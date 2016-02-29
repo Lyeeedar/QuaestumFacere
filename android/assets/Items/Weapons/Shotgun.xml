@@ -1,8 +1,8 @@
 <Weapon>
 
-    <HitType>All</HitType>
+    <HitType>Closest(1)</HitType>
 
-    <HitPercent>100</HitPercent>
+    <HitPercent>90</HitPercent>
 
     <HitSprite>
         <Name>EffectSprites/Bolt/Bolt</Name>
@@ -12,8 +12,9 @@
     </HitSprite>
 
     <HitPattern>
-        <Line>...#####...</Line>
         <Line>....###....</Line>
+        <Line>....###....</Line>
+        <Line>.....#.....</Line>
         <Line>.....x.....</Line>
     </HitPattern>
 

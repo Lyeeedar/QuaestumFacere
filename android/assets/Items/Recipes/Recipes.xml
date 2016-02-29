@@ -1,11 +1,14 @@
 <Recipes>
 
     <Armours>
-
+        <Exoskeleton></Exoskeleton>
+        <Weave></Weave>
+        <Gel></Gel>
     </Armours>
 
     <Weapons>
         <Pistol></Pistol>
+        <Shotgun></Shotgun>
     </Weapons>
 
 </Recipes>

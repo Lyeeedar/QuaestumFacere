@@ -14,16 +14,14 @@ import java.util.Random;
  */
 public class Recipe
 {
-	public static Item createRecipe( XmlReader.Element itemTemplate, Item material )
+	public static Item createRecipe( XmlReader.Element itemTemplate, int quality, String name )
 	{
 		Item item = Item.load( itemTemplate );
-		item.quality = material.quality;
+		item.quality = quality;
 
-		item.applyQuality( material.quality );
+		item.applyQuality( quality );
 
-		combineItems( item, material );
-
-		item.name = material.name + " " + item.name;
+		item.name = name;
 
 		return item;
 	}

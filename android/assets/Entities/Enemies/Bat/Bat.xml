@@ -1,8 +1,0 @@
-<Faction>
-    <Name>Bat</Name>
-
-    <Creatures>
-        <SmallBat></SmallBat>
-        <GiantBat></GiantBat>
-    </Creatures>
-</Faction>

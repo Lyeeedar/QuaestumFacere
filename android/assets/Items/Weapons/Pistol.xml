@@ -1,0 +1,21 @@
+<Weapon>
+
+    <HitType>Closest(1)</HitType>
+
+    <HitPercent>90</HitPercent>
+
+    <HitSprite>
+        <Name>EffectSprites/Bolt/Bolt</Name>
+        <Animation><Move/></Animation>
+        <UpdateRate>0.1</UpdateRate>
+        <Sound><Name>Wand</Name></Sound>
+    </HitSprite>
+
+    <HitPattern>
+        <Line>....###....</Line>
+        <Line>....###....</Line>
+        <Line>.....#.....</Line>
+        <Line>.....x.....</Line>
+    </HitPattern>
+
+</Weapon>

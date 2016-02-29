@@ -1,24 +1,3 @@
 <Quests>
-	<Quest>Blacksmith/Blacksmith1</Quest>
-	<Quest>Blacksmith/Blacksmith2</Quest>
-	<Quest>Blacksmith/Blacksmith3</Quest>
-	<Quest>Blacksmith/Blacksmith4</Quest>
-	<Quest>Blacksmith/Blacksmith5</Quest>
-	<Quest>Blacksmith/Blacksmith6</Quest>
-	<Quest>EnchantedForest/EvilAltar</Quest>
-	<Quest>EnchantedForest/GoodAltar</Quest>
-	<Quest>Fighter/Fighter1</Quest>
-	<Quest>Forest/ArmyExpeditionLosing</Quest>
-	<Quest>Forest/BanditStash</Quest>
-	<Quest>Forest/CapturedVillagers</Quest>
-	<Quest>Forest/KnightChallenge</Quest>
-	<Quest>Forest/MageAttacked</Quest>
-	<Quest>Forest/MerchantRobbed</Quest>
-	<Quest>Forest/SpiderHouse</Quest>
-	<Quest>Forest/WitchHerb</Quest>
-	<Quest>Hunter/Hunter1</Quest>
-	<Quest>Lovers/LoversCaptured</Quest>
-	<Quest>Lovers/LoversEncounter</Quest>
-	<Quest>Lovers/LoversTemple</Quest>
-	<Quest>Mage/Mage1</Quest>
+	<Quest>Asteroid/CrystalGather</Quest>
 </Quests>

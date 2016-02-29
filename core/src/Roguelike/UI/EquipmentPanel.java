@@ -1,6 +1,5 @@
 package Roguelike.UI;
 
-import Roguelike.Ability.AbilityTree;
 import Roguelike.AssetManager;
 import Roguelike.Entity.Tasks.TaskAttack;
 import Roguelike.Global;

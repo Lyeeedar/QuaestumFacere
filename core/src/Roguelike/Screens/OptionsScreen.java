@@ -46,6 +46,9 @@ public class OptionsScreen implements Screen, InputProcessor
 	{
 		skin = Global.loadSkin();
 
+		background = AssetManager.loadTexture( "Sprites/GUI/background.png" );
+		background.setWrap( Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat );
+
 		stage = new Stage( new ScreenViewport() );
 		batch = new SpriteBatch();
 
@@ -540,6 +543,10 @@ public class OptionsScreen implements Screen, InputProcessor
 		Gdx.gl.glClearColor( 0.3f, 0.3f, 0.3f, 1 );
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 
+		batch.begin();
+		batch.draw( background, 0, 0, stage.getWidth(), stage.getHeight(), 0, 0, stage.getWidth() / background.getWidth(), stage.getHeight() / background.getHeight() );
+		batch.end();
+
 		stage.draw();
 
 		// limit fps
@@ -647,6 +654,8 @@ public class OptionsScreen implements Screen, InputProcessor
 
 	public InputMultiplexer inputMultiplexer;
 	public ButtonKeyboardHelper keyboardHelper;
+
+	Texture background;
 
 	private abstract class SaveAction
 	{

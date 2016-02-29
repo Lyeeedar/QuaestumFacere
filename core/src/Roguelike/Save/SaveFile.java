@@ -1,6 +1,5 @@
 package Roguelike.Save;
 
-import Roguelike.Ability.AbilityTree;
 import Roguelike.Ability.ActiveAbility.ActiveAbility;
 import Roguelike.AssetManager;
 import Roguelike.DungeonGeneration.DungeonFileParser.DFPRoom;
@@ -309,26 +308,6 @@ public final class SaveFile
 			}
 		} );
 
-		kryo.register( AbilityTree.class, new Serializer<AbilityTree> ()
-		{
-			@Override
-			public void write( Kryo kryo, Output output, AbilityTree object )
-			{
-				SaveAbilityTree saveTree = new SaveAbilityTree();
-				saveTree.store( object );
-
-				kryo.writeObject( output, saveTree );
-			}
-
-			@Override
-			public AbilityTree read( Kryo kryo, Input input, Class<AbilityTree> type )
-			{
-				SaveAbilityTree saveTree = kryo.readObject( input, SaveAbilityTree.class );
-
-				return saveTree.create();
-			}
-		} );
-
 		kryo.register( ActiveAbility.class, new Serializer<ActiveAbility>()
 		{
 			@Override
@@ -336,6 +315,7 @@ public final class SaveFile
 			{
 				output.writeString( object.creationPath );
 				kryo.writeObjectOrNull( output, object.creationData, Element.class);
+				output.writeInt( object.cooldown );
 			}
 
 			@Override
@@ -343,6 +323,7 @@ public final class SaveFile
 			{
 				String creationPath = input.readString();
 				Element creationData = kryo.readObjectOrNull( input, Element.class );
+				int cooldown = input.readInt();
 
 				ActiveAbility ab;
 				if (creationPath != null)
@@ -353,6 +334,8 @@ public final class SaveFile
 				{
 					ab = ActiveAbility.load( creationData );
 				}
+
+				ab.cooldown = cooldown;
 
 				return ab;
 			}
@@ -442,8 +425,6 @@ public final class SaveFile
 		kryo.register( SaveFile.class );
 		kryo.register( SaveGameEntity.class );
 		kryo.register( SaveLevel.class );
-		kryo.register( SaveAbilityTree.class );
-		kryo.register( SaveAbilityTree.SaveAbilityStage.class );
 		kryo.register( SaveLevelItem.class );
 
 		kryo.register( Point.class );

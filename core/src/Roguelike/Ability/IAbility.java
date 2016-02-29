@@ -13,8 +13,6 @@ public interface IAbility
 
 	void setCaster(Entity entity);
 
-	void setTree(AbilityTree.AbilityStage tree );
-
 	void onTurn();
 	void onMove();
 	void onAttack();
@@ -25,8 +23,6 @@ public interface IAbility
 	int getCooldown();
 
 	void setCooldown( int val );
-
-	int getLevel();
 
 	Table createTable( Skin skin, Entity entity );
 

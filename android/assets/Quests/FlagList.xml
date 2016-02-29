@@ -1,38 +1,8 @@
 <Flags>
-	<hunter>
-		<1/>
-	</hunter>
-	<loversquest>
-		<temple/>
-		<captured/>
-		<possessed/>
-		<resurrect/>
-	</loversquest>
-	<blacksmith>
-		<1/>
-		<2/>
-		<3/>
-		<4/>
-		<5/>
-		<6/>
-	</blacksmith>
-	<witchhelped RunFlag="true" >
+	<nocrystal>
 		<true/>
-	</witchhelped>
-	<merchanthelped RunFlag="true" >
+	</nocrystal>
+	<gotcrystal>
 		<true/>
-	</merchanthelped>
-	<villagersfreed RunFlag="true" >
-		<true/>
-	</villagersfreed>
-	<magequest>
-		<lived1/>
-		<died1/>
-	</magequest>
-	<mage>
-		<1/>
-	</mage>
-	<fighter>
-		<1/>
-	</fighter>
+	</gotcrystal>
 </Flags>

@@ -1,6 +1,6 @@
 package Roguelike.Items;
 
-import Roguelike.Ability.AbilityTree;
+import Roguelike.Ability.AbilityLoader;
 import Roguelike.Ability.ActiveAbility.ActiveAbility;
 import Roguelike.Ability.IAbility;
 import Roguelike.Ability.PassiveAbility.PassiveAbility;
@@ -16,6 +16,7 @@ import Roguelike.Sprite.Sprite;
 import Roguelike.Sprite.SpriteAnimation.MoveAnimation;
 import Roguelike.Tiles.Point;
 import Roguelike.UI.Seperator;
+import Roguelike.UI.SpriteWidget;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -33,12 +34,6 @@ import java.util.HashMap;
 
 public final class Item extends GameEventHandler
 {
-	/*
-	 * IDEAS:
-	 *
-	 * Unlock extra power after condition (absorb x essence, kill x enemy)
-	 */
-
 	public String name = "";
 	public String description = "";
 	public Sprite hitEffect;
@@ -50,7 +45,10 @@ public final class Item extends GameEventHandler
 	public Light light;
 	public boolean canDrop = true;
 	public String dropChanceEqn;
-	public AbilityTree ability;
+
+	public IAbility ability1;
+	public IAbility ability2;
+
 	public WeaponDefinition wepDef;
 	public int quality = 1;
 	public int upgradeCount = 1;
@@ -197,8 +195,6 @@ public final class Item extends GameEventHandler
 	// ----------------------------------------------------------------------
 	public Table createTable( Skin skin, GameEntity entity )
 	{
-		if ( ability != null ) { return ability.current.current.createTable( skin, entity ); }
-
 		Inventory inventory = entity.getInventory();
 
 		if ( slots.contains( EquipmentSlot.WEAPON, true ) )
@@ -226,6 +222,30 @@ public final class Item extends GameEventHandler
 		descLabel.setWrap( true );
 		table.add( descLabel ).expand().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
 		table.row();
+
+		if (ability1 != null)
+		{
+			table.add( new Seperator( skin ) ).expandX().fillX();
+			table.row();
+
+			Table ability1Table = new Table(  );
+			ability1Table.add( new SpriteWidget( ability1.getIcon(), 24, 24 ) );
+			ability1Table.add( new Label( ability1.getName(), skin ) );
+
+			table.add( ability1Table ).expandX().left();
+			table.row();
+
+			if (ability2 != null)
+			{
+				Table ability2Table = new Table(  );
+				ability2Table.add( new SpriteWidget( ability2.getIcon(), 24, 24 ) );
+				ability2Table.add( new Label( ability2.getName(), skin ) );
+
+				table.add( ability2Table ).expandX().left();
+				table.row();
+			}
+		}
+
 
 		return table;
 	}
@@ -419,8 +439,6 @@ public final class Item extends GameEventHandler
 	@Override
 	public String getName()
 	{
-		if ( ability != null ) { return ability.current.current.getName(); }
-
 		return name;
 	}
 
@@ -428,8 +446,6 @@ public final class Item extends GameEventHandler
 	@Override
 	public String getDescription()
 	{
-		if ( ability != null ) { return ability.current.current.getDescription(); }
-
 		return description;
 	}
 
@@ -448,7 +464,6 @@ public final class Item extends GameEventHandler
 			}
 			return spriteGroups.get( 0 ).sprite;
 		}
-		if ( ability != null) { return ability.current.current.getIcon(); }
 
 		if ( spriteGroups.size == 0 )
 		{
@@ -549,10 +564,15 @@ public final class Item extends GameEventHandler
 			wepDef = WeaponDefinition.load( type );
 		}
 
-		Element abilityElement = xmlElement.getChildByName( "Ability" );
-		if ( abilityElement != null )
+		Array<Element> abilityElement = xmlElement.getChildrenByName( "Ability" );
+		if ( abilityElement.size > 0 )
 		{
-			ability = new AbilityTree(abilityElement.getText());
+			ability1 = AbilityLoader.loadAbility( abilityElement.get( 0 ) );
+		}
+
+		if ( abilityElement.size > 1 )
+		{
+			ability2 = AbilityLoader.loadAbility( abilityElement.get( 1 ) );
 		}
 
 		// Preload sprites
@@ -585,13 +605,11 @@ public final class Item extends GameEventHandler
 	// ----------------------------------------------------------------------
 	public enum EquipmentSlot
 	{
-		// Weapons
 		WEAPON,
-
-		// Armour
-		HEAD,
-		BODY,
-		LEGS
+		ARMOUR,
+		UTILITY1,
+		UTILITY2,
+		UTILITY3
 	}
 
 	// ----------------------------------------------------------------------
@@ -599,12 +617,8 @@ public final class Item extends GameEventHandler
 	{
 		ARMOUR,
 		WEAPON,
-		JEWELRY,
 		TREASURE,
-		MATERIAL,
-		MISC,
-
-		ALL
+		MISC
 	}
 
 	// ----------------------------------------------------------------------

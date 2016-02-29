@@ -1,8 +1,0 @@
-<Entity Extends="Enemies/Rat/RatBase">
-	<Sprite>
-		<Name>Oryx/uf_split/uf_heroes/rat</Name>
-		<DrawActualSize>true</DrawActualSize>
-        <Sound><Name>rat1</Name></Sound>
-	</Sprite>
-
-</Entity>

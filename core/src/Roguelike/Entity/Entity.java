@@ -200,7 +200,7 @@ public abstract class Entity implements IGameObject
 			variableMap.put( s.toString().toLowerCase(), getStatistic( s ) );
 		}
 
-		variableMap.put( "maxhp", variableMap.get( Statistic.CONSTITUTION.toString().toLowerCase() ) * 10 );
+		variableMap.put( "maxhp", variableMap.get( Statistic.VITALITY.toString().toLowerCase() ) * 10 );
 
 		if (inventory.getEquip( EquipmentSlot.WEAPON ) != null)
 		{
@@ -223,7 +223,7 @@ public abstract class Entity implements IGameObject
 			baseVariableMap.put( s.toString().toLowerCase(), statistics.get( s ) + inventory.getStatistic( Statistic.emptyMap, s ) );
 		}
 
-		baseVariableMap.put( "maxhp", baseVariableMap.get( Statistic.CONSTITUTION.toString().toLowerCase() ) * 10 );
+		baseVariableMap.put( "maxhp", baseVariableMap.get( Statistic.VITALITY.toString().toLowerCase() ) * 10 );
 		baseVariableMap.put( "hp", HP );
 
 		for ( EquipmentSlot slot : EquipmentSlot.values() )
@@ -298,7 +298,7 @@ public abstract class Entity implements IGameObject
 	// ----------------------------------------------------------------------
 	public int getMaxHP()
 	{
-		return getVariable( Statistic.CONSTITUTION ) * 10;
+		return getVariable( Statistic.VITALITY ) * 10;
 	}
 
 	// ----------------------------------------------------------------------
@@ -471,7 +471,7 @@ public abstract class Entity implements IGameObject
 	// ----------------------------------------------------------------------
 	public void updateShadowCast()
 	{
-		visibilityCache.getShadowCast( tile[0][0].level.Grid, tile[0][0].x, tile[0][0].y, getStatistic( Statistic.PERCEPTION ), this );
+		visibilityCache.getShadowCast( tile[0][0].level.Grid, tile[0][0].x, tile[0][0].y, getStatistic( Statistic.SIGHT ), this );
 	}
 
 	// ----------------------------------------------------------------------

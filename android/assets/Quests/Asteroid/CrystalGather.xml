@@ -1,0 +1,64 @@
+<Quest>
+
+    <Name>Crystal Hunting</Name>
+    <Description>Some dude wants some cystal stuff to make things with.</Description>
+    <Reward>100</Reward>
+    <Difficulty>1</Difficulty>
+    <Icon>
+        <Name>Icons/ConeOfCold</Name>
+    </Icon>
+    <Faction>Spider</Faction>
+    <Level>Asteroid</Level>
+
+    <Rooms>
+        <Room>
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>c</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/ore_iron</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                        <OnActivate>
+                            <Group Name="Take Crystal">
+                                <SetEnabled Enabled="false">Take Crystal</SetEnabled>
+                            </Group>
+                        </OnActivate>
+                    </EnvironmentData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>c</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <GotCrystal>
+
+            <Message>The client is pleased</Message>
+            <Reward>100</Reward>
+
+            <Conditions>
+                <ActionEnabled Not="true">Take Crystal</ActionEnabled>
+            </Conditions>
+        </GotCrystal>
+
+        <NoCrystal>
+
+            <Message>The client is not happy that you returned empty handed</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <ActionEnabled>Take Crystal</ActionEnabled>
+            </Conditions>
+        </NoCrystal>
+
+    </Outputs>
+
+</Quest>

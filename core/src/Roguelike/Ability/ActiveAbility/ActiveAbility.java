@@ -1,6 +1,5 @@
 package Roguelike.Ability.ActiveAbility;
 
-import Roguelike.Ability.AbilityTree;
 import Roguelike.Ability.ActiveAbility.CostType.AbstractCostType;
 import Roguelike.Ability.ActiveAbility.EffectType.AbstractEffectType;
 import Roguelike.Ability.ActiveAbility.HitType.*;
@@ -97,8 +96,6 @@ public class ActiveAbility implements IAbility, IGameObject
 	private boolean spentCost = false;
 	public boolean noSprite = false;
 
-	public AbilityTree.AbilityStage tree;
-
 	public String creationPath;
 	public Element creationData;
 
@@ -116,20 +113,6 @@ public class ActiveAbility implements IAbility, IGameObject
 	}
 
 	// ----------------------------------------------------------------------
-	@Override
-	public int getLevel()
-	{
-		return tree.level;
-	}
-
-	// ----------------------------------------------------------------------
-	@Override
-	public void setTree(AbilityTree.AbilityStage tree )
-	{
-		this.tree = tree;
-	}
-
-	// ----------------------------------------------------------------------
 	public GameEntity getCaster()
 	{
 		return caster;
@@ -144,15 +127,6 @@ public class ActiveAbility implements IAbility, IGameObject
 	// ----------------------------------------------------------------------
 	public HashMap<String, Integer> getVariableMap()
 	{
-		if (tree != null)
-		{
-			variableMap.put("level", tree.level);
-		}
-		else
-		{
-			variableMap.put("level", 1);
-		}
-
 		return variableMap;
 	}
 
@@ -232,8 +206,6 @@ public class ActiveAbility implements IAbility, IGameObject
 		aa.hitSprite = hitSprite != null ? hitSprite.copy() : null;
 		aa.useSprite = useSprite != null ? useSprite.copy() : null;
 		aa.singleSprite = singleSprite;
-
-		aa.tree = tree;
 
 		return aa;
 	}
@@ -866,30 +838,6 @@ public class ActiveAbility implements IAbility, IGameObject
 			header.add( label ).expandX().right();
 		}
 		table.add(header).expandX().fillX().left();
-
-		table.row();
-
-		String level = "Level: " + tree.level;
-
-		if (tree.level == 10)
-		{
-			if (tree.branch1 != null)
-			{
-				level += " ( Mutate )";
-			}
-			else
-			{
-				level += " ( Max )";
-			}
-		}
-		else
-		{
-			float per = (float) tree.exp / (float) tree.expToNextLevel;
-			per *= 100;
-			level += " ( " + (int)per + "% )";
-		}
-
-		table.add(new Label(level, skin)).left();
 		table.row();
 
 		Label descLabel = new Label( description, skin );

@@ -1,5 +1,6 @@
 package Roguelike.Screens;
 
+import Roguelike.AssetManager;
 import Roguelike.GameEvent.IGameObject;
 import Roguelike.Global;
 import Roguelike.Items.Item;
@@ -12,8 +13,10 @@ import Roguelike.UI.SpriteWidget;
 import Roguelike.UI.TabPanel;
 import Roguelike.Util.Controls;
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -41,6 +44,9 @@ public class HubScreen implements Screen, InputProcessor
 	public void create()
 	{
 		skin = Global.loadSkin();
+
+		background = AssetManager.loadTexture( "Sprites/GUI/background.png" );
+		background.setWrap( Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat );
 
 		stage = new Stage( new ScreenViewport() );
 		batch = new SpriteBatch();
@@ -81,7 +87,7 @@ public class HubScreen implements Screen, InputProcessor
 
 		for (int i = 0; i < 10; i++)
 		{
-			Item item = TreasureGenerator.generateRandom( Global.QuestManager.difficulty, MathUtils.random ).get( 0 );
+			Item item = TreasureGenerator.generateWeapon( Global.QuestManager.difficulty, MathUtils.random ).get( 0 );
 
 			UIWrapper wrapper = new UIWrapper();
 			wrapper.obj = item;
@@ -169,6 +175,12 @@ public class HubScreen implements Screen, InputProcessor
 
 		Gdx.gl.glClearColor( 0.3f, 0.3f, 0.3f, 1 );
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+
+		batch.begin();
+
+		batch.draw( background, 0, 0, stage.getWidth(), stage.getHeight(), 0, 0, stage.getWidth() / background.getWidth(), stage.getHeight() / background.getHeight() );
+
+		batch.end();
 
 		stage.draw();
 
@@ -269,6 +281,8 @@ public class HubScreen implements Screen, InputProcessor
 	public InputMultiplexer inputMultiplexer;
 	public ButtonKeyboardHelper keyboardHelper;
 
+	Texture background;
+
 	@Override
 	public boolean keyDown( int keycode )
 	{
@@ -308,7 +322,7 @@ public class HubScreen implements Screen, InputProcessor
 	@Override
 	public boolean mouseMoved( int screenX, int screenY )
 	{
-		keyboardHelper.clear();
+//		keyboardHelper.clear();
 		return false;
 	}
 

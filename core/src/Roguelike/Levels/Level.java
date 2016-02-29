@@ -1,7 +1,7 @@
 package Roguelike.Levels;
 
-import Roguelike.Ability.AbilityTree;
 import Roguelike.Ability.ActiveAbility.ActiveAbility;
+import Roguelike.Ability.IAbility;
 import Roguelike.AssetManager;
 import Roguelike.DungeonGeneration.DungeonFileParser.DFPRoom;
 import Roguelike.Entity.ActivationAction.ActivationActionGroup;
@@ -413,7 +413,7 @@ public class Level
 
 		shadowCastStore.clear();
 		shadowCastStore.addAll( visibilityData.getCurrentShadowCast() );
-		Array<Point> output = visibilityData.getShadowCast( Grid, player.tile[0][0].x, player.tile[0][0].y, player.getVariable( Statistic.PERCEPTION ), player, true );
+		Array<Point> output = visibilityData.getShadowCast( Grid, player.tile[0][0].x, player.tile[0][0].y, player.getVariable( Statistic.SIGHT ), player, true );
 
 		for ( Point tilePos : output )
 		{
@@ -750,32 +750,23 @@ public class Level
 
 		if (task instanceof TaskMove)
 		{
-			for (AbilityTree ab : player.slottedAbilities)
+			for (IAbility ab : player.slottedAbilities)
 			{
-				if (ab != null)
-				{
-					ab.current.current.onMove();
-				}
+				ab.onMove();
 			}
 		}
 		else if (task instanceof TaskAttack)
 		{
-			for (AbilityTree ab : player.slottedAbilities)
+			for (IAbility ab : player.slottedAbilities)
 			{
-				if (ab != null)
-				{
-					ab.current.current.onAttack();
-				}
+				ab.onAttack();
 			}
 		}
 		else if (task instanceof TaskWait)
 		{
-			for (AbilityTree ab : player.slottedAbilities)
+			for (IAbility ab : player.slottedAbilities)
 			{
-				if (ab != null)
-				{
-					ab.current.current.onWait();
-				}
+				ab.onWait();
 			}
 		}
 
@@ -992,32 +983,23 @@ public class Level
 
 				if (task instanceof TaskMove)
 				{
-					for (AbilityTree ab : e.slottedAbilities)
+					for (IAbility ab : e.slottedAbilities)
 					{
-						if (ab != null)
-						{
-							ab.current.current.onMove();
-						}
+						ab.onMove();
 					}
 				}
 				else if (task instanceof TaskAttack)
 				{
-					for (AbilityTree ab : e.slottedAbilities)
+					for (IAbility ab : e.slottedAbilities)
 					{
-						if (ab != null)
-						{
-							ab.current.current.onAttack();
-						}
+						ab.onAttack();
 					}
 				}
 				else if (task instanceof TaskWait)
 				{
-					for (AbilityTree ab : e.slottedAbilities)
+					for (IAbility ab : e.slottedAbilities)
 					{
-						if (ab != null)
-						{
-							ab.current.current.onWait();
-						}
+						ab.onWait();
 					}
 				}
 
@@ -1369,7 +1351,7 @@ public class Level
 		updateVisibleTiles();
 		lightList.clear();
 
-		int playerViewRange = player.getVariable( Statistic.PERCEPTION );
+		int playerViewRange = player.getVariable( Statistic.SIGHT );
 		for ( int x = 0; x < width; x++ )
 		{
 			for ( int y = 0; y < height; y++ )
@@ -1422,11 +1404,11 @@ public class Level
 			}
 		}
 
-		for ( AbilityTree a : player.slottedAbilities )
+		for ( IAbility a : player.slottedAbilities )
 		{
-			if ( a != null && a.current.current instanceof ActiveAbility )
+			if ( a instanceof ActiveAbility )
 			{
-				ActiveAbility aa = (ActiveAbility) a.current.current;
+				ActiveAbility aa = (ActiveAbility) a;
 
 				aa.source = player.tile[0][0];
 				aa.hasValidTargets = aa.getValidTargets().size > 0;

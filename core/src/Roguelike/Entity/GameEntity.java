@@ -1,6 +1,6 @@
 package Roguelike.Entity;
 
-import Roguelike.Ability.AbilityTree;
+import Roguelike.Ability.AbilityLoader;
 import Roguelike.Ability.ActiveAbility.ActiveAbility;
 import Roguelike.Ability.IAbility;
 import Roguelike.Ability.PassiveAbility.PassiveAbility;
@@ -81,11 +81,11 @@ public class GameEntity extends Entity
 
 		actionDelayAccumulator += cost;
 
-		for ( AbilityTree a : slottedAbilities )
+		for ( IAbility a : slottedAbilities )
 		{
 			if (a != null)
 			{
-				a.current.current.onTurn();
+				a.onTurn();
 			}
 		}
 
@@ -135,11 +135,11 @@ public class GameEntity extends Entity
 
 		variableMap.put( stat.toString().toLowerCase(), val );
 
-		for ( AbilityTree a : slottedAbilities )
+		for ( IAbility a : slottedAbilities )
 		{
-			if ( a != null && a.current.current instanceof PassiveAbility )
+			if ( a != null && a instanceof PassiveAbility )
 			{
-				PassiveAbility passive = (PassiveAbility) a.current.current;
+				PassiveAbility passive = (PassiveAbility) a;
 				val += passive.getStatistic( variableMap, stat );
 			}
 		}
@@ -209,33 +209,9 @@ public class GameEntity extends Entity
 			for ( int i = 0; i < abilitiesElement.getChildCount(); i++ )
 			{
 				Element abilityElement = abilitiesElement.getChild( i );
-				AbilityTree tree = null;
-
-				if (abilityElement.getChildCount() == 0)
-				{
-					tree = new AbilityTree( abilityElement.getText() );
-				}
-				else
-				{
-					IAbility ability = null;
-					if ( abilityElement.getName().equalsIgnoreCase( "Active" ) )
-					{
-						ability = ActiveAbility.load( abilityElement );
-					}
-					else if  ( abilityElement.getName().equalsIgnoreCase( "Passive" ) )
-					{
-						ability = PassiveAbility.load( abilityElement );
-					}
-					else
-					{
-						throw new RuntimeException( "Invalid ability type '" + abilityElement.getName() + "'" );
-					}
-
-					tree = new AbilityTree( ability );
-				}
-
-				tree.current.current.setCaster( this );
-				slottedAbilities.add( tree );
+				IAbility ability = AbilityLoader.loadAbility( abilityElement );
+				ability.setCaster( this );
+				slottedAbilities.add( ability );
 			}
 		}
 
@@ -273,11 +249,11 @@ public class GameEntity extends Entity
 	{
 		Array<GameEventHandler> handlers = new Array<GameEventHandler>();
 
-		for ( AbilityTree a : slottedAbilities )
+		for ( IAbility a : slottedAbilities )
 		{
-			if ( a != null && a.current.current instanceof PassiveAbility )
+			if ( a != null && a instanceof PassiveAbility )
 			{
-				handlers.add( (PassiveAbility) a.current.current );
+				handlers.add( (PassiveAbility) a );
 			}
 		}
 
@@ -349,11 +325,11 @@ public class GameEntity extends Entity
 
 		if (!updatedAbilityDam)
 		{
-			for (AbilityTree ab : slottedAbilities)
+			for (IAbility ab : slottedAbilities)
 			{
 				if (ab != null)
 				{
-					ab.current.current.onDamaged();
+					ab.onDamaged();
 				}
 			}
 			updatedAbilityDam = true;
@@ -368,11 +344,11 @@ public class GameEntity extends Entity
 
 		if (!updatedAbilityHeal)
 		{
-			for (AbilityTree ab : slottedAbilities)
+			for (IAbility ab : slottedAbilities)
 			{
 				if (ab != null)
 				{
-					ab.current.current.onHealed();
+					ab.onHealed();
 				}
 			}
 			updatedAbilityHeal = true;
@@ -509,7 +485,7 @@ public class GameEntity extends Entity
 	public Array<Element> xmlData;
 
 	// ----------------------------------------------------------------------
-	public Array<AbilityTree> slottedAbilities = new Array<AbilityTree>();
+	public Array<IAbility> slottedAbilities = new Array<IAbility>();
 
 	// ----------------------------------------------------------------------
 	public Sprite defaultHitEffect = AssetManager.loadSprite( "EffectSprites/Strike/Strike", 0.1f, "Hit" );

@@ -3,7 +3,6 @@ package Roguelike.Ability.PassiveAbility;
 import java.io.IOException;
 import java.util.HashMap;
 
-import Roguelike.Ability.AbilityTree;
 import Roguelike.AssetManager;
 import Roguelike.Ability.IAbility;
 import Roguelike.Entity.Entity;
@@ -26,8 +25,6 @@ public class PassiveAbility extends GameEventHandler implements IAbility
 	public String Description;
 	public Sprite Icon;
 
-	public AbilityTree.AbilityStage tree;
-
 	// ----------------------------------------------------------------------
 	@Override
 	public void setCaster(Entity entity)
@@ -35,31 +32,8 @@ public class PassiveAbility extends GameEventHandler implements IAbility
 
 	// ----------------------------------------------------------------------
 	@Override
-	public int getLevel()
-	{
-		return tree.level;
-	}
-
-	// ----------------------------------------------------------------------
-	@Override
-	public void setTree(AbilityTree.AbilityStage tree )
-	{
-		this.tree = tree;
-	}
-
-	// ----------------------------------------------------------------------
-	@Override
 	protected void appendExtraVariables(HashMap<String, Integer> variableMap )
 	{
-		if (tree != null)
-		{
-			variableMap.put("level", tree.level);
-		}
-		else
-		{
-			variableMap.put("level", 1);
-		}
-
 		for (Object[] data : extraData)
 		{
 			variableMap.put( (String)data[0], (Integer)data[1] );
@@ -89,30 +63,6 @@ public class PassiveAbility extends GameEventHandler implements IAbility
 			header.add( label ).expandX().right();
 		}
 		table.add(header).expandX().fillX().left();
-
-		table.row();
-
-		String level = "Level: " + tree.level;
-
-		if (tree.level == 10)
-		{
-			if (tree.branch1 != null)
-			{
-				level += " ( Mutate )";
-			}
-			else
-			{
-				level += " ( Max )";
-			}
-		}
-		else
-		{
-			float per = (float) tree.exp / (float) tree.expToNextLevel;
-			per *= 100;
-			level += " ( " + (int)per + "% )";
-		}
-
-		table.add(new Label(level, skin)).left();
 		table.row();
 
 		Label descLabel = new Label( Description, skin );

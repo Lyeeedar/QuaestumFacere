@@ -22,7 +22,7 @@ public class QuestManager
 
 	public ObjectMap<String, String> flags = new ObjectMap<String, String>();
 
-	public int difficulty;
+	public int difficulty = 1;
 
 	public SaveLevel currentLevel;
 

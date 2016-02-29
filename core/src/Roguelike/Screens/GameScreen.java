@@ -1,7 +1,7 @@
 package Roguelike.Screens;
 
-import Roguelike.Ability.AbilityTree;
 import Roguelike.Ability.ActiveAbility.ActiveAbility;
+import Roguelike.Ability.IAbility;
 import Roguelike.AssetManager;
 import Roguelike.Entity.ActivationAction.ActivationActionGroup;
 import Roguelike.Entity.Entity;
@@ -235,18 +235,6 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 
 			level.advance( delta );
 			processPickupQueue();
-
-			if (contextMenu == null)
-			{
-				for (AbilityTree tree : Global.CurrentLevel.player.slottedAbilities)
-				{
-					if (tree != null && tree.current.level == 10 && tree.current.branch1 != null)
-					{
-						tree.current.mutate( skin, Global.CurrentLevel.player, stage );
-						break;
-					}
-				}
-			}
 		}
 
 		int offsetx = Global.Resolution[ 0 ] / 2 - Global.CurrentLevel.player.tile[ 0 ][ 0 ].x * Global.TileSize - Global.TileSize / 2;
@@ -1089,11 +1077,8 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 						Global.CurrentLevel.player.isVariableMapDirty = true;
 						for ( int i = 0; i < Global.CurrentLevel.player.slottedAbilities.size; i++ )
 						{
-							AbilityTree tree = Global.CurrentLevel.player.slottedAbilities.get( i );
-							if (tree != null)
-							{
-								tree.current.current.setCaster( Global.CurrentLevel.player );
-							}
+							IAbility ab = Global.CurrentLevel.player.slottedAbilities.get( i );
+							ab.setCaster( Global.CurrentLevel.player );
 						}
 					}
 				} );
@@ -1264,16 +1249,16 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 		else if ( Global.Controls.toAbilityKey( keycode ) >= 0 )
 		{
 			int i = Global.Controls.toAbilityKey( keycode );
-			AbilityTree a = Global.CurrentLevel.player.slottedAbilities.size > i ? Global.CurrentLevel.player.slottedAbilities.get( i ) : null;
-			if ( a != null && a.current.current instanceof ActiveAbility && ( (ActiveAbility) a.current.current ).isAvailable() )
+			IAbility a = Global.CurrentLevel.player.slottedAbilities.size > i ? Global.CurrentLevel.player.slottedAbilities.get( i ) : null;
+			if ( a instanceof ActiveAbility && ( (ActiveAbility) a ).isAvailable() )
 			{
-				if (preparedAbility == a.current.current )
+				if (preparedAbility == a )
 				{
 					prepareAbility( null );
 				}
 				else
 				{
-					prepareAbility( (ActiveAbility) a.current.current );
+					prepareAbility( (ActiveAbility) a );
 				}
 			}
 		}

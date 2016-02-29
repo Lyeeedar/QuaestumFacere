@@ -2,7 +2,6 @@ package Roguelike.Save;
 
 import java.util.HashMap;
 
-import Roguelike.Ability.AbilityTree;
 import Roguelike.Ability.IAbility;
 import Roguelike.Dialogue.Dialogue;
 import Roguelike.Dialogue.DialogueManager;
@@ -25,7 +24,7 @@ public final class SaveGameEntity extends SaveableObject<GameEntity>
 	public boolean isPlayer = false;
 	public int quality = 1;
 	public Array<StatusEffect> statuses = new Array<StatusEffect>();
-	public Array<SaveAbilityTree> slottedAbilities = new Array<SaveAbilityTree>();
+	public Array<IAbility> slottedAbilities = new Array<IAbility>();
 	public Inventory inventory;
 	public String UID;
 	public Point spawnPoint;
@@ -51,20 +50,7 @@ public final class SaveGameEntity extends SaveableObject<GameEntity>
 			dialogueData = obj.dialogue.data;
 		}
 
-		for ( AbilityTree a : obj.slottedAbilities )
-		{
-			if (a != null)
-			{
-				SaveAbilityTree saveTree = new SaveAbilityTree();
-				saveTree.store( a );
-
-				slottedAbilities.add( saveTree );
-			}
-			else
-			{
-				slottedAbilities.add( null );
-			}
-		}
+		slottedAbilities.addAll( obj.slottedAbilities );
 
 		UID = obj.UID;
 
@@ -89,44 +75,11 @@ public final class SaveGameEntity extends SaveableObject<GameEntity>
 
 		entity.inventory = inventory;
 
+		entity.slottedAbilities.clear();
 		for ( int i = 0; i < slottedAbilities.size; i++ )
 		{
-			SaveAbilityTree saveTree = slottedAbilities.get( i );
-
-			if (entity.slottedAbilities.size <= i)
-			{
-				if (saveTree == null)
-				{
-					entity.slottedAbilities.add( null );
-				}
-				else
-				{
-					entity.slottedAbilities.add( saveTree.create() );
-					entity.slottedAbilities.get( i ).current.current.setCaster( entity );
-				}
-			}
-			else
-			{
-				AbilityTree tree = entity.slottedAbilities.get( i );
-
-				if (tree == null)
-				{
-					if (saveTree != null)
-					{
-						entity.slottedAbilities.removeIndex( i );
-						entity.slottedAbilities.insert( i, saveTree.create() );
-					}
-				}
-				else
-				{
-					saveTree.writeData( tree );
-				}
-
-				if (entity.slottedAbilities.get( i ) != null)
-				{
-					entity.slottedAbilities.get( i ).current.current.setCaster( entity );
-				}
-			}
+			entity.slottedAbilities.add( slottedAbilities.get( i ) );
+			slottedAbilities.get( i ).setCaster( entity );
 		}
 
 		entity.UID = UID;

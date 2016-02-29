@@ -1,0 +1,33 @@
+<Recipe>
+
+    <ItemTemplate>
+        <Name>Pistol</Name>
+        <Description>Pew Pew</Description>
+
+        <Slot>Weapon</Slot>
+        <Category>Weapon</Category>
+        <Type>Pistol</Type>
+
+        <Icon>
+            <Name>Oryx/uf_split/uf_items/weapon_longbow</Name>
+        </Icon>
+
+        <Events>
+            <Constant>
+                <Attack>11 + 4 * quality</Attack>
+            </Constant>
+        </Events>
+    </ItemTemplate>
+
+    <AllowedAbilities>
+        <PowerShot MinQuality="3"></PowerShot>
+    </AllowedAbilities>
+
+    <AllowedMaterials>
+        <Metal></Metal>
+    </AllowedMaterials>
+
+    <AllowedModifiers>
+        <Incendiary MinQuality="3"></Incendiary>
+    </AllowedModifiers>
+</Recipe>

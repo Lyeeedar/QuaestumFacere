@@ -83,9 +83,14 @@ public class DialogueActionOpenShop extends AbstractDialogueAction
 		{
 			if (item.value > 0)
 			{
-				if (item.ability != null)
+				if (item.ability1 != null)
 				{
-					item.ability.current.current.setCaster( Global.CurrentLevel.player );
+					item.ability1.setCaster( Global.CurrentLevel.player );
+				}
+
+				if (item.ability2 != null)
+				{
+					item.ability2.setCaster( Global.CurrentLevel.player );
 				}
 
 				final boolean hasTheCash = Global.CurrentLevel.player.inventory.getItemCount( "money" ) >= item.value;
@@ -130,15 +135,8 @@ public class DialogueActionOpenShop extends AbstractDialogueAction
 					public void clicked (InputEvent event, float x, float y)
 					{
 
-						if (item.ability != null)
-						{
-							GameScreen.Instance.pickupQueue.add( item );
-						}
-						else
-						{
-							Global.CurrentLevel.player.inventory.equip( item );
-							Global.CurrentLevel.player.inventory.removeItem( "money", item.value );
-						}
+						Global.CurrentLevel.player.inventory.equip( item );
+						Global.CurrentLevel.player.inventory.removeItem( "money", item.value );
 
 						fillTable( table, keyboardHelper );
 					}

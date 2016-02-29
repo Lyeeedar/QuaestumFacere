@@ -165,7 +165,11 @@ public class Global
 		SaveFile save = new SaveFile();
 
 		save.questManager = QuestManager;
-		save.questManager.currentLevel.store( Global.CurrentLevel );
+
+		if (save.questManager.currentLevel != null)
+		{
+			save.questManager.currentLevel.store( Global.CurrentLevel );
+		}
 
 		save.save();
 	}
@@ -586,7 +590,7 @@ public class Global
 		tabPanelStyle.font = skin.getFont( "default" );
 		tabPanelStyle.fontColor = Color.LIGHT_GRAY;
 		tabPanelStyle.overFontColor = Color.WHITE;
-		tabPanelStyle.bodyBackground = new NinePatchDrawable( new NinePatch( AssetManager.loadTextureRegion( "Sprites/GUI/TextField.png" ), 6, 6, 6, 6 ) ).tint( new Color( 1, 1, 1, 0.2f ) );
+		tabPanelStyle.bodyBackground = new NinePatchDrawable( new NinePatch( AssetManager.loadTextureRegion( "Sprites/GUI/TextField.png" ), 6, 6, 6, 6 ) ).tint( new Color( 1, 1, 1, 0.9f ) );
 		tabPanelStyle.titleButtonUnselected = new NinePatchDrawable( new NinePatch( AssetManager.loadTextureRegion( "Sprites/GUI/Button.png" ), 12, 12, 12, 12 ) );
 		tabPanelStyle.titleButtonSelected = ((NinePatchDrawable)tabPanelStyle.titleButtonUnselected).tint( new Color( 0.8f, 0.8f, 0.8f, 1.0f ) );
 		skin.add( "default", tabPanelStyle );
@@ -953,10 +957,8 @@ public class Global
 		PENETRATION, // Penetration
 
 		// Modifier stats
-		STRENGTH, // Melee dam
-		PERCEPTION, // Sight range + range dam
-		WILLPOWER, // magic dam
-		CONSTITUTION, // Health + Blood dam
+		VITALITY, // Health
+		SIGHT, // sight range
 		SPEED; // Speed
 
 		public static Statistic[] PassabilityValues = { Statistic.WALK, Statistic.LEVITATE, Statistic.LIGHT, Statistic.ENTITY };
@@ -964,10 +966,8 @@ public class Global
 		public static Statistic[] BaseValues = { Statistic.ATTACK, Statistic.DEFENSE };
 
 		public static Statistic[] ModifierValues = {
-			Statistic.STRENGTH,
-			Statistic.PERCEPTION,
-			Statistic.WILLPOWER,
-			Statistic.CONSTITUTION,
+			Statistic.VITALITY,
+			Statistic.SIGHT,
 			Statistic.SPEED };
 
 		public static HashMap<String, Integer> emptyMap = new HashMap<String, Integer>();

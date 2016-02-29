@@ -31,12 +31,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 /**
  * Created by Philip on 28-Feb-16.
  */
-public class HubScreen implements Screen, InputProcessor
+public class LoadoutScreen implements Screen, InputProcessor
 {
 
-	public static HubScreen Instance;
+	public static LoadoutScreen Instance;
 
-	public HubScreen()
+	public LoadoutScreen()
 	{
 		Instance = this;
 	}
@@ -66,77 +66,37 @@ public class HubScreen implements Screen, InputProcessor
 	{
 		table.clear();
 
-		keyboardHelper = new ButtonKeyboardHelper(  );
-
-		tabPanel = new TabPanel( Global.loadSkin() );
-
-		Array<UIWrapper> quests = new Array<UIWrapper>(  );
-		Array<UIWrapper> items = new Array<UIWrapper>(  );
-
-		Array<Quest> chosenQuests = Global.QuestManager.getQuests( );
-
-		for (Quest quest : chosenQuests)
-		{
-			UIWrapper wrapper = new UIWrapper();
-			wrapper.obj = quest;
-
-			quests.add( wrapper );
-		}
-
-		for (int i = 0; i < 10; i++)
-		{
-			Item item = TreasureGenerator.generateWeapon( Global.QuestManager.difficulty, MathUtils.random ).get( 0 );
-
-			UIWrapper wrapper = new UIWrapper();
-			wrapper.obj = item;
-
-			items.add(wrapper);
-		}
-
-		createTab( null, "Missions", quests );
-		createTab( null, "Market", items );
-
-		table.add( tabPanel ).colspan( 2 ).expand().fill().pad( 25 );
-		table.row();
-	}
-
-	public void createTab(ButtonKeyboardHelper keyboardHelper, String title, Array<UIWrapper> items )
-	{
-		Table tab = new Table(  );
 		Skin skin = Global.loadSkin();
 
-		Table buttons = new Table(  );
-		final Table content = new Table(  );
+		keyboardHelper = new ButtonKeyboardHelper(  );
 
-		for (final UIWrapper item : items)
+		Table slots = new Table(  );
+		Table items = new Table(  );
+		Table desc = new Table(  );
+
+		ScrollPane slotsScrollPane = new ScrollPane( slots, skin );
+		slotsScrollPane.setScrollingDisabled( true, false );
+		slotsScrollPane.setVariableSizeKnobs( true );
+		slotsScrollPane.setFadeScrollBars( false );
+		slotsScrollPane.setScrollbarsOnTop( false );
+		slotsScrollPane.setForceScroll( false, true );
+
+		ScrollPane itemsScrollPane = new ScrollPane( items, skin );
+		itemsScrollPane.setScrollingDisabled( true, false );
+		itemsScrollPane.setVariableSizeKnobs( true );
+		itemsScrollPane.setFadeScrollBars( false );
+		itemsScrollPane.setScrollbarsOnTop( false );
+		itemsScrollPane.setForceScroll( false, true );
+		itemsScrollPane.setFlickScroll( false );
+
+		table.add( slotsScrollPane ).expand().fill();
+		table.add( itemsScrollPane ).expand().fill();
+		table.add( desc ).expand().fill();
+
+		for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
 		{
-			Button button = item.getButton();
 
-			button.addListener( new ClickListener(  )
-			{
-				public void clicked (InputEvent event, float x, float y)
-				{
-					content.clear();
-					content.add( item.getContent() ).expand().fill();
-				}
-			} );
-
-			buttons.add( button ).expandX().fillX();
-			buttons.row();
 		}
-
-		ScrollPane scrollPane = new ScrollPane( buttons, skin );
-		scrollPane.setScrollingDisabled( true, false );
-		scrollPane.setVariableSizeKnobs( true );
-		scrollPane.setFadeScrollBars( false );
-		scrollPane.setScrollbarsOnTop( false );
-		scrollPane.setForceScroll( false, true );
-		scrollPane.setFlickScroll( false );
-
-		tab.add( scrollPane ).width( Value.percentWidth( 0.4f, tab ) ).expandY().fillY();
-		tab.add( content ).width( Value.percentWidth( 0.6f, tab ) ).expandY().fillY();
-
-		tabPanel.addTab( title, tab );
 	}
 
 	@Override
@@ -268,7 +228,6 @@ public class HubScreen implements Screen, InputProcessor
 
 	boolean created;
 
-	TabPanel tabPanel;
 	Table table;
 
 	Stage stage;
@@ -327,95 +286,5 @@ public class HubScreen implements Screen, InputProcessor
 	public boolean scrolled( int amount )
 	{
 		return false;
-	}
-
-	public class UIWrapper
-	{
-		public Object obj;
-
-		private Sprite getIcon()
-		{
-			if (obj instanceof Quest)
-			{
-				Quest quest = (Quest)obj;
-				return quest.icon;
-			}
-			else if (obj instanceof Item)
-			{
-				Item item = (Item)obj;
-				return item.getIcon();
-			}
-
-			return null;
-		}
-
-		private String getName()
-		{
-			if (obj instanceof Quest)
-			{
-				Quest quest = (Quest)obj;
-				return quest.name;
-			}
-			else if (obj instanceof Item)
-			{
-				Item item = (Item)obj;
-				return item.getName();
-			}
-
-			return "";
-		}
-
-		private int getValue()
-		{
-			if (obj instanceof Quest)
-			{
-				Quest quest = (Quest)obj;
-				return quest.reward;
-			}
-			else if (obj instanceof Item)
-			{
-				Item item = (Item)obj;
-				return item.value;
-			}
-
-			return 0;
-		}
-
-		public Button getButton()
-		{
-			Skin skin = Global.loadSkin();
-			Button button = new Button( skin );
-			button.defaults().pad( 5 );
-
-			SpriteWidget sprite = new SpriteWidget( getIcon(), 24, 24 );
-			button.add( sprite );
-
-			Table right = new Table(  );
-			button.add( right ).expand().left();
-
-			right.add( new Label( getName(), skin ) ).left();
-			right.row();
-			right.add( new Label( ""+getValue(), skin ) ).left();
-			right.row();
-
-			return button;
-		}
-
-		public Table getContent()
-		{
-			if (obj instanceof Quest)
-			{
-				Quest quest = (Quest)obj;
-
-				return quest.createTable( Global.loadSkin() );
-			}
-			else if (obj instanceof Item)
-			{
-				Item item = (Item)obj;
-				return item.createTable( Global.loadSkin(), null );
-			}
-
-			return new Table();
-		}
 	}
 }

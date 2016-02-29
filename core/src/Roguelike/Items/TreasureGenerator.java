@@ -184,9 +184,9 @@ public class TreasureGenerator
 		String materialType = recipe.getMaterial( quality, ran );
 		Item materialItem = getMaterial( materialType, quality, ran );
 
-		Item item = Recipe.createRecipe( recipe.recipeName, materialItem );
+		Item item = Recipe.createRecipe( recipe.itemTemplate, materialItem );
 
-		item.getIcon().colour.mul( materialItem.getIcon().colour );
+		item.getIcon().colour = item.getIcon().colour.cpy().mul( materialItem.getIcon().colour );
 
 		int numModifiers = ran.nextInt( Math.max( 2, quality / 2 ) );
 
@@ -264,10 +264,10 @@ public class TreasureGenerator
 		return materialItem;
 	}
 
-	private static final RecipeList recipeList = new RecipeList( "Items/Recipes/Recipes.xml" );
+	public static final RecipeList recipeList = new RecipeList( "Items/Recipes/Recipes.xml" );
 	private static final HashMap<String, QualityMap> materialLists = new HashMap<String, QualityMap>(  );
 
-	private static class RecipeList
+	public static class RecipeList
 	{
 		public Array<RecipeData> armourRecipes = new Array<RecipeData>(  );
 		public Array<RecipeData> weaponRecipes = new Array<RecipeData>(  );
@@ -301,6 +301,27 @@ public class TreasureGenerator
 
 				weaponRecipes.add( new RecipeData( weaponElement.getName() ) );
 			}
+		}
+
+		public XmlReader.Element getItemTemplate( String recipe )
+		{
+			for (RecipeData rd : armourRecipes)
+			{
+				if (rd.recipeName.equals( recipe ))
+				{
+					return rd.itemTemplate;
+				}
+			}
+
+			for (RecipeData rd : weaponRecipes)
+			{
+				if (rd.recipeName.equals( recipe ))
+				{
+					return rd.itemTemplate;
+				}
+			}
+
+			return null;
 		}
 	}
 

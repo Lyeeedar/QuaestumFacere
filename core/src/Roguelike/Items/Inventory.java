@@ -111,31 +111,19 @@ public final class Inventory
 			addItem( item );
 		}
 
-		for ( int i = 0; i < item.slots.size; i++ )
+		if ( m_equipment.containsKey( item.slot ) )
 		{
-			EquipmentSlot slot = item.slots.get( i );
-			if ( m_equipment.containsKey( slot ) )
-			{
-				unequip( m_equipment.get( slot ) );
-			}
+			unequip( m_equipment.get( item.slot ) );
 		}
 
-		for ( int i = 0; i < item.slots.size; i++ )
-		{
-			EquipmentSlot slot = item.slots.get( i );
-			m_equipment.put( slot, item );
-			isVariableMapDirty = true;
-		}
+		m_equipment.put( item.slot, item );
+		isVariableMapDirty = true;
 	}
 
 	public void unequip( Item item )
 	{
-		for ( int i = 0; i < item.slots.size; i++ )
-		{
-			EquipmentSlot slot = item.slots.get( i );
-			m_equipment.remove( slot );
-			isVariableMapDirty = true;
-		}
+		m_equipment.remove( item.slot );
+		isVariableMapDirty = true;
 	}
 
 	public void removeItem( Item item )
@@ -282,7 +270,7 @@ public final class Inventory
 			{
 				Item i = itr.next();
 
-				if ( type == ItemCategory.ALL || i.category == type )
+				if ( i.category == type )
 				{
 					queued = i;
 					break;

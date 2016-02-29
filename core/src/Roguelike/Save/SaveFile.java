@@ -74,6 +74,7 @@ public final class SaveFile
 	private static Kryo kryo;
 
 	public QuestManager questManager;
+	public Array<Item> unlockedItems;
 
 	public void save()
 	{
@@ -92,6 +93,7 @@ public final class SaveFile
 		}
 
 		kryo.writeObject( output, questManager );
+		kryo.writeObject( output, unlockedItems );
 
 		output.close();
 
@@ -119,6 +121,7 @@ public final class SaveFile
 		}
 
 		questManager = kryo.readObject( input, QuestManager.class );
+		unlockedItems = kryo.readObject( input, Array.class );
 
 		input.close();
 	}

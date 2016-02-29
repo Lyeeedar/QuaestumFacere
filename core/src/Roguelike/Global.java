@@ -4,6 +4,7 @@ import Roguelike.Entity.Entity;
 import Roguelike.Entity.GameEntity;
 import Roguelike.GameEvent.Damage.DamageObject;
 import Roguelike.GameEvent.GameEventHandler;
+import Roguelike.Items.Item;
 import Roguelike.Levels.Level;
 import Roguelike.Lights.Light;
 import Roguelike.Quests.QuestManager;
@@ -101,6 +102,7 @@ public class Global
 
 	// ----------------------------------------------------------------------
 	public static QuestManager QuestManager;
+	public static Array<Item> UnlockedItems = new Array<Item>(  );
 
 	// ----------------------------------------------------------------------
 	public static Level CurrentLevel;
@@ -148,6 +150,7 @@ public class Global
 		}
 
 		Global.QuestManager = save.questManager;
+		Global.UnlockedItems = save.unlockedItems;
 
 		return save;
 	}
@@ -165,6 +168,7 @@ public class Global
 		SaveFile save = new SaveFile();
 
 		save.questManager = QuestManager;
+		save.unlockedItems = UnlockedItems;
 
 		if (save.questManager.currentLevel != null)
 		{
@@ -178,6 +182,7 @@ public class Global
 	public static void newWorld()
 	{
 		QuestManager = new QuestManager();
+		UnlockedItems.clear();
 
 		GameScreen.Instance.queueMessage( "Controls",
 										  "Click in a direction to move there (or use the arrow keys)." +
@@ -307,34 +312,6 @@ public class Global
 		}
 
 		defender.applyDamage( damObj.damage, attacker );
-	}
-
-	// ----------------------------------------------------------------------
-	public static int calculateScaledAttack( HashMap<String, Integer> attackVariableMap, HashMap<String, Integer> attackerVariableMap )
-	{
-		int baseAtk = attackVariableMap.get( Statistic.ATTACK.toString().toLowerCase() );
-		int totalAtk = baseAtk;
-
-		for ( Statistic stat : Statistic.ModifierValues )
-		{
-			int atkStat = attackVariableMap.get( stat.toString().toLowerCase() );
-
-			if (atkStat == 0) { continue; }
-
-			float atkerStat = attackerVariableMap.get( stat.toString().toLowerCase() ) / 5.0f;
-
-			float sclVal = atkerStat * atkStat;
-
-			float falloff = (float)Math.sqrt( sclVal );
-
-			float modifier = falloff / 10.0f;
-
-			int dam = (int) ( baseAtk * modifier );
-
-			totalAtk += dam;
-		}
-
-		return totalAtk;
 	}
 
 	// ----------------------------------------------------------------------

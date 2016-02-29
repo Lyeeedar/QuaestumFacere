@@ -7,7 +7,12 @@ import Roguelike.Quests.Input.AbstractQuestInput;
 import Roguelike.Quests.Output.AbstractQuestOutputCondition;
 import Roguelike.Quests.Output.QuestOutput;
 import Roguelike.Sprite.Sprite;
+import Roguelike.UI.Seperator;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.XmlReader;
@@ -110,6 +115,32 @@ public class Quest
 
 			rooms.add( room );
 		}
+	}
+
+	public Table createTable( Skin skin )
+	{
+		Table table = new Table();
+
+		table.defaults().pad( 10 );
+
+		table.add( new Label( name, skin, "title" ) ).expandX().left();
+		table.row();
+
+		table.add( new Seperator( skin ) ).expandX().fillX();
+		table.row();
+
+		Label desc = new Label( description, skin );
+		desc.setWrap( true );
+		table.add( desc ).expandX().fillX().left();
+		table.row();
+
+		Label rew = new Label( "Reward: " + reward, skin );
+		rew.setColor( Color.GOLD );
+
+		table.add( rew ).expandX().left();
+		table.row();
+
+		return table;
 	}
 
 	public static Quest load(String name)

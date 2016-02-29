@@ -37,7 +37,7 @@ public final class Item extends GameEventHandler
 	public String name = "";
 	public String description = "";
 	public Sprite hitEffect;
-	public Array<EquipmentSlot> slots = new Array<EquipmentSlot>();
+	public EquipmentSlot slot;
 	public ItemCategory category;
 	public String type = "";
 	public boolean canStack;
@@ -51,8 +51,8 @@ public final class Item extends GameEventHandler
 
 	public WeaponDefinition wepDef;
 	public int quality = 1;
-	public int upgradeCount = 1;
 	public int value;
+	public int utilSlots;
 
 	public Array<SpriteGroup> spriteGroups = new Array<SpriteGroup>(  );
 
@@ -66,47 +66,9 @@ public final class Item extends GameEventHandler
 	@Override
 	protected void appendExtraVariables(HashMap<String, Integer> variableMap )
 	{
-		variableMap.put("upgrade", upgradeCount-1);
-
 		for (Object[] data : extraData)
 		{
 			variableMap.put( (String)data[0], (Integer)data[1] );
-		}
-	}
-
-	// ----------------------------------------------------------------------
-	public void upgrade()
-	{
-		upgradeCount++;
-
-		if ( slots.contains( EquipmentSlot.WEAPON, true ) )
-		{
-			// only upgrade attack
-			String currentAtk = constantEvent.equations.get( Statistic.ATTACK );
-
-			if (!currentAtk.endsWith( "upgrade)" ))
-			{
-				currentAtk = "(" + currentAtk + ")*(1+0.1*upgrade)";
-			}
-
-			constantEvent.putStatistic( Statistic.ATTACK, currentAtk );
-		}
-		else
-		{
-			for (Statistic stat : Statistic.values())
-			{
-				if (constantEvent.equations.containsKey( stat ))
-				{
-					String currentVal = constantEvent.equations.get( stat );
-
-					if (!currentVal.endsWith( "upgrade)" ))
-					{
-						currentVal = "(" + currentVal + ")*(1+0.1*upgrade)";
-					}
-
-					constantEvent.putStatistic( stat, currentVal );
-				}
-			}
 		}
 	}
 
@@ -127,8 +89,9 @@ public final class Item extends GameEventHandler
 		int quality = xml.getInt( "Quality" );
 
 		Item materialItem = TreasureGenerator.getMaterial( material, quality, MathUtils.random );
+		Element itemTemplate = TreasureGenerator.recipeList.getItemTemplate( recipe );
 
-		Item item = Recipe.createRecipe( recipe, materialItem );
+		Item item = Recipe.createRecipe( itemTemplate, materialItem );
 		item.getIcon().colour.mul( materialItem.getIcon().colour );
 
 		Element prefixElement = xml.getChildByName( "Prefix" );
@@ -195,16 +158,16 @@ public final class Item extends GameEventHandler
 	// ----------------------------------------------------------------------
 	public Table createTable( Skin skin, GameEntity entity )
 	{
-		Inventory inventory = entity.getInventory();
+		Inventory inventory = entity != null ? entity.getInventory() : null;
 
-		if ( slots.contains( EquipmentSlot.WEAPON, true ) )
+		if ( slot == EquipmentSlot.WEAPON )
 		{
-			Item other = inventory.getEquip( EquipmentSlot.WEAPON );
+			Item other = inventory != null ? inventory.getEquip( EquipmentSlot.WEAPON ) : null;
 			return createWeaponTable( other, entity, skin );
 		}
-		else if ( slots.size > 0 )
+		else if ( slot != null )
 		{
-			Item other = inventory.getEquip( slots.get( 0 ) );
+			Item other = inventory != null ? inventory.getEquip( slot ) : null;
 			return createArmourTable( other, entity, skin );
 		}
 
@@ -326,6 +289,7 @@ public final class Item extends GameEventHandler
 	private Table createWeaponTable( Item other, GameEntity entity, Skin skin )
 	{
 		Table table = new Table();
+		table.defaults().pad( 5 );
 
 		Table titleRow = new Table();
 
@@ -341,9 +305,12 @@ public final class Item extends GameEventHandler
 		table.add( titleRow ).expandX().fillX();
 		table.row();
 
+		table.add( new Seperator( skin ) ).expandX().fillX();
+		table.row();
+
 		Label descLabel = new Label( description, skin );
 		descLabel.setWrap( true );
-		table.add( descLabel ).expand().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
+		table.add( descLabel ).expandX().fillX().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
 		table.row();
 
 		table.add( new Seperator( skin, false ) ).expandX().fillX();
@@ -358,8 +325,8 @@ public final class Item extends GameEventHandler
 		table.add( new Seperator( skin, false ) ).expandX().fillX();
 		table.row();
 
-		int oldDam = other != null ? Global.calculateScaledAttack( Statistic.statsBlockToVariableBlock( other.getStatistics( entity.getVariableMap() ) ), entity.getVariableMap() ) : 0;
-		int newDam = Global.calculateScaledAttack( Statistic.statsBlockToVariableBlock( getStatistics( entity.getVariableMap() ) ), entity.getVariableMap() );
+		int oldDam = other != null ? other.getStatistic( Statistic.emptyMap, Statistic.ATTACK ) : 0;
+		int newDam = getStatistic( Statistic.emptyMap, Statistic.ATTACK );
 
 		String damText = "Damage: " + newDam;
 		if ( newDam != oldDam )
@@ -382,39 +349,7 @@ public final class Item extends GameEventHandler
 		table.add( new Seperator( skin, false ) ).expandX().fillX();
 		table.row();
 
-		table.add( new Label( "Scales with:", skin ) ).expandX().left();
-		table.row();
-
-		for (Statistic stat : Statistic.values())
-		{
-			int val = getStatistic( entity.getVariableMap(), stat );
-			int otherVal = other != null ? other.getStatistic( entity.getVariableMap(), stat ) : 0;
-
-			if ( stat == Statistic.ATTACK || stat == Statistic.DEFENSE )
-			{
-				continue;
-			}
-
-			if (val > 0 || val != otherVal)
-			{
-				String scale = val > 0 ? Global.ScaleLevel.values()[ val - 1 ].toString() : "--";
-
-				if (val < otherVal)
-				{
-					scale = "[RED] " + scale + "[]";
-				}
-				else if (val > otherVal)
-				{
-					scale = "[GREEN] " + scale + "[]";
-				}
-
-				Label statLabel = new Label( Global.capitalizeString( stat.toString() ) + ": " + scale, skin );
-				table.add( statLabel ).expandX().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
-				table.row();
-			}
-		}
-
-		Array<String> lines = toString( entity.getVariableMap(), true );
+		Array<String> lines = toString( Statistic.emptyMap, true );
 		for (String line : lines)
 		{
 			if (line.equals( "---" ))
@@ -547,19 +482,16 @@ public final class Item extends GameEventHandler
 		String slotsElement = xmlElement.get( "Slot", null );
 		if ( slotsElement != null )
 		{
-			String[] split = slotsElement.split( "," );
-			for ( String s : split )
-			{
-				slots.add( EquipmentSlot.valueOf( s.toUpperCase() ) );
-			}
+			slot = EquipmentSlot.valueOf( slotsElement.toUpperCase() );
 		}
 		category = xmlElement.get( "Category", null ) != null ? ItemCategory.valueOf( xmlElement.get( "Category" ).toUpperCase() ) : category;
 		type = xmlElement.get( "Type", type ).toLowerCase();
 		quality = xmlElement.getInt( "Quality", quality );
 		value = xmlElement.getInt( "Value", value );
+		utilSlots = xmlElement.getInt( "UtilitySlots", utilSlots );
 
 		// Load the wep def
-		if (slots.contains( EquipmentSlot.WEAPON, true ) && type != null)
+		if (slot == EquipmentSlot.WEAPON && type != null)
 		{
 			wepDef = WeaponDefinition.load( type );
 		}
@@ -586,7 +518,7 @@ public final class Item extends GameEventHandler
 	// ----------------------------------------------------------------------
 	public EquipmentSlot getMainSlot()
 	{
-		return slots.size > 0 ? slots.get( 0 ) : null;
+		return slot;
 	}
 
 	// ----------------------------------------------------------------------

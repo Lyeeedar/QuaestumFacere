@@ -14,9 +14,9 @@ import java.util.Random;
  */
 public class Recipe
 {
-	public static Item createRecipe( String recipe, Item material )
+	public static Item createRecipe( XmlReader.Element itemTemplate, Item material )
 	{
-		Item item = Item.load( "Recipes/"+recipe );
+		Item item = Item.load( itemTemplate );
 		item.quality = material.quality;
 
 		item.applyQuality( material.quality );

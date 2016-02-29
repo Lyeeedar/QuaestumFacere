@@ -25,7 +25,7 @@ public class RoguelikeGame extends Game
 
 	public enum ScreenEnum
 	{
-		MAINMENU, GAME, LOADING, HUB, OPTIONS, CREDITS
+		MAINMENU, GAME, LOADING, HUB, OPTIONS, CREDITS, LOADOUT
 	}
 
 	public final HashMap<ScreenEnum, Screen> screens = new HashMap<ScreenEnum, Screen>();
@@ -65,6 +65,7 @@ public class RoguelikeGame extends Game
 		screens.put( ScreenEnum.HUB, new HubScreen() );
 		screens.put( ScreenEnum.OPTIONS, new OptionsScreen() );
 		screens.put( ScreenEnum.CREDITS, new CreditsScreen() );
+		screens.put( ScreenEnum.LOADOUT, new LoadoutScreen() );
 
 		switchScreen( ScreenEnum.MAINMENU );
 	}

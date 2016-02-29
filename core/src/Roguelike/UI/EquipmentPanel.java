@@ -30,7 +30,7 @@ public class EquipmentPanel extends TilePanel
 
 	public EquipmentPanel( Skin skin, Stage stage )
 	{
-		super( skin, stage, AssetManager.loadSprite( "GUI/TileBackground" ), AssetManager.loadSprite( "GUI/TileBorder" ), 1, Item.EquipmentSlot.values().length + 1, 48, false );
+		super( skin, stage, AssetManager.loadSprite( "GUI/TileBackground" ), AssetManager.loadSprite( "GUI/TileBorder" ), 1, Item.EquipmentSlot.values().length, 48, false );
 
 		drawHorizontalBackground = false;
 		font = skin.getFont( "default" );
@@ -107,27 +107,7 @@ public class EquipmentPanel extends TilePanel
 	@Override
 	public Color getColourForData( Object data )
 	{
-		if (data instanceof Integer)
-		{
-			int stones = (Integer)data;
-
-			for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
-			{
-				final Item equip = Global.CurrentLevel.player.inventory.getEquip( slot );
-
-				if ( equip != null )
-				{
-					final int required = 2 * equip.upgradeCount;
-
-					if (required <= stones)
-					{
-						return null;
-					}
-				}
-			}
-		}
-
-		if ( !( data instanceof Item ) ) { return Color.DARK_GRAY; }
+				if ( !( data instanceof Item ) ) { return Color.DARK_GRAY; }
 
 		return null;
 	}

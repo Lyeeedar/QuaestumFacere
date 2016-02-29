@@ -1041,7 +1041,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 		{
 			final Item item = pickupQueue.removeIndex( 0 );
 
-			if ( item.slots.size > 0 )
+			if ( item.slot != null )
 			{
 				// Is Equipment
 
@@ -1062,14 +1062,11 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 					{
 						clearContextMenu( true );
 
-						for ( Item.EquipmentSlot slot : item.slots)
-						{
-							Item currentItem = Global.CurrentLevel.player.inventory.getEquip( slot );
+						Item currentItem = Global.CurrentLevel.player.inventory.getEquip( item.slot );
 
-							if (currentItem != null)
-							{
-								Global.CurrentLevel.player.tile[0][0].items.add( currentItem );
-							}
+						if (currentItem != null)
+						{
+							Global.CurrentLevel.player.tile[0][0].items.add( currentItem );
 						}
 
 						Global.CurrentLevel.player.getInventory().equip( item );

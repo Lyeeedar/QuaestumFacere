@@ -201,16 +201,6 @@ public abstract class Entity implements IGameObject
 		}
 
 		variableMap.put( "maxhp", variableMap.get( Statistic.VITALITY.toString().toLowerCase() ) * 10 );
-
-		if (inventory.getEquip( EquipmentSlot.WEAPON ) != null)
-		{
-			Item wep = inventory.getEquip( EquipmentSlot.WEAPON );
-
-			int atk = Global.calculateScaledAttack( Statistic.statsBlockToVariableBlock( wep.getStatistics( variableMap ) ), variableMap );
-
-			String key = Statistic.ATTACK.toString().toLowerCase();
-			variableMap.put( key, variableMap.get( key ) + atk );
-		}
 	}
 
 	// ----------------------------------------------------------------------

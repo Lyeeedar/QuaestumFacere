@@ -471,7 +471,8 @@ public class TaskAttack extends AbstractTask
 			for ( GameTile tile : attackedTiles )
 			{
 				// do misses
-				int hitPercent = weapon != null && weapon.wepDef != null ? weapon.wepDef.hitPercent : 100;
+				int hitPercent = entity.getVariable( Global.Statistic.ACCURACY );
+
 				if ( hitPercent < 100 )
 				{
 					if ( MathUtils.random( 100 ) > hitPercent )

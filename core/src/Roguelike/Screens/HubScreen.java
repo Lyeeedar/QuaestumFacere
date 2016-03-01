@@ -81,10 +81,6 @@ public class HubScreen implements Screen, InputProcessor
 			market.add(item);
 		}
 
-		createMissions( chosenQuests );
-		createMarket( market );
-		createStash();
-
 		Skin skin = Global.loadSkin();
 
 		ScrollPane missionScrollPane = new ScrollPane( missionList, skin );
@@ -125,10 +121,48 @@ public class HubScreen implements Screen, InputProcessor
 
 		table.add( tabPanel ).colspan( 2 ).expand().fill().pad( 25 );
 		table.row();
+
+		createMissions( chosenQuests, missionHelper );
+		createMarket( market, marketHelper );
+		createStash( stashHelper );
+
+		missionHelper.scrollPane = missionScrollPane;
+		marketHelper.scrollPane = marketScrollPane;
+		stashHelper.scrollPane = stashScrollPane;
+
+		tabPanel.addListener( new ChangeListener() {
+			@Override
+			public void changed( ChangeEvent event, Actor actor )
+			{
+				ButtonKeyboardHelper oldHelper = keyboardHelper;
+
+				if (tabPanel.getSelectedIndex() == 0)
+				{
+					keyboardHelper = missionHelper;
+				}
+				else if (tabPanel.getSelectedIndex() == 1)
+				{
+					keyboardHelper = marketHelper;
+				}
+				else if (tabPanel.getSelectedIndex() == 2)
+				{
+					keyboardHelper = stashHelper;
+				}
+
+				keyboardHelper.trySetCurrent( oldHelper.currentx, oldHelper.currenty, oldHelper.currentz );
+			}
+		} );
+
+		keyboardHelper = missionHelper;
 	}
 
-	public void createMissions( Array<Quest> items )
+	public void createMissions( Array<Quest> items, final ButtonKeyboardHelper helper )
 	{
+		for (Actor a : tabPanel.tabTitleTable.getChildren())
+		{
+			helper.add( a, 0, 0 );
+		}
+
 		final Skin skin = Global.loadSkin();
 
 		for (final Quest item : items)
@@ -167,21 +201,35 @@ public class HubScreen implements Screen, InputProcessor
 
 					missionContent.add( embark ).expandX().right();
 					missionContent.row();
+
+					helper.replace( embark, 1, 1 );
 				}
 			} );
 
 			missionList.add( button ).expandX().fillX();
 			missionList.row();
+
+			helper.add( button );
 		}
 	}
 
-	public void createMarket( final Array<Item> items )
+	public void createMarket( final Array<Item> items, final ButtonKeyboardHelper helper )
 	{
+		ScrollPane scrollPane = helper.scrollPane;
+		helper.clearGrid();
+		helper.scrollPane = scrollPane;
+
+		for (Actor a : tabPanel.tabTitleTable.getChildren())
+		{
+			helper.add( a, 0, 0 );
+		}
+
 		final Skin skin = Global.loadSkin();
 
 		marketList.clear();
 		marketContent.clear();
 
+		int i = 0;
 		for ( Item.ItemCategory category : Item.ItemCategory.values() )
 		{
 			Array<Item> categoryItems = new Array<Item>(  );
@@ -223,6 +271,8 @@ public class HubScreen implements Screen, InputProcessor
 				right.add( valueLabel ).left();
 				right.row();
 
+				final int currenti = i++;
+
 				button.addListener( new ClickListener()
 				{
 					public void clicked( InputEvent event, float x, float y )
@@ -244,30 +294,47 @@ public class HubScreen implements Screen, InputProcessor
 									Global.UnlockedItems.add( item );
 									Global.Funds -= item.value;
 
-									createMarket( items );
-									createStash();
+									createMarket( items, helper );
+									createStash( stashHelper );
 								}
 							} );
 
 							marketContent.add( buy ).expandX().right();
 							marketContent.row();
+
+							helper.clearColumn( 1 );
+							helper.replace( buy, 1, currenti );
 						}
 					}
 				} );
 
 				marketList.add( button ).expandX().fillX();
 				marketList.row();
+
+				helper.add( button );
 			}
 		}
+
+		helper.trySetCurrent(  );
 	}
 
-	public void createStash()
+	public void createStash( final ButtonKeyboardHelper helper )
 	{
+		ScrollPane scrollPane = helper.scrollPane;
+		helper.clearGrid();
+		helper.scrollPane = scrollPane;
+
+		for (Actor a : tabPanel.tabTitleTable.getChildren())
+		{
+			helper.add( a, 0, 0 );
+		}
+
 		final Skin skin = Global.loadSkin();
 
 		stashList.clear();
 		stashContent.clear();
 
+		int i = 0;
 		for ( Item.ItemCategory category : Item.ItemCategory.values() )
 		{
 			Array<Item> categoryItems = new Array<Item>(  );
@@ -301,6 +368,8 @@ public class HubScreen implements Screen, InputProcessor
 				right.add( new Label( "" + item.value, skin ) ).left();
 				right.row();
 
+				final int currenti = i++;
+
 				button.addListener( new ClickListener()
 				{
 					public void clicked( InputEvent event, float x, float y )
@@ -318,20 +387,27 @@ public class HubScreen implements Screen, InputProcessor
 								Global.UnlockedItems.removeValue( item, true );
 								Global.Funds += item.value;
 
-								createMarket( market );
-								createStash();
+								createMarket( market, marketHelper );
+								createStash( helper );
 							}
 						} );
 
 						stashContent.add( sell ).expandX().right();
 						stashContent.row();
+
+						helper.clearColumn( 1 );
+						helper.replace( sell, 1, currenti );
 					}
 				} );
 
 				stashList.add( button ).expandX().fillX();
 				stashList.row();
+
+				helper.add( button );
 			}
 		}
+
+		helper.trySetCurrent(  );
 	}
 
 	// ----------------------------------------------------------------------
@@ -351,11 +427,16 @@ public class HubScreen implements Screen, InputProcessor
 	Table stashList = new Table(  );
 	Table stashContent = new Table(  );
 
+	final ButtonKeyboardHelper missionHelper = new ButtonKeyboardHelper(  );
+	final ButtonKeyboardHelper marketHelper = new ButtonKeyboardHelper(  );
+	final ButtonKeyboardHelper stashHelper = new ButtonKeyboardHelper(  );
+
 	Stage stage;
 
 	SpriteBatch batch;
 
 	public InputMultiplexer inputMultiplexer;
+
 	public ButtonKeyboardHelper keyboardHelper;
 
 	Array<Item> market = new Array<Item>(  );
@@ -491,6 +572,11 @@ public class HubScreen implements Screen, InputProcessor
 	@Override
 	public boolean keyDown( int keycode )
 	{
+		if (keyboardHelper != null)
+		{
+			keyboardHelper.keyDown( keycode );
+		}
+
 		return false;
 	}
 
@@ -527,7 +613,11 @@ public class HubScreen implements Screen, InputProcessor
 	@Override
 	public boolean mouseMoved( int screenX, int screenY )
 	{
-//		keyboardHelper.clear();
+		if (keyboardHelper != null)
+		{
+			keyboardHelper.clear();
+		}
+
 		return false;
 	}
 

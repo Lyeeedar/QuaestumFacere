@@ -69,7 +69,7 @@ public final class ConstantEvent
 	{
 		Array<String> lines = new Array<String>();
 
-		for ( Statistic stat : Statistic.BaseValues )
+		for ( Statistic stat : Statistic.DamageValues )
 		{
 			int val = getStatistic( variableMap, stat );
 
@@ -79,7 +79,7 @@ public final class ConstantEvent
 			}
 		}
 
-		for ( Statistic stat : Statistic.ModifierValues )
+		for ( Statistic stat : Statistic.OtherValues )
 		{
 			int val = getStatistic( variableMap, stat );
 

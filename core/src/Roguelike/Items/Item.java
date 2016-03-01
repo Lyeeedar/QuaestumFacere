@@ -329,19 +329,10 @@ public final class Item extends GameEventHandler
 		table.add( new Seperator( skin, false ) ).expandX().fillX();
 		table.row();
 
-		table.add( new Label("HitCount: " + wepDef.hitCount, skin) ).expandX().fillX();
-		table.row();
+		int oldDam = other != null ? other.getStatistic( Statistic.emptyMap, Statistic.ATTACK ) * other.wepDef.hitCount : 0;
+		int newDam = getStatistic( Statistic.emptyMap, Statistic.ATTACK ) * wepDef.hitCount;
 
-		table.add( new Label("HitPercent: " + wepDef.hitPercent, skin) ).expandX().fillX();
-		table.row();
-
-		table.add( new Seperator( skin, false ) ).expandX().fillX();
-		table.row();
-
-		int oldDam = other != null ? other.getStatistic( Statistic.emptyMap, Statistic.ATTACK ) : 0;
-		int newDam = getStatistic( Statistic.emptyMap, Statistic.ATTACK );
-
-		String damText = "Damage: " + newDam;
+		String damText = "DPS: " + newDam;
 		if ( newDam != oldDam )
 		{
 			int diff = newDam - oldDam;
@@ -356,10 +347,18 @@ public final class Item extends GameEventHandler
 			}
 		}
 
-		table.add( new Label( damText, skin ) ).expandX().left();
+		Label dpsLabel = new Label( damText, skin );
+		dpsLabel.setFontScale( 1.3f );
+		table.add( dpsLabel ).expandX().left();
 		table.row();
 
 		table.add( new Seperator( skin, false ) ).expandX().fillX();
+		table.row();
+
+		table.add( new Label("Damage: " + getStatistic( Statistic.emptyMap, Statistic.ATTACK ) + " (x"+wepDef.hitCount+")", skin) ).expandX().fillX();
+		table.row();
+
+		table.add( new Label("Accuracy: " + getStatistic( Statistic.emptyMap, Statistic.ACCURACY ), skin ) ).expandX().fillX();
 		table.row();
 
 		Array<String> lines = toString( Statistic.emptyMap, true );
@@ -608,7 +607,6 @@ public final class Item extends GameEventHandler
 		public String hitData;
 		public Sprite hitSprite;
 		public int hitCount;
-		public int hitPercent;
 
 		public Array<Point> hitPoints = new Array<Point>(  );
 
@@ -639,7 +637,6 @@ public final class Item extends GameEventHandler
 			String[] hitTypeData = xml.get( "HitType" ).split( "[\\(\\)]" );
 			wepDef.hitType = HitType.valueOf( hitTypeData[0].toUpperCase() );
 			wepDef.hitData = hitTypeData.length > 1 ? hitTypeData[1] : null;
-			wepDef.hitPercent = xml.getInt( "HitPercent", 100 );
 			wepDef.hitCount = xml.getInt( "HitCount", 1 );
 
 			Element hitPatternElement = xml.getChildByName( "HitPattern" );

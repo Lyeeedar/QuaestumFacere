@@ -136,6 +136,45 @@ public class ButtonKeyboardHelper
 	}
 
 	// ----------------------------------------------------------------------
+	public void replace( Actor actor, int x, int y )
+	{
+		Column column = null;
+		for (int i = 0; i < grid.size; i++)
+		{
+			if (grid.get( i ).x == x)
+			{
+				column = grid.get( i );
+				break;
+			}
+		}
+
+		Cell cell = null;
+		if (column != null)
+		{
+			for (int i = 0; i < column.cells.size; i++)
+			{
+				if (column.cells.get( i ).y == y)
+				{
+					cell = column.cells.get( i );
+					break;
+				}
+			}
+		}
+
+		if (cell != null)
+		{
+			cell.actors.clear();
+			cell.actors.add( actor );
+
+			trySetCurrent( );
+		}
+		else
+		{
+			add(actor, x, y);
+		}
+	}
+
+	// ----------------------------------------------------------------------
 	public Actor getCurrent()
 	{
 		return get( currentx, currenty, currentz );
@@ -144,6 +183,11 @@ public class ButtonKeyboardHelper
 	// ----------------------------------------------------------------------
 	public Actor get(int x, int y, int z)
 	{
+		if (grid.size == 0)
+		{
+			return null;
+		}
+
 		return getColumn( x ).getCell( y ).getActor( z );
 	}
 
@@ -166,18 +210,64 @@ public class ButtonKeyboardHelper
 	}
 
 	// ----------------------------------------------------------------------
+	public void clearColumn(int x)
+	{
+		Column column = null;
+		for (Column col : grid)
+		{
+			if (col.x == x)
+			{
+				column = col;
+				break;
+			}
+		}
+
+		if (column != null)
+		{
+			grid.removeValue( column, true );
+			trySetCurrent();
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	public void clearGrid()
+	{
+		active = null;
+		cancel = null;
+		scrollPane = null;
+		grid.clear();
+	}
+
+	// ----------------------------------------------------------------------
 	public void clear()
 	{
+		if (grid.size == 0)
+		{
+			return;
+		}
+
 		if (!cleared)
 		{
 			cleared = true;
+
 			exit( getCurrent() );
 		}
 	}
 
 	// ----------------------------------------------------------------------
+	public void trySetCurrent()
+	{
+		trySetCurrent( currentx, currenty, currentz );
+	}
+
+	// ----------------------------------------------------------------------
 	public void trySetCurrent(int x, int y, int z)
 	{
+		if (grid.size == 0)
+		{
+			return;
+		}
+
 		cleared = false;
 
 		exit( getCurrent() );
@@ -231,6 +321,11 @@ public class ButtonKeyboardHelper
 	// ----------------------------------------------------------------------
 	public boolean keyDown( int keycode )
 	{
+		if (grid.size == 0)
+		{
+			return false;
+		}
+
 		if (active != null)
 		{
 			if (active instanceof Slider)
@@ -341,7 +436,7 @@ public class ButtonKeyboardHelper
 				else
 				{
 					Column current = getColumn( currentx );
-					if ( current != grid.first() )
+					if ( current != grid.get(grid.size-1) )
 					{
 						int index = grid.indexOf( current, true );
 						Column next = grid.get( index + 1 );

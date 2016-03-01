@@ -106,6 +106,8 @@ public class LoadoutScreen implements Screen, InputProcessor
 		}
 
 		hideUtilities();
+
+		keyboardHelper = slotHelper;
 	}
 
 	private void fillSlotButton( final Item.EquipmentSlot slot )
@@ -113,6 +115,8 @@ public class LoadoutScreen implements Screen, InputProcessor
 		Skin skin = Global.loadSkin();
 		Button button = buttonMap.get( slot );
 		button.clear();
+
+		button.addListener( button.getClickListener() );
 
 		Label slotLabel = new Label( Global.capitalizeString( slot.toString() ), skin );
 		slotLabel.setFontScale( 0.5f );
@@ -152,6 +156,26 @@ public class LoadoutScreen implements Screen, InputProcessor
 			{
 				activeSlot = slot;
 				fillItemTable();
+
+				int i = -1;
+
+				for (final Item item : Global.UnlockedItems)
+				{
+					if ( item.slot == activeSlot )
+					{
+						i++;
+						if (item == slotMap.get( activeSlot ))
+						{
+							break;
+						}
+					}
+				}
+
+				if (i >= 0)
+				{
+					keyboardHelper = itemHelper;
+					itemHelper.trySetCurrent( 0, i, 0 );
+				}
 			}
 		} );
 
@@ -164,8 +188,12 @@ public class LoadoutScreen implements Screen, InputProcessor
 		desc.add( item.createTable( Global.loadSkin(), slotMap.get( slot ) ) ).expand().fill();
 	}
 
-	private void fillItemTable()
+	private void fillItemTable( )
 	{
+		ScrollPane scrollPane = itemHelper.scrollPane;
+		itemHelper.clearGrid();
+		itemHelper.scrollPane = scrollPane;
+
 		items.clear();
 
 		Skin skin = Global.loadSkin();
@@ -191,6 +219,11 @@ public class LoadoutScreen implements Screen, InputProcessor
 				{
 					public void clicked (InputEvent event, float x, float y)
 					{
+						slotHelper.trySetCurrent( 0, activeSlot.ordinal(), 0 );
+						keyboardHelper = slotHelper;
+						items.clear();
+						desc.clear();
+
 						slotMap.put( activeSlot, item );
 						fillSlotButton( activeSlot );
 						hideUtilities();
@@ -209,12 +242,20 @@ public class LoadoutScreen implements Screen, InputProcessor
 				{
 					button.setChecked( true );
 				}
+
+				itemHelper.add( button );
 			}
 		}
+
+		itemHelper.trySetCurrent(  );
 	}
 
 	private void hideUtilities()
 	{
+		ScrollPane scrollPane = slotHelper.scrollPane;
+		slotHelper.clearGrid();
+		slotHelper.scrollPane = scrollPane;
+
 		int numUtilSlots = slotMap.get( Item.EquipmentSlot.ARMOUR ) != null ? slotMap.get( Item.EquipmentSlot.ARMOUR ).utilSlots : 0;
 		for (int i = 0; i < Item.EquipmentSlot.UtilitySlots.length; i++)
 		{
@@ -228,6 +269,18 @@ public class LoadoutScreen implements Screen, InputProcessor
 				buttonMap.get( slot ).setVisible( false );
 			}
 		}
+
+		for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
+		{
+			Button button = buttonMap.get( slot );
+
+			if (button.isVisible())
+			{
+				slotHelper.add( button );
+			}
+		}
+
+		slotHelper.trySetCurrent(  );
 	}
 
 	// ----------------------------------------------------------------------
@@ -242,7 +295,11 @@ public class LoadoutScreen implements Screen, InputProcessor
 	SpriteBatch batch;
 
 	public InputMultiplexer inputMultiplexer;
+
 	public ButtonKeyboardHelper keyboardHelper;
+
+	ButtonKeyboardHelper slotHelper = new ButtonKeyboardHelper(  );
+	ButtonKeyboardHelper itemHelper = new ButtonKeyboardHelper(  );
 
 	Texture background;
 
@@ -303,6 +360,11 @@ public class LoadoutScreen implements Screen, InputProcessor
 	@Override
 	public boolean keyDown( int keycode )
 	{
+		if (keyboardHelper != null)
+		{
+			keyboardHelper.keyDown( keycode );
+		}
+
 		return false;
 	}
 
@@ -339,7 +401,10 @@ public class LoadoutScreen implements Screen, InputProcessor
 	@Override
 	public boolean mouseMoved( int screenX, int screenY )
 	{
-//		keyboardHelper.clear();
+		if (keyboardHelper != null)
+		{
+			keyboardHelper.clear();
+		}
 		return false;
 	}
 

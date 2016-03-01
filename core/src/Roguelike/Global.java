@@ -103,7 +103,7 @@ public class Global
 	// ----------------------------------------------------------------------
 	public static QuestManager QuestManager;
 	public static Array<Item> UnlockedItems = new Array<Item>(  );
-	public static int Funds = 0;
+	public static int Funds = 500;
 
 	// ----------------------------------------------------------------------
 	public static Level CurrentLevel;
@@ -186,6 +186,7 @@ public class Global
 	{
 		QuestManager = new QuestManager();
 		UnlockedItems.clear();
+		Funds = 500;
 
 		GameScreen.Instance.queueMessage( "Controls",
 										  "Click in a direction to move there (or use the arrow keys)." +
@@ -500,7 +501,7 @@ public class Global
 
 		Button.ButtonStyle buttonStyle = new Button.ButtonStyle(  );
 		buttonStyle.up = new NinePatchDrawable( new NinePatch( AssetManager.loadTextureRegion( "Sprites/GUI/Button.png" ), 12, 12, 12, 12 ) );
-		buttonStyle.over = ((NinePatchDrawable)buttonStyle.up).tint( new Color( 0.9f, 0.9f, 0.9f, 1.0f ) );
+		buttonStyle.over = ((NinePatchDrawable)buttonStyle.up).tint( new Color( 0.8f, 0.8f, 0.8f, 1.0f ) );
 		skin.add( "default", buttonStyle );
 
 		Button.ButtonStyle sheathButton = new Button.ButtonStyle(  );
@@ -931,21 +932,22 @@ public class Global
 		LIGHT,
 		ENTITY,
 
-		// Base stats
+		// Damage stats
 		ATTACK, // Base Damage
 		DEFENSE, // Defense
 		PENETRATION, // Penetration
+		ACCURACY, // Chance to hit
 
-		// Modifier stats
+		// Other stats
 		VITALITY, // Health
 		SIGHT, // sight range
 		SPEED; // Speed
 
 		public static Statistic[] PassabilityValues = { Statistic.WALK, Statistic.LEVITATE, Statistic.LIGHT, Statistic.ENTITY };
 
-		public static Statistic[] BaseValues = { Statistic.ATTACK, Statistic.DEFENSE };
+		public static Statistic[] DamageValues = { Statistic.ATTACK, Statistic.DEFENSE, Statistic.PENETRATION, Statistic.ACCURACY };
 
-		public static Statistic[] ModifierValues = {
+		public static Statistic[] OtherValues = {
 			Statistic.VITALITY,
 			Statistic.SIGHT,
 			Statistic.SPEED };

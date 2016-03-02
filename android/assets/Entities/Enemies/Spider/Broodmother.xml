@@ -74,7 +74,7 @@
     <Statistics>
         <Attack>val+10</Attack>
         <Defense>val+10</Defense>
-        <Constitution>val+10</Constitution>
+        <Vitality>val+10</Vitality>
     </Statistics>
 
 </Entity>

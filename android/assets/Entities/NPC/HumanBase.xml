@@ -10,10 +10,8 @@
         <Attack>5</Attack>
         <Defense>30</Defense>
 
-        <Constitution>10</Constitution>
-        <Perception>10</Perception>
-        <Strength>10</Strength>
-        <Willpower>10</Willpower>
+        <Vitality>10</Vitality>
+        <Sight>10</Sight>
         <Speed>10</Speed>
 
     </Statistics>

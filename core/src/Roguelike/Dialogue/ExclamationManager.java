@@ -1,7 +1,9 @@
 package Roguelike.Dialogue;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
+import Roguelike.Entity.Entity;
 import com.badlogic.gdx.audio.Sound;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -48,7 +50,7 @@ public class ExclamationManager
 		}
 	}
 
-	public void process( Array<GameTile> tiles, GameEntity entity )
+	public void process( Array<GameTile> tiles, Entity entity )
 	{
 		if ( seePlayer != null )
 		{
@@ -76,7 +78,7 @@ public class ExclamationManager
 		}
 	}
 
-	private void processSeePlayer( Array<GameTile> tiles, GameEntity entity )
+	private void processSeePlayer( Array<GameTile> tiles, Entity entity )
 	{
 		boolean canSeePlayer = false;
 		for ( GameTile tile : tiles )
@@ -99,12 +101,17 @@ public class ExclamationManager
 		}
 	}
 
-	private void processSeeAlly( Array<GameTile> tiles, GameEntity entity )
+	private void processSeeAlly( Array<GameTile> tiles, Entity entity )
 	{
+		if (!(entity instanceof GameEntity))
+		{
+			return;
+		}
+
 		boolean canSeeAlly = false;
 		for ( GameTile tile : tiles )
 		{
-			if ( tile.entity != null && tile.entity.isAllies( entity ) )
+			if ( tile.entity != null && tile.entity.isAllies( (GameEntity)entity ) )
 			{
 				canSeeAlly = true;
 				break;
@@ -122,14 +129,19 @@ public class ExclamationManager
 		}
 	}
 
-	private void processSeeEnemy( Array<GameTile> tiles, GameEntity entity )
+	private void processSeeEnemy( Array<GameTile> tiles, Entity entity )
 	{
+		if (!(entity instanceof GameEntity))
+		{
+			return;
+		}
+
 		Point pos = null;
 
 		boolean canSeeEnemy = false;
 		for ( GameTile tile : tiles )
 		{
-			if ( tile.entity != null && !tile.entity.isAllies( entity ) )
+			if ( tile.entity != null && !tile.entity.isAllies( (GameEntity)entity ) )
 			{
 				pos = new Point().set( tile );
 				canSeeEnemy = true;
@@ -148,14 +160,19 @@ public class ExclamationManager
 		}
 	}
 
-	private void processInCombat( Array<GameTile> tiles, GameEntity entity )
+	private void processInCombat( Array<GameTile> tiles, Entity entity )
 	{
+		if (!(entity instanceof GameEntity))
+		{
+			return;
+		}
+
 		Point pos = null;
 
 		boolean canSeeEnemy = false;
 		for ( GameTile tile : tiles )
 		{
-			if ( tile.entity != null && !tile.entity.isAllies( entity ) )
+			if ( tile.entity != null && !tile.entity.isAllies( (GameEntity)entity ) )
 			{
 				pos = new Point().set( tile );
 				canSeeEnemy = true;
@@ -173,7 +190,7 @@ public class ExclamationManager
 		}
 	}
 
-	private void processLowHealth( Array<GameTile> tiles, GameEntity entity )
+	private void processLowHealth( Array<GameTile> tiles, Entity entity )
 	{
 		boolean isLowHealth = entity.HP < entity.getMaxHP() / 2;
 
@@ -234,7 +251,7 @@ public class ExclamationManager
 		public String cooldown;
 		public float cooldownAccumulator;
 
-		public void process( GameEntity entity, String key, Object value )
+		public void process( Entity entity, String key, Object value )
 		{
 			for ( ExclamationWrapper wrapper : groups )
 			{
@@ -250,7 +267,7 @@ public class ExclamationManager
 
 					if ( sound != null )
 					{
-						sound.shoutFaction = entity.factions;
+						sound.shoutFaction = (entity instanceof GameEntity) ? ((GameEntity)entity).factions : new HashSet<String>(  );
 						sound.key = key;
 						sound.value = value;
 

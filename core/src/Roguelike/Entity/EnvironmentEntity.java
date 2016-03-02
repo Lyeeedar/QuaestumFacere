@@ -12,6 +12,7 @@ import Roguelike.Sprite.TilingSprite;
 import Roguelike.Sprite.Sprite;
 import Roguelike.StatusEffect.StatusEffect;
 import Roguelike.Tiles.GameTile;
+import Roguelike.Tiles.Point;
 import Roguelike.Util.EnumBitflag;
 
 import com.badlogic.gdx.utils.Array;
@@ -55,6 +56,20 @@ public class EnvironmentEntity extends Entity
 		if ( popupDuration > 0 )
 		{
 			popupDuration -= 1;
+		}
+
+		if (dialogue != null)
+		{
+			dialogue.exclamationManager.update( cost );
+
+			Array<Point> current = visibilityCache.getShadowCast( tile[0][0].level.Grid, tile[0][0].x, tile[0][0].y, 5, this );
+			Array<GameTile> tiles = new Array<GameTile>(  );
+			for (Point p : current)
+			{
+				tiles.add( tile[0][0].level.getGameTile( p ) );
+			}
+
+			dialogue.exclamationManager.process( tiles, this );
 		}
 	}
 

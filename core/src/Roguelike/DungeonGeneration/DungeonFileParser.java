@@ -209,31 +209,25 @@ public class DungeonFileParser
 				{
 					// Rows in seperate csv file
 					String fileName = rowsElement.getText();
-					FileHandle handle = Gdx.files.internal( fileName + ".csv" );
+					FileHandle handle = Gdx.files.internal( "Levels/" + fileName + ".txt" );
 					String content = handle.readString();
+					content = content.replace( "\u0000", "" );
+					content = content.replaceAll("[^\\p{ASCII}]", "");
 
-					String[] lines = content.split( System.getProperty( "line.separator" ) );
+					String[] lines = content.split( "\n" );
 
-					int height = 0;
-					int width = lines.length;
+					int height = lines.length;
+					int width = lines[0].length();
 
-					String[][] rows = new String[lines.length][];
-					for ( int i = 0; i < lines.length; i++ )
-					{
-						rows[i] = lines[i].split( " " );
-
-						height = rows[i].length;
-					}
-
-					room.width = "" + width;
 					room.height = "" + height;
+					room.width = "" + width;
 
 					room.roomDef = new char[width][height];
 					for ( int x = 0; x < width; x++ )
 					{
 						for ( int y = 0; y < height; y++ )
 						{
-							room.roomDef[x][y] = rows[x][y].charAt( 0 );
+							room.roomDef[x][y] = lines[height-y-1].charAt( x );
 						}
 					}
 				}

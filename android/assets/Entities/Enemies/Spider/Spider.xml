@@ -23,7 +23,7 @@
 				<Opaque>false</Opaque>
 
 				<Statistics>
-					<Constitution>10</Constitution>
+					<Vitality>10</Vitality>
 				</Statistics>
 
 			</EnvironmentData>
@@ -44,30 +44,5 @@
     <Bosses>
         <Broodmother />
     </Bosses>
-
-    <Rooms>
-
-        <Boss_Broodmother Condition="Boss">
-
-            <Symbols>
-                <Symbol Extends=".">
-                    <Char>B</Char>
-                    <EntityData>Broodmother</EntityData>
-                </Symbol>
-            </Symbols>
-
-            <Rows>
-                <Row>.......</Row>
-                <Row>.......</Row>
-                <Row>.......</Row>
-                <Row>...B...</Row>
-                <Row>.......</Row>
-                <Row>.......</Row>
-                <Row>.......</Row>
-            </Rows>
-
-        </Boss_Broodmother>
-
-    </Rooms>
 
 </Faction>

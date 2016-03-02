@@ -11,14 +11,13 @@
 
     <Statistics>
 
-        <Attack>12</Attack>
-        <Defense>15</Defense>
+        <Attack>5</Attack>
+        <Defense>5</Defense>
+        <Accuracy>100</Accuracy>
 
-        <Constitution>7</Constitution>
-        <Perception>7</Perception>
-        <Strength>5</Strength>
-        <Willpower>5</Willpower>
-        <Speed>9</Speed>
+        <Vitality>4</Vitality>
+        <Sight>7</Sight>
+        <Speed>7</Speed>
 
     </Statistics>
 

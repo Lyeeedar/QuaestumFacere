@@ -215,19 +215,6 @@ public class GameEntity extends Entity
 			}
 		}
 
-		Element dialogueElement = xmlElement.getChildByName( "Dialogue" );
-		if ( dialogueElement != null )
-		{
-			if (dialogueElement.getChildCount() > 0)
-			{
-				dialogue = DialogueManager.load( dialogueElement );
-			}
-			else
-			{
-				dialogue = DialogueManager.load( dialogueElement.getText() );
-			}
-		}
-
 		Element statusesElement = xmlElement.getChildByName( "Statuses" );
 		if ( statusesElement != null )
 		{
@@ -495,9 +482,6 @@ public class GameEntity extends Entity
 	public float actionDelayAccumulator;
 	public boolean canSwap;
 	public boolean canMove = true;
-
-	// ----------------------------------------------------------------------
-	public DialogueManager dialogue;
 
 	// ----------------------------------------------------------------------
 	public HashSet<String> factions = new HashSet<String>();

@@ -1,6 +1,7 @@
 package Roguelike.Screens;
 
 import Roguelike.AssetManager;
+import Roguelike.Entity.GameEntity;
 import Roguelike.GameEvent.IGameObject;
 import Roguelike.Global;
 import Roguelike.Items.Item;
@@ -35,7 +36,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public class LoadoutScreen implements Screen, InputProcessor
 {
-
 	public static LoadoutScreen Instance;
 
 	public LoadoutScreen()
@@ -52,6 +52,8 @@ public class LoadoutScreen implements Screen, InputProcessor
 		batch = new SpriteBatch();
 
 		table = new Table();
+		table.defaults().pad( 5 );
+
 		stage.addActor( table );
 		table.setFillParent( true );
 
@@ -104,6 +106,42 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 			fillSlotButton(slot);
 		}
+
+		table.row();
+
+		launchButton = new TextButton( "Launch Mission", skin );
+		launchButton.addListener( new ClickListener(  )
+		{
+			public void clicked (InputEvent event, float x, float y)
+			{
+				GameEntity player = GameEntity.load( "player" );
+
+				for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
+				{
+					Item item = slotMap.get( slot );
+
+					if (item != null)
+					{
+						player.inventory.equip( item );
+
+						if (item.ability1 != null)
+						{
+							player.slottedAbilities.add( item.ability1 );
+						}
+
+						if (item.ability2 != null)
+						{
+							player.slottedAbilities.add( item.ability2 );
+						}
+					}
+				}
+
+				Global.QuestManager.currentQuest.createLevel( player );
+			}
+		} );
+
+		table.add( launchButton ).colspan( 3 );
+		table.row();
 
 		hideUtilities();
 
@@ -254,7 +292,6 @@ public class LoadoutScreen implements Screen, InputProcessor
 	{
 		ScrollPane scrollPane = slotHelper.scrollPane;
 		slotHelper.clearGrid();
-		slotHelper.scrollPane = scrollPane;
 
 		int numUtilSlots = slotMap.get( Item.EquipmentSlot.ARMOUR ) != null ? slotMap.get( Item.EquipmentSlot.ARMOUR ).utilSlots : 0;
 		for (int i = 0; i < Item.EquipmentSlot.UtilitySlots.length; i++)
@@ -280,6 +317,9 @@ public class LoadoutScreen implements Screen, InputProcessor
 			}
 		}
 
+		slotHelper.add( launchButton );
+
+		slotHelper.scrollPane = scrollPane;
 		slotHelper.trySetCurrent(  );
 	}
 
@@ -306,6 +346,8 @@ public class LoadoutScreen implements Screen, InputProcessor
 	FastEnumMap<Item.EquipmentSlot, Item> slotMap = new FastEnumMap<Item.EquipmentSlot, Item>( Item.EquipmentSlot.class );
 	FastEnumMap<Item.EquipmentSlot, Button> buttonMap = new FastEnumMap<Item.EquipmentSlot, Button>( Item.EquipmentSlot.class );
 	Item.EquipmentSlot activeSlot;
+
+	TextButton launchButton;
 
 	Table items = new Table(  );
 	Table desc = new Table(  );

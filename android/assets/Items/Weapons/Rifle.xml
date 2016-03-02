@@ -1,6 +1,6 @@
 <Weapon>
 
-    <HitType>All</HitType>
+    <HitType>Closest(1)</HitType>
 
     <HitSprite>
         <Name>EffectSprites/Shot/Shot</Name>
@@ -10,8 +10,10 @@
     </HitSprite>
 
     <HitPattern>
-        <Line>...#####...</Line>
         <Line>....###....</Line>
+        <Line>....###....</Line>
+        <Line>....###....</Line>
+        <Line>.....#.....</Line>
         <Line>.....x.....</Line>
     </HitPattern>
 

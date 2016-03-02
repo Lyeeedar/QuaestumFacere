@@ -1,22 +1,22 @@
 <Recipe>
 
     <ItemTemplate>
-        <Name>Shotgun</Name>
-        <Description>This is my boomstick!</Description>
+        <Name>Rifle</Name>
+        <Description>Good for putting a bullet in a target</Description>
 
         <Slot>Weapon</Slot>
         <Category>Weapon</Category>
-        <Type>Shotgun</Type>
+        <Type>Rifle</Type>
         <Value>120</Value>
 
         <Icon>
-            <Name>Oryx/Custom/items/Shotgun</Name>
+            <Name>Oryx/Custom/items/Rifle</Name>
         </Icon>
 
         <Events>
             <Constant>
                 <Attack>20 + 5 * quality</Attack>
-                <Accuracy>100 + quality</Accuracy>
+                <Accuracy>90 + quality</Accuracy>
             </Constant>
         </Events>
     </ItemTemplate>
@@ -26,10 +26,10 @@
     </AllowedAbilities>
 
     <Names>
-        <Shotgun></Shotgun>
-        <Boomstick></Boomstick>
-        <Scatter_Blaster></Scatter_Blaster>
-        <Pulveriser></Pulveriser>
+        <Combat_Rifle></Combat_Rifle>
+        <Fusil></Fusil>
+        <Carbine></Carbine>
+        <Blaster></Blaster>
     </Names>
 
     <AllowedModifiers>

@@ -37,7 +37,7 @@ public final class SaveLevel extends SaveableObject<Level>
 		this.UID = UID;
 	}
 
-	public SaveLevel( String fileName, int depth, Array<DFPRoom> requiredRooms, long seed )
+	public SaveLevel( String fileName, Array<DFPRoom> requiredRooms, long seed )
 	{
 		this.fileName = fileName;
 		if ( requiredRooms != null )

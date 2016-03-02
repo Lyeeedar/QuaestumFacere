@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import Roguelike.AssetManager;
+import Roguelike.Dialogue.DialogueManager;
 import Roguelike.GameEvent.AdditionalSprite;
 import Roguelike.GameEvent.IGameObject;
 import Roguelike.Global;
@@ -113,6 +114,19 @@ public abstract class Entity implements IGameObject
 		canTakeDamage = xml.getBoolean( "CanTakeDamage", canTakeDamage );
 
 		UID = getClass().getSimpleName() + " " + name + ": ID " + hashCode();
+
+		Element dialogueElement = xml.getChildByName( "Dialogue" );
+		if ( dialogueElement != null )
+		{
+			if (dialogueElement.getChildCount() > 0)
+			{
+				dialogue = DialogueManager.load( dialogueElement );
+			}
+			else
+			{
+				dialogue = DialogueManager.load( dialogueElement.getText() );
+			}
+		}
 	}
 
 	// ----------------------------------------------------------------------
@@ -522,6 +536,7 @@ public abstract class Entity implements IGameObject
 	public String name = "";
 
 	// ----------------------------------------------------------------------
+	public DialogueManager dialogue;
 	public String popup;
 	public String displayedPopup;
 	public float popupDuration = 0;

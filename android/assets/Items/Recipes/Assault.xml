@@ -1,22 +1,22 @@
 <Recipe>
 
     <ItemTemplate>
-        <Name>Shotgun</Name>
-        <Description>This is my boomstick!</Description>
+        <Name>Assault</Name>
+        <Description>Spray and pray</Description>
 
         <Slot>Weapon</Slot>
         <Category>Weapon</Category>
-        <Type>Shotgun</Type>
+        <Type>Assault</Type>
         <Value>120</Value>
 
         <Icon>
-            <Name>Oryx/Custom/items/Shotgun</Name>
+            <Name>Oryx/Custom/items/Rifle</Name>
         </Icon>
 
         <Events>
             <Constant>
-                <Attack>20 + 5 * quality</Attack>
-                <Accuracy>100 + quality</Accuracy>
+                <Attack>5 + 1.1 * quality</Attack>
+                <Accuracy>75 + quality</Accuracy>
             </Constant>
         </Events>
     </ItemTemplate>
@@ -26,9 +26,9 @@
     </AllowedAbilities>
 
     <Names>
-        <Shotgun></Shotgun>
-        <Boomstick></Boomstick>
-        <Scatter_Blaster></Scatter_Blaster>
+        <Assault_Rifle></Assault_Rifle>
+        <Repeater></Repeater>
+        <Gatling_Rifle></Gatling_Rifle>
         <Pulveriser></Pulveriser>
     </Names>
 

@@ -56,5 +56,6 @@ public abstract class AbstractActivationAction
 		ClassMap.put( "REMOVEITEM", ActivationActionRemoveItem.class );
 		ClassMap.put( "DEALDAMAGE", ActivationActionDealDamage.class );
 		ClassMap.put( "ADDSTATUS", ActivationActionAddStatus.class );
+		ClassMap.put( "ENDMISSION", ActivationActionEndMission.class );
 	}
 }

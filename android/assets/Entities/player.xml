@@ -1,0 +1,38 @@
+<Entity>
+    <Name>player</Name>
+    <CanSwap>true</CanSwap>
+    <AI>player</AI>
+
+    <Factions>
+        <Faction>Human</Faction>
+    </Factions>
+
+    <Sprite>
+        <Name>Oryx/Custom/heroes/Merc</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Statistics>
+
+        <Attack>5</Attack>
+        <Defense>5</Defense>
+
+        <Vitality>10</Vitality>
+        <Sight>10</Sight>
+        <Accuracy>10</Accuracy>
+        <Speed>10</Speed>
+
+    </Statistics>
+
+    <Light>
+        <Colour>
+            <Red>1</Red>
+            <Green>1</Green>
+            <Blue>1</Blue>
+            <Alpha>0.8</Alpha>
+        </Colour>
+
+        <Intensity>4</Intensity>
+    </Light>
+
+</Entity>

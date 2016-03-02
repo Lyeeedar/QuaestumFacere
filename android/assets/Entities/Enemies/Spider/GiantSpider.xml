@@ -9,7 +9,7 @@
     <Statistics>
         <Attack>val+5</Attack>
         <Defense>val+5</Defense>
-        <Constitution>val+3</Constitution>
+        <Vitality>val+3</Vitality>
     </Statistics>
 
 </Entity>

@@ -473,6 +473,16 @@ public class TaskAttack extends AbstractTask
 				// do misses
 				int hitPercent = entity.getVariable( Global.Statistic.ACCURACY );
 
+				int dist = Global.TaxiDist( entity.tile[0][0].x, entity.tile[0][0].y, tile.x, tile.y );
+				if (dist <= 1)
+				{
+					hitPercent = (int)((float)hitPercent * 1.9f);
+				}
+				else if (dist == 2)
+				{
+					hitPercent = (int)((float)hitPercent * 1.3f);
+				}
+
 				if ( hitPercent < 100 )
 				{
 					if ( MathUtils.random( 100 ) > hitPercent )
@@ -488,7 +498,7 @@ public class TaskAttack extends AbstractTask
 					}
 				}
 
-				if ( weapon == null || weapon.wepDef == null || weapon.wepDef.hitType != Item.WeaponDefinition.HitType.ALL )
+				//if ( weapon == null || weapon.wepDef == null )
 				{
 					int[] diff = tile.getPosDiff( source );
 
@@ -509,8 +519,11 @@ public class TaskAttack extends AbstractTask
 					float angle = (float) Math.atan2( det, dot ) * MathUtils.radiansToDegrees;
 					sprite.rotation = angle;
 
-					sprite.renderDelay = animdelay;
-					animdelay += 0.1f;
+					if (weapon == null || weapon.wepDef == null || weapon.wepDef.hitType != Item.WeaponDefinition.HitType.ALL)
+					{
+						sprite.renderDelay = animdelay;
+						animdelay += 0.1f;
+					}
 
 					boolean isMoving = sprite.spriteAnimation != null && sprite.spriteAnimation instanceof MoveAnimation;
 					final SoundInstance sound = hitEffect.sound;
@@ -548,82 +561,82 @@ public class TaskAttack extends AbstractTask
 					SpriteEffect effect = new SpriteEffect( sprite, Direction.CENTER, weapon != null && weapon.light != null ? weapon.light.copyNoFlag() : null );
 					tile.spriteEffects.add( effect );
 				}
-				else
-				{
-					// do on hit
-					for ( GameEventHandler handler : entity.getAllHandlers() )
-					{
-						handler.onHit( entity, tile );
-					}
-
-					if ( tile.entity != null && !tile.entity.isAllies( entity ) )
-					{
-						entity.attack( tile.entity, dir );
-					}
-					else if ( tile.environmentEntity != null && !tile.environmentEntity.passableBy.intersect( entity.getTravelType() ) )
-					{
-						entity.attack( tile.environmentEntity, dir );
-					}
-
-					if ( tile.x < minPoint.x )
-					{
-						minPoint.x = tile.x;
-					}
-					if ( tile.x > maxPoint.x )
-					{
-						maxPoint.x = tile.x;
-					}
-					if ( tile.y < minPoint.y )
-					{
-						minPoint.y = tile.y;
-					}
-					if ( tile.y > maxPoint.y )
-					{
-						maxPoint.y = tile.y;
-					}
-
-				}
+//				else
+//				{
+//					// do on hit
+//					for ( GameEventHandler handler : entity.getAllHandlers() )
+//					{
+//						handler.onHit( entity, tile );
+//					}
+//
+//					if ( tile.entity != null && !tile.entity.isAllies( entity ) )
+//					{
+//						entity.attack( tile.entity, dir );
+//					}
+//					else if ( tile.environmentEntity != null && !tile.environmentEntity.passableBy.intersect( entity.getTravelType() ) )
+//					{
+//						entity.attack( tile.environmentEntity, dir );
+//					}
+//
+//					if ( tile.x < minPoint.x )
+//					{
+//						minPoint.x = tile.x;
+//					}
+//					if ( tile.x > maxPoint.x )
+//					{
+//						maxPoint.x = tile.x;
+//					}
+//					if ( tile.y < minPoint.y )
+//					{
+//						minPoint.y = tile.y;
+//					}
+//					if ( tile.y > maxPoint.y )
+//					{
+//						maxPoint.y = tile.y;
+//					}
+//
+//				}
 			}
 		}
 
-		if ( weapon != null && weapon.wepDef != null && weapon.wepDef.hitType == Item.WeaponDefinition.HitType.ALL )
-		{
-			// Use a joined sprite
-
-			Sprite sprite = hitEffect.copy();
-
-			sprite.rotation = dir.getAngle();
-			sprite.baseScale[0] = ( maxPoint.x - minPoint.x ) + 1;
-			sprite.baseScale[1] = ( maxPoint.y - minPoint.y ) + 1;
-
-
-			if (dir == Direction.WEST || dir == Direction.EAST)
-			{
-				float temp = sprite.baseScale[0];
-				sprite.baseScale[0] = sprite.baseScale[1];
-				sprite.baseScale[1] = temp;
-			}
-
-			SpriteEffect effect = new SpriteEffect( sprite, Direction.CENTER, weapon != null && weapon.light != null ? weapon.light.copyNoFlag() : null );
-
-			int px = minPoint.x;
-			int py = minPoint.y;
-
-			float dx = ( maxPoint.x - minPoint.x ) / 2.0f;
-			float dy = ( maxPoint.y - minPoint.y ) / 2.0f;
-
-			px += dir.getX() < 0 ? Math.ceil( dx ) : Math.floor( dx );
-			py += dir.getY() < 0 ? Math.ceil( dy ) : Math.floor( dy );
-
-			GameTile tile = attackedTiles.first().level.getGameTile( px, py );
-
-			tile.spriteEffects.add( effect );
-
-			SoundInstance sound = hitEffect.sound;
-			if ( sound != null )
-			{
-				sound.play( tile );
-			}
-		}
+//		if ( weapon != null && weapon.wepDef != null && weapon.wepDef.hitType == Item.WeaponDefinition.HitType.ALL )
+//		{
+//			// Use a joined sprite
+//
+//			Sprite sprite = hitEffect.copy();
+//
+//			sprite.rotation = dir.getAngle();
+//			sprite.baseScale[0] = ( maxPoint.x - minPoint.x ) + 1;
+//			sprite.baseScale[1] = ( maxPoint.y - minPoint.y ) + 1;
+//
+//
+//			if (dir == Direction.WEST || dir == Direction.EAST)
+//			{
+//				float temp = sprite.baseScale[0];
+//				sprite.baseScale[0] = sprite.baseScale[1];
+//				sprite.baseScale[1] = temp;
+//			}
+//
+//			SpriteEffect effect = new SpriteEffect( sprite, Direction.CENTER, weapon != null && weapon.light != null ? weapon.light.copyNoFlag() : null );
+//
+//			int px = minPoint.x;
+//			int py = minPoint.y;
+//
+//			float dx = ( maxPoint.x - minPoint.x ) / 2.0f;
+//			float dy = ( maxPoint.y - minPoint.y ) / 2.0f;
+//
+//			px += dir.getX() < 0 ? Math.ceil( dx ) : Math.floor( dx );
+//			py += dir.getY() < 0 ? Math.ceil( dy ) : Math.floor( dy );
+//
+//			GameTile tile = attackedTiles.first().level.getGameTile( px, py );
+//
+//			tile.spriteEffects.add( effect );
+//
+//			SoundInstance sound = hitEffect.sound;
+//			if ( sound != null )
+//			{
+//				sound.play( tile );
+//			}
+//		}
 	}
 }

@@ -182,7 +182,7 @@ public final class Inventory
 
 		for ( EquipmentSlot slot : EquipmentSlot.values() )
 		{
-			if ( slot != EquipmentSlot.WEAPON && m_equipment.containsKey( slot ) )
+			if ( m_equipment.containsKey( slot ) )
 			{
 				Item item = m_equipment.get( slot );
 				if ( slot == item.getMainSlot() )

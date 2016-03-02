@@ -2,10 +2,14 @@ package Roguelike.Quests;
 
 import Roguelike.AssetManager;
 import Roguelike.DungeonGeneration.DungeonFileParser;
+import Roguelike.Entity.GameEntity;
 import Roguelike.Global;
 import Roguelike.Quests.Input.AbstractQuestInput;
 import Roguelike.Quests.Output.AbstractQuestOutputCondition;
 import Roguelike.Quests.Output.QuestOutput;
+import Roguelike.RoguelikeGame;
+import Roguelike.Save.SaveLevel;
+import Roguelike.Screens.LoadingScreen;
 import Roguelike.Sprite.Sprite;
 import Roguelike.UI.Seperator;
 import com.badlogic.gdx.Gdx;
@@ -115,6 +119,36 @@ public class Quest
 
 			rooms.add( room );
 		}
+	}
+
+	private DungeonFileParser.DFPRoom getPlayerShip()
+	{
+		XmlReader reader = new XmlReader();
+		XmlReader.Element xml = null;
+
+		try
+		{
+			xml = reader.parse( Gdx.files.internal( "Levels/ship.xml" ) );
+		}
+		catch ( IOException e )
+		{
+			e.printStackTrace();
+		}
+
+		DungeonFileParser.DFPRoom room = DungeonFileParser.DFPRoom.parse(xml);
+
+		return room;
+	}
+
+	public void createLevel( GameEntity player )
+	{
+		Array<DungeonFileParser.DFPRoom> requiredRooms = new Array<DungeonFileParser.DFPRoom>(  );
+		requiredRooms.add( getPlayerShip() );
+		requiredRooms.addAll( rooms );
+
+		SaveLevel level = new SaveLevel( name, requiredRooms, Global.QuestManager.seed );
+		LoadingScreen.Instance.set( level, this, player, "playerspawn", null );
+		RoguelikeGame.Instance.switchScreen( RoguelikeGame.ScreenEnum.LOADING );
 	}
 
 	public Table createTable( Skin skin )

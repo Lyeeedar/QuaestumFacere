@@ -195,6 +195,7 @@ public class HubScreen implements Screen, InputProcessor
 					{
 						public void clicked (InputEvent event, float x, float y)
 						{
+							Global.QuestManager.currentQuest = item;
 							RoguelikeGame.Instance.switchScreen( RoguelikeGame.ScreenEnum.LOADOUT );
 						}
 					} );
@@ -217,7 +218,6 @@ public class HubScreen implements Screen, InputProcessor
 	{
 		ScrollPane scrollPane = helper.scrollPane;
 		helper.clearGrid();
-		helper.scrollPane = scrollPane;
 
 		for (Actor a : tabPanel.tabTitleTable.getChildren())
 		{
@@ -315,6 +315,7 @@ public class HubScreen implements Screen, InputProcessor
 			}
 		}
 
+		helper.scrollPane = scrollPane;
 		helper.trySetCurrent(  );
 	}
 
@@ -322,7 +323,6 @@ public class HubScreen implements Screen, InputProcessor
 	{
 		ScrollPane scrollPane = helper.scrollPane;
 		helper.clearGrid();
-		helper.scrollPane = scrollPane;
 
 		for (Actor a : tabPanel.tabTitleTable.getChildren())
 		{
@@ -407,6 +407,7 @@ public class HubScreen implements Screen, InputProcessor
 			}
 		}
 
+		helper.scrollPane = scrollPane;
 		helper.trySetCurrent(  );
 	}
 

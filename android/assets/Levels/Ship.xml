@@ -1,0 +1,84 @@
+<Room>
+    <Faction>none</Faction>
+    <Placement>South</Placement>
+    <Symbols>
+        <Symbol>
+            <Char>.</Char>
+            <TileData>
+                <Passable>true</Passable>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/shipfloor</Name>
+                </Sprite>
+            </TileData>
+        </Symbol>
+        <Symbol>
+            <Char>w</Char>
+            <TileData>
+                <Passable>false</Passable>
+                <TilingSprite>
+                    <Name>ShipWall</Name>
+                    <Front>
+                        <Name>Oryx/Custom/terrain/MetalWallFront</Name>
+                    </Front>
+                    <Top>
+                        <Name>Oryx/Custom/terrain/MetalWallTop</Name>
+                    </Top>
+                    <Overhang>
+                        <Name>Oryx/Custom/terrain/MetalWallOverhang</Name>
+                    </Overhang>
+                </TilingSprite>
+            </TileData>
+        </Symbol>
+        <Symbol Extends=".">
+            <Char>+</Char>
+            <EnvironmentData>
+                <Type>Door</Type>
+            </EnvironmentData>
+        </Symbol>
+        <Symbol Extends=".">
+            <Char>p</Char>
+            <EnvironmentData>
+                <Passable>false</Passable>
+                <Opaque>false</Opaque>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/computerpanel</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+            </EnvironmentData>
+        </Symbol>
+        <Symbol Extends=".">
+            <Char>C</Char>
+            <EnvironmentData>
+                <Passable>false</Passable>
+                <Opaque>false</Opaque>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/console</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+                <OnActivate>
+                    <Group Name="Finish Mission">
+                        <EndMission></EndMission>
+                    </Group>
+                </OnActivate>
+                <Dialogue>
+                    <Exclamations>
+                        <SeePlayer>
+                            <Exclamation>Use the console once you are done to complete the mission</Exclamation>
+                        </SeePlayer>
+                    </Exclamations>
+                </Dialogue>
+            </EnvironmentData>
+        </Symbol>
+        <Symbol Extends=".">
+            <Char>s</Char>
+            <MetaValue>playerspawn</MetaValue>
+        </Symbol>
+    </Symbols>
+    <Rows>
+        <Row>www+www</Row>
+        <Row>ww...ww</Row>
+        <Row>wp.C.pw</Row>
+        <Row>wp.s.pw</Row>
+        <Row>wwwwwww</Row>
+    </Rows>
+</Room>

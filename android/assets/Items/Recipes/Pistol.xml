@@ -11,12 +11,13 @@
         <Value>100</Value>
 
         <Icon>
-            <Name>Oryx/uf_split/uf_items/weapon_longbow</Name>
+            <Name>Oryx/Custom/items/Pistol</Name>
         </Icon>
 
         <Events>
             <Constant>
                 <Attack>11 + 4 * quality</Attack>
+                <Accuracy>70 + quality</Accuracy>
             </Constant>
         </Events>
     </ItemTemplate>

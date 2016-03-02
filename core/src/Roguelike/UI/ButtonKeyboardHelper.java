@@ -73,7 +73,7 @@ public class ButtonKeyboardHelper
 	}
 
 	// ----------------------------------------------------------------------
-	public void add( Actor actor, int x, int y )
+	public void add( final Actor actor, int x, int y )
 	{
 		Column column = null;
 		for (int i = 0; i < grid.size; i++)
@@ -133,6 +133,36 @@ public class ButtonKeyboardHelper
 
 			first = false;
 		}
+
+		actor.addListener( new InputListener()
+		{
+			public boolean mouseMoved (InputEvent event, float x, float y)
+			{
+				// find the index
+				outer:
+				for (Column col : grid)
+				{
+					for (Cell cell : col.cells)
+					{
+						for (int z = 0; z < cell.actors.size; z++)
+						{
+							if (cell.actors.get(z) == actor)
+							{
+								clear();
+								currentx = col.x;
+								currenty = cell.y;
+								currentz = z;
+								break outer;
+							}
+						}
+					}
+				}
+
+				// set the current
+
+				return false;
+			}
+		} );
 	}
 
 	// ----------------------------------------------------------------------

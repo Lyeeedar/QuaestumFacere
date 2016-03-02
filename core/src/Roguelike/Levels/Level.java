@@ -585,6 +585,21 @@ public class Level
 
 		if ( tile.environmentEntity != null && tile.environmentEntity.tile[0][0] == tile )
 		{
+			if (tile.environmentEntity.dialogue != null)
+			{
+				if (tile.environmentEntity.dialogue.popupText != null)
+				{
+					tile.environmentEntity.setPopupText( tile.environmentEntity.dialogue.popupText, 2 );
+					tile.environmentEntity.dialogue.popupText = null;
+				}
+
+				if (tile.environmentEntity.dialogue.soundToBePlayed != null)
+				{
+					tile.environmentEntity.dialogue.soundToBePlayed.play( tile.environmentEntity.tile[0][0] );
+					tile.environmentEntity.dialogue.soundToBePlayed = null;
+				}
+			}
+
 			if ( tile.environmentEntity.popup != null )
 			{
 				if ( tile.environmentEntity.displayedPopup.length() < tile.environmentEntity.popup.length() )

@@ -252,7 +252,7 @@ public class GameTile implements PathfindingTile
 			}
 		}
 
-		if ( environmentEntity != null && environmentEntity != self && !environmentEntity.passableBy.intersect( travelType ) && !environmentEntity.canTakeDamage )
+		if ( environmentEntity != null && environmentEntity != self && !environmentEntity.passableBy.intersect( travelType ) )
 		{
 			return false;
 		}

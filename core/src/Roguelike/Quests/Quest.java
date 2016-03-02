@@ -9,6 +9,7 @@ import Roguelike.Quests.Output.AbstractQuestOutputCondition;
 import Roguelike.Quests.Output.QuestOutput;
 import Roguelike.RoguelikeGame;
 import Roguelike.Save.SaveLevel;
+import Roguelike.Screens.HubScreen;
 import Roguelike.Screens.LoadingScreen;
 import Roguelike.Sprite.Sprite;
 import Roguelike.UI.Seperator;
@@ -57,7 +58,7 @@ public class Quest
 
 	public void evaluateOutputs()
 	{
-		int reward = 0;
+		int reward = -1;
 		String message = null;
 
 		for (QuestOutput output : outputs)
@@ -73,6 +74,8 @@ public class Quest
 				}
 			}
 		}
+
+		HubScreen.Instance.showRewardMessage( message, reward );
 	}
 
 	public void parse( XmlReader.Element xml )

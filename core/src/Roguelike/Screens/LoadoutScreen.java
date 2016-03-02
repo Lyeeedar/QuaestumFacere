@@ -74,15 +74,6 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 		keyboardHelper = new ButtonKeyboardHelper(  );
 
-		Table slots = new Table(  );
-
-		ScrollPane slotsScrollPane = new ScrollPane( slots, skin );
-		slotsScrollPane.setScrollingDisabled( true, false );
-		slotsScrollPane.setVariableSizeKnobs( true );
-		slotsScrollPane.setFadeScrollBars( false );
-		slotsScrollPane.setScrollbarsOnTop( false );
-		slotsScrollPane.setForceScroll( false, true );
-
 		ScrollPane itemsScrollPane = new ScrollPane( items, skin );
 		itemsScrollPane.setScrollingDisabled( true, false );
 		itemsScrollPane.setVariableSizeKnobs( true );
@@ -91,16 +82,15 @@ public class LoadoutScreen implements Screen, InputProcessor
 		itemsScrollPane.setForceScroll( false, true );
 		itemsScrollPane.setFlickScroll( false );
 
-		table.add( slotsScrollPane ).expandY().fillY().width( Value.percentWidth( 1.0f/3.0f, table ) );
-		table.add( itemsScrollPane ).expandY().fillY().width( Value.percentWidth( 1.0f/3.0f, table ) );
-		table.add( desc ).expandY().fillY().width( Value.percentWidth( 1.0f/3.0f, table ) );
+		table.add( itemsScrollPane ).expandY().fillY().width( Value.percentWidth( 0.4f, table ) );
+		table.add( desc ).expandY().fillY().width( Value.percentWidth( 0.6f, table ) );
 
 		for ( final Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
 		{
 			Button button = new Button(skin);
 
-			slots.add( button ).expandX().fillX();
-			slots.row();
+			items.add( button ).expandX().fillX();
+			items.row();
 
 			buttonMap.put( slot, button );
 
@@ -226,6 +216,27 @@ public class LoadoutScreen implements Screen, InputProcessor
 		desc.add( item.createTable( Global.loadSkin(), slotMap.get( slot ) ) ).expand().fill();
 	}
 
+	private void fillSlotTable()
+	{
+		items.clear();
+
+		for ( final Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
+		{
+			Button button = buttonMap.get( slot );
+
+			items.add( button ).expandX().fillX();
+			items.row();
+
+			buttonMap.put( slot, button );
+
+			fillSlotButton(slot);
+		}
+
+		table.row();
+
+		hideUtilities();
+	}
+
 	private void fillItemTable( )
 	{
 		ScrollPane scrollPane = itemHelper.scrollPane;
@@ -259,12 +270,11 @@ public class LoadoutScreen implements Screen, InputProcessor
 					{
 						slotHelper.trySetCurrent( 0, activeSlot.ordinal(), 0 );
 						keyboardHelper = slotHelper;
-						items.clear();
 						desc.clear();
 
 						slotMap.put( activeSlot, item );
 						fillSlotButton( activeSlot );
-						hideUtilities();
+						fillSlotTable();
 					}
 				} );
 

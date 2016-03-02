@@ -33,7 +33,7 @@ public class QuestOutputConditionActionEnabled extends AbstractQuestOutputCondit
 
 				for (ActivationActionGroup group : output)
 				{
-					if (group.name.equals( actionName ) && group.enabled == !not)
+					if (group.name.equals( actionName ) && group.enabled)
 					{
 						found = true;
 						break outer;

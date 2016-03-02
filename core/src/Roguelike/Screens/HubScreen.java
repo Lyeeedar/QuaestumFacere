@@ -8,10 +8,8 @@ import Roguelike.Items.TreasureGenerator;
 import Roguelike.Quests.Quest;
 import Roguelike.RoguelikeGame;
 import Roguelike.Sprite.Sprite;
-import Roguelike.UI.ButtonKeyboardHelper;
-import Roguelike.UI.Seperator;
-import Roguelike.UI.SpriteWidget;
-import Roguelike.UI.TabPanel;
+import Roguelike.UI.*;
+import Roguelike.UI.Tooltip;
 import Roguelike.Util.Controls;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
@@ -23,6 +21,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -61,15 +62,158 @@ public class HubScreen implements Screen, InputProcessor
 
 		inputMultiplexer.addProcessor( inputProcessorTwo );
 		inputMultiplexer.addProcessor( inputProcessorOne );
+
+		lastFunds = Global.Funds;
+	}
+
+	// ----------------------------------------------------------------------
+	public void clearContextMenu( )
+	{
+		if (keyboardHelper != null)
+		{
+			keyboardHelper.clear();
+			keyboardHelper = null;
+		}
+
+		if ( contextMenu != null )
+		{
+			contextMenu.addAction( new SequenceAction( Actions.fadeOut( 0.25f ), Actions.removeActor() ) );
+			contextMenu = null;
+
+			if (contextMenuQueue.size > 0)
+			{
+				GameScreen.ContextMenuData data = contextMenuQueue.removeIndex( 0 );
+				displayContextMenu( data.content, data.keyboardHelper );
+			}
+			else
+			{
+				createUI();
+			}
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	public void displayContextMenu(Table content, ButtonKeyboardHelper keyboardHelper)
+	{
+		if ( !created )
+		{
+			create();
+			created = true;
+		}
+
+		table.clear();
+		missionList.clear();
+		missionContent.clear();
+		marketList.clear();
+		marketContent.clear();
+		stashList.clear();
+		stashContent.clear();
+
+		missionHelper.clearGrid();
+		marketHelper.clearGrid();
+		stashHelper.clearGrid();
+
+		Skin skin = Global.loadSkin();
+
+		contextMenu = new Tooltip( content, skin, stage );
+		contextMenu.setWidth( stage.getWidth() - 40 );
+		contextMenu.setHeight( stage.getHeight() - 40 );
+
+		contextMenu.show( stage.getWidth() / 2 - contextMenu.getWidth() / 2 - 10, stage.getHeight() / 2 - contextMenu.getHeight() / 2 - 30, true );
+
+		ParallelAction parallelAction = new ParallelAction(
+				new SequenceAction( Actions.alpha( 0 ), Actions.fadeIn( 0.25f ) ),
+				new SequenceAction( Actions.scaleTo( 0, 0 ), Actions.scaleTo( 1, 1, 0.25f ) ) );
+
+		contextMenu.addAction( new SequenceAction( parallelAction, Actions.removeAction( parallelAction ) ) );
+
+		this.keyboardHelper = keyboardHelper;
+	}
+
+	public void showRewardMessage( String messageString, final int reward )
+	{
+		Skin skin = Global.loadSkin();
+
+		Table message = new Table();
+		message.defaults().pad( 10 );
+
+		Label title = new Label("Reward", skin, "title");
+		message.add( title ).expandX().left();
+		message.row();
+
+		message.add( new Seperator( skin ) ).expandX().fillX();
+		message.row();
+
+		Table messageBody = new Table();
+		Label messageText = new Label( messageString, skin);
+		messageText.setWrap( true );
+		messageBody.add( messageText ).expand().fillX();
+		messageBody.row();
+
+		message.add( messageBody ).expand().fill();
+		message.row();
+
+		Label rewardMessage = new Label( "Reward: " +reward, skin );
+		rewardMessage.setColor( Color.GOLD );
+		message.add( rewardMessage ).expandX();
+		message.row();
+
+		message.add( new Seperator( skin ) ).expandX().fillX();
+		message.row();
+
+		TextButton continueButton = new TextButton( "Continue", skin );
+		continueButton.addListener( new ClickListener(  )
+		{
+			public void clicked( InputEvent event, float x, float y )
+			{
+				Global.Funds += reward;
+				Global.QuestManager.currentQuest = null;
+				Global.QuestManager.currentLevel = null;
+				Global.QuestManager.difficulty += 1;
+
+				clearContextMenu();
+			}
+		} );
+		message.add( continueButton ).expandX();
+		message.row();
+
+		queueContextMenu(message, new ButtonKeyboardHelper( continueButton ));
+	}
+
+	// ----------------------------------------------------------------------
+	public void queueContextMenu(Table table, ButtonKeyboardHelper keyboardHelper)
+	{
+		if (contextMenu == null)
+		{
+			displayContextMenu( table, keyboardHelper );
+		}
+		else
+		{
+			contextMenuQueue.add( new GameScreen.ContextMenuData( table, keyboardHelper ) );
+		}
 	}
 
 	public void createUI()
 	{
 		table.clear();
+		missionList.clear();
+		missionContent.clear();
+		marketList.clear();
+		marketContent.clear();
+		stashList.clear();
+		stashContent.clear();
+
+		missionHelper.clearGrid();
+		marketHelper.clearGrid();
+		stashHelper.clearGrid();
 
 		keyboardHelper = new ButtonKeyboardHelper(  );
 
 		tabPanel = new TabPanel( Global.loadSkin() );
+		funds = new Label( "Funds: " + Global.Funds, Global.loadSkin(), "title" );
+
+		table.add( funds ).expandX().left();
+		table.row();
 
 		Array<Quest> chosenQuests = Global.QuestManager.getQuests( );
 
@@ -292,6 +436,8 @@ public class HubScreen implements Screen, InputProcessor
 									item.value /= 2;
 									items.removeValue( item, true );
 									Global.UnlockedItems.add( item );
+
+									lastFunds = Global.Funds;
 									Global.Funds -= item.value;
 
 									createMarket( items, helper );
@@ -385,6 +531,8 @@ public class HubScreen implements Screen, InputProcessor
 							public void clicked( InputEvent event, float x, float y )
 							{
 								Global.UnlockedItems.removeValue( item, true );
+
+								lastFunds = Global.Funds;
 								Global.Funds += item.value;
 
 								createMarket( market, marketHelper );
@@ -416,6 +564,11 @@ public class HubScreen implements Screen, InputProcessor
 
 	boolean created;
 
+	Tooltip contextMenu;
+
+	// ----------------------------------------------------------------------
+	public Array<GameScreen.ContextMenuData> contextMenuQueue = new Array<GameScreen.ContextMenuData>(  );
+
 	TabPanel tabPanel;
 	Table table;
 
@@ -427,6 +580,9 @@ public class HubScreen implements Screen, InputProcessor
 
 	Table stashList = new Table(  );
 	Table stashContent = new Table(  );
+
+	Label funds;
+	int lastFunds;
 
 	final ButtonKeyboardHelper missionHelper = new ButtonKeyboardHelper(  );
 	final ButtonKeyboardHelper marketHelper = new ButtonKeyboardHelper(  );
@@ -451,10 +607,9 @@ public class HubScreen implements Screen, InputProcessor
 		if ( !created )
 		{
 			create();
+			createUI();
 			created = true;
 		}
-
-		createUI();
 
 		Gdx.input.setInputProcessor( inputMultiplexer );
 
@@ -474,6 +629,31 @@ public class HubScreen implements Screen, InputProcessor
 	@Override
 	public void render( float delta )
 	{
+		if (lastFunds != Global.Funds)
+		{
+			int fundsChange = Global.Funds - lastFunds;
+			if (fundsChange < 0)
+			{
+				int change = fundsChange / 10 - 1;
+				fundsChange -= change;
+				lastFunds += change;
+
+				funds.setText( "Funds: " + lastFunds + " [RED]"+fundsChange+"[]" );
+			}
+			else
+			{
+				int change = fundsChange / 10 + 1;
+				fundsChange -= change;
+				lastFunds += change;
+
+				funds.setText( "Funds: " + lastFunds + " [GREEN]+"+fundsChange+"[]" );
+			}
+		}
+		else
+		{
+			funds.setText( "Funds: " + Global.Funds );
+		}
+
 		keyboardHelper.update( delta );
 		stage.act();
 

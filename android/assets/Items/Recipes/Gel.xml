@@ -34,6 +34,9 @@
     </Names>
 
     <AllowedModifiers>
-
+        <Accuracy></Accuracy>
+        <Vitality></Vitality>
+        <Speed></Speed>
+        <Regeneration MinQuality="3"></Regeneration>
     </AllowedModifiers>
 </Recipe>

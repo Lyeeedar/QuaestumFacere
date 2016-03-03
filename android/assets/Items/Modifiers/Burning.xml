@@ -1,0 +1,15 @@
+<Recipe>
+    <Names>
+        <Flaming />
+        <Burning />
+        <Searing />
+        <Roasting />
+        <Incinerating />
+    </Names>
+
+    <Events>
+        <OnDealDamage>
+            <Status Condition="chance(quality, 5)" Stacks="quality/5+1">Burning</Status>
+        </OnDealDamage>
+    </Events>
+</Recipe>

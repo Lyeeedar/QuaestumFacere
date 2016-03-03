@@ -150,6 +150,8 @@ public class Quest
 		requiredRooms.addAll( rooms );
 
 		SaveLevel level = new SaveLevel( name, requiredRooms, Global.QuestManager.seed );
+		Global.QuestManager.currentLevel = level;
+
 		LoadingScreen.Instance.set( level, this, player, "playerspawn", null );
 		RoguelikeGame.Instance.switchScreen( RoguelikeGame.ScreenEnum.LOADING );
 	}

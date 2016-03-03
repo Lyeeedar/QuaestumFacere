@@ -1,7 +1,7 @@
 <Recipe>
 
     <ItemTemplate>
-        <Name>Exoskelton</Name>
+        <Name>Exoskeleton</Name>
         <Description>Powered suit of heavy plate. Provides lots of protection.</Description>
         <UtilitySlots>1</UtilitySlots>
         <Type>Exoskeleton</Type>
@@ -23,7 +23,7 @@
 
     <Names>
         <Exoskeleton></Exoskeleton>
-        <AssistedCarapace></AssistedCarapace>
+        <Assisted_Carapace></Assisted_Carapace>
         <Exosuit></Exosuit>
         <Power_Armour></Power_Armour>
     </Names>
@@ -33,6 +33,9 @@
     </AllowedAbilities>
 
     <AllowedModifiers>
-
+        <Accuracy></Accuracy>
+        <Vitality></Vitality>
+        <Speed></Speed>
+        <Regeneration MinQuality="3"></Regeneration>
     </AllowedModifiers>
 </Recipe>

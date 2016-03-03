@@ -1,0 +1,15 @@
+<Recipe>
+    <Names>
+        <Stabilised />
+        <Accurate />
+        <Targetted />
+        <Seeking />
+        <Homing />
+    </Names>
+
+    <Events>
+        <Constant>
+            <Accuracy>3*quality</Accuracy>
+        </Constant>
+    </Events>
+</Recipe>

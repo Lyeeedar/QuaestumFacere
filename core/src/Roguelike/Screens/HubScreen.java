@@ -64,6 +64,20 @@ public class HubScreen implements Screen, InputProcessor
 		inputMultiplexer.addProcessor( inputProcessorOne );
 
 		lastFunds = Global.Funds;
+
+		Gdx.input.setInputProcessor( inputMultiplexer );
+
+		camera = new OrthographicCamera( Global.Resolution[0], Global.Resolution[1] );
+		camera.translate( Global.Resolution[0] / 2, Global.Resolution[1] / 2 );
+		camera.setToOrtho( false, Global.Resolution[0], Global.Resolution[1] );
+		camera.update();
+
+		batch.setProjectionMatrix( camera.combined );
+		stage.getViewport().setCamera( camera );
+		stage.getViewport().setWorldWidth( Global.Resolution[0] );
+		stage.getViewport().setWorldHeight( Global.Resolution[1] );
+		stage.getViewport().setScreenWidth( Global.ScreenSize[0] );
+		stage.getViewport().setScreenHeight( Global.ScreenSize[1] );
 	}
 
 	// ----------------------------------------------------------------------
@@ -169,7 +183,16 @@ public class HubScreen implements Screen, InputProcessor
 				Global.Funds += reward;
 				Global.QuestManager.currentQuest = null;
 				Global.QuestManager.currentLevel = null;
-				Global.QuestManager.difficulty += 1;
+				Global.QuestManager.count++;
+
+				if (Global.QuestManager.count == 2)
+				{
+					Global.QuestManager.difficulty++;
+					Global.QuestManager.count = 0;
+				}
+
+				Global.fillMarket();
+				Global.fillMissions();
 
 				clearContextMenu();
 			}
@@ -215,16 +238,6 @@ public class HubScreen implements Screen, InputProcessor
 		table.add( funds ).expandX().left();
 		table.row();
 
-		Array<Quest> chosenQuests = Global.QuestManager.getQuests( );
-
-		market.clear();
-
-		for (int i = 0; i < 10; i++)
-		{
-			Item item = TreasureGenerator.generateRandom( Global.QuestManager.difficulty, MathUtils.random ).get( 0 );
-			market.add(item);
-		}
-
 		Skin skin = Global.loadSkin();
 
 		ScrollPane missionScrollPane = new ScrollPane( missionList, skin );
@@ -266,8 +279,8 @@ public class HubScreen implements Screen, InputProcessor
 		table.add( tabPanel ).colspan( 2 ).expand().fill().pad( 25 );
 		table.row();
 
-		createMissions( chosenQuests, missionHelper );
-		createMarket( market, marketHelper );
+		createMissions( Global.Missions, missionHelper );
+		createMarket( Global.Market, marketHelper );
 		createStash( stashHelper );
 
 		missionHelper.scrollPane = missionScrollPane;
@@ -440,6 +453,8 @@ public class HubScreen implements Screen, InputProcessor
 									lastFunds = Global.Funds;
 									Global.Funds -= item.value;
 
+									Global.save();
+
 									createMarket( items, helper );
 									createStash( stashHelper );
 								}
@@ -535,7 +550,17 @@ public class HubScreen implements Screen, InputProcessor
 								lastFunds = Global.Funds;
 								Global.Funds += item.value;
 
-								createMarket( market, marketHelper );
+								for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
+								{
+									if (Global.Loadout.get( slot ) == item)
+									{
+										Global.Loadout.put( slot, null );
+									}
+								}
+
+								Global.save();
+
+								createMarket( Global.Market, marketHelper );
 								createStash( helper );
 							}
 						} );
@@ -596,8 +621,6 @@ public class HubScreen implements Screen, InputProcessor
 
 	public ButtonKeyboardHelper keyboardHelper;
 
-	Array<Item> market = new Array<Item>(  );
-
 	Texture background;
 
 
@@ -629,29 +652,39 @@ public class HubScreen implements Screen, InputProcessor
 	@Override
 	public void render( float delta )
 	{
-		if (lastFunds != Global.Funds)
+		if ( !created )
 		{
-			int fundsChange = Global.Funds - lastFunds;
-			if (fundsChange < 0)
-			{
-				int change = fundsChange / 10 - 1;
-				fundsChange -= change;
-				lastFunds += change;
+			create();
+			createUI();
+			created = true;
+		}
 
-				funds.setText( "Funds: " + lastFunds + " [RED]"+fundsChange+"[]" );
+		if (funds != null)
+		{
+			if ( lastFunds != Global.Funds )
+			{
+				int fundsChange = Global.Funds - lastFunds;
+				if ( fundsChange < 0 )
+				{
+					int change = fundsChange / 10 - 1;
+					fundsChange -= change;
+					lastFunds += change;
+
+					funds.setText( "Funds: " + lastFunds + " [RED]" + fundsChange + "[]" );
+				}
+				else
+				{
+					int change = fundsChange / 10 + 1;
+					fundsChange -= change;
+					lastFunds += change;
+
+					funds.setText( "Funds: " + lastFunds + " [GREEN]+" + fundsChange + "[]" );
+				}
 			}
 			else
 			{
-				int change = fundsChange / 10 + 1;
-				fundsChange -= change;
-				lastFunds += change;
-
-				funds.setText( "Funds: " + lastFunds + " [GREEN]+"+fundsChange+"[]" );
+				funds.setText( "Funds: " + Global.Funds );
 			}
-		}
-		else
-		{
-			funds.setText( "Funds: " + Global.Funds );
 		}
 
 		keyboardHelper.update( delta );

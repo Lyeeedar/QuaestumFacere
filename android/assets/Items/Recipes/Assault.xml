@@ -16,7 +16,7 @@
         <Events>
             <Constant>
                 <Attack>5 + 1.1 * quality</Attack>
-                <Accuracy>75 + quality</Accuracy>
+                <Accuracy>70 + quality</Accuracy>
             </Constant>
         </Events>
     </ItemTemplate>
@@ -33,6 +33,11 @@
     </Names>
 
     <AllowedModifiers>
-        <Incendiary MinQuality="3"></Incendiary>
+        <Accuracy></Accuracy>
+        <Attack></Attack>
+        <Penetration></Penetration>
+        <Burning MinQuality="2"></Burning>
+        <Chilling MinQuality="2"></Chilling>
+        <Stunning MinQuality="3"></Stunning>
     </AllowedModifiers>
 </Recipe>

@@ -69,6 +69,8 @@ public class LoadoutScreen implements Screen, InputProcessor
 	public void createUI()
 	{
 		table.clear();
+		items.clear();
+		desc.clear();
 
 		Skin skin = Global.loadSkin();
 
@@ -108,7 +110,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 				for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
 				{
-					Item item = slotMap.get( slot );
+					Item item = Global.Loadout.get( slot );
 
 					if (item != null)
 					{
@@ -151,7 +153,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 		button.add( slotLabel ).expandX(  ).left();
 		button.row();
 
-		final Item current = slotMap.get( slot );
+		final Item current = Global.Loadout.get( slot );
 		Table itemTable = new Table(  );
 		itemTable.defaults().pad( 5 );
 
@@ -183,8 +185,6 @@ public class LoadoutScreen implements Screen, InputProcessor
 			public void clicked (InputEvent event, float x, float y)
 			{
 				activeSlot = slot;
-				fillItemTable();
-
 				int i = -1;
 
 				for (final Item item : Global.UnlockedItems)
@@ -192,7 +192,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 					if ( item.slot == activeSlot )
 					{
 						i++;
-						if (item == slotMap.get( activeSlot ))
+						if (item == Global.Loadout.get( activeSlot ))
 						{
 							break;
 						}
@@ -201,8 +201,14 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 				if (i >= 0)
 				{
+					fillItemTable();
+
 					keyboardHelper = itemHelper;
 					itemHelper.trySetCurrent( 0, i, 0 );
+				}
+				else
+				{
+					activeSlot = null;
 				}
 			}
 		} );
@@ -213,7 +219,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 	private void fillDescriptionTable( Item item, Item.EquipmentSlot slot)
 	{
 		desc.clear();
-		desc.add( item.createTable( Global.loadSkin(), slotMap.get( slot ) ) ).expand().fill();
+		desc.add( item.createTable( Global.loadSkin(), Global.Loadout.get( slot ) ) ).expand().fill();
 	}
 
 	private void fillSlotTable()
@@ -272,7 +278,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 						keyboardHelper = slotHelper;
 						desc.clear();
 
-						slotMap.put( activeSlot, item );
+						Global.Loadout.put( activeSlot, item );
 						fillSlotButton( activeSlot );
 						fillSlotTable();
 					}
@@ -286,7 +292,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 				items.add( button ).expandX().fillX();
 				items.row();
 
-				if (item == slotMap.get( activeSlot ))
+				if (item == Global.Loadout.get( activeSlot ))
 				{
 					button.setChecked( true );
 				}
@@ -303,7 +309,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 		ScrollPane scrollPane = slotHelper.scrollPane;
 		slotHelper.clearGrid();
 
-		int numUtilSlots = slotMap.get( Item.EquipmentSlot.ARMOUR ) != null ? slotMap.get( Item.EquipmentSlot.ARMOUR ).utilSlots : 0;
+		int numUtilSlots = Global.Loadout.get( Item.EquipmentSlot.ARMOUR ) != null ? Global.Loadout.get( Item.EquipmentSlot.ARMOUR ).utilSlots : 0;
 		for (int i = 0; i < Item.EquipmentSlot.UtilitySlots.length; i++)
 		{
 			Item.EquipmentSlot slot = Item.EquipmentSlot.UtilitySlots[i];
@@ -353,7 +359,6 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 	Texture background;
 
-	FastEnumMap<Item.EquipmentSlot, Item> slotMap = new FastEnumMap<Item.EquipmentSlot, Item>( Item.EquipmentSlot.class );
 	FastEnumMap<Item.EquipmentSlot, Button> buttonMap = new FastEnumMap<Item.EquipmentSlot, Button>( Item.EquipmentSlot.class );
 	Item.EquipmentSlot activeSlot;
 

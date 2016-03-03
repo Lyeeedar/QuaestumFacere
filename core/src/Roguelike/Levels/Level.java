@@ -363,6 +363,15 @@ public class Level
 	{
 		if ( tile.spriteEffects.size > 0 )
 		{
+			for (SpriteEffect effect : tile.spriteEffects)
+			{
+				if (effect.Sprite.spriteAction != null)
+				{
+					effect.Sprite.spriteAction.evaluate();
+					effect.Sprite.spriteAction = null;
+				}
+			}
+
 			tile.spriteEffects.clear();
 		}
 

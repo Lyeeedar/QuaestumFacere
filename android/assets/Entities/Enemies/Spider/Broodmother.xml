@@ -1,7 +1,7 @@
 <Entity Extends="Enemies/Spider/SpiderBase">
 
     <Sprite>
-        <Name>Oryx/uf_split/uf_heroes/spider_brown_giant</Name>
+        <Name>Oryx/Custom/heroes/spiderboss</Name>
         <DrawActualSize>true</DrawActualSize>
         <Sound><Name>slime1</Name></Sound>
     </Sprite>

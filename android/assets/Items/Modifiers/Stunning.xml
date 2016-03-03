@@ -1,0 +1,11 @@
+<Recipe>
+    <Names>
+        <Stunning />
+    </Names>
+
+    <Events>
+        <OnDealDamage>
+            <Status Condition="chance(1, 3)">Stunned</Status>
+        </OnDealDamage>
+    </Events>
+</Recipe>

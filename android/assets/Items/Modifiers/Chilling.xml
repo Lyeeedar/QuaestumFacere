@@ -1,0 +1,15 @@
+<Recipe>
+    <Names>
+        <Chilling />
+        <Icy />
+        <Cold />
+        <Freezing />
+        <Glacial />
+    </Names>
+
+    <Events>
+        <OnDealDamage>
+            <Status Condition="chance(quality, 5)" Stacks="quality/5+1">Chilled</Status>
+        </OnDealDamage>
+    </Events>
+</Recipe>

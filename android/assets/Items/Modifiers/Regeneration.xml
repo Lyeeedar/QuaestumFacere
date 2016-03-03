@@ -1,0 +1,11 @@
+<Recipe>
+    <Names>
+        <Regenerating />
+    </Names>
+
+    <Events>
+        <OnTurn>
+            <Heal>1</Heal>
+        </OnTurn>
+    </Events>
+</Recipe>

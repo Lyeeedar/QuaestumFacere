@@ -5,8 +5,10 @@ import Roguelike.Entity.GameEntity;
 import Roguelike.GameEvent.Damage.DamageObject;
 import Roguelike.GameEvent.GameEventHandler;
 import Roguelike.Items.Item;
+import Roguelike.Items.TreasureGenerator;
 import Roguelike.Levels.Level;
 import Roguelike.Lights.Light;
+import Roguelike.Quests.Quest;
 import Roguelike.Quests.QuestManager;
 import Roguelike.RoguelikeGame.ScreenEnum;
 import Roguelike.Save.SaveFile;
@@ -104,6 +106,9 @@ public class Global
 	public static QuestManager QuestManager;
 	public static Array<Item> UnlockedItems = new Array<Item>(  );
 	public static int Funds = 500;
+	public static Array<Item> Market = new Array<Item>(  );
+	public static Array<Quest> Missions = new Array<Quest>(  );
+	public static FastEnumMap<Item.EquipmentSlot, Item> Loadout = new FastEnumMap<Item.EquipmentSlot, Item>( Item.EquipmentSlot.class );
 
 	// ----------------------------------------------------------------------
 	public static Level CurrentLevel;
@@ -137,6 +142,27 @@ public class Global
 	}
 
 	// ----------------------------------------------------------------------
+	public static void fillMarket()
+	{
+		Market.clear();
+		for (int i = 0; i < 10; i++)
+		{
+			int quality = Global.QuestManager.difficulty;
+			quality += MathUtils.random( -1, 1 );
+			if (quality < 1) { quality = 1; }
+
+			Item item = TreasureGenerator.generateRandom( quality, MathUtils.random ).get( 0 );
+			Market.add(item);
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	public static void fillMissions()
+	{
+		Missions = Global.QuestManager.getQuests( );
+	}
+
+	// ----------------------------------------------------------------------
 	public static SaveFile load()
 	{
 		SaveFile save = null;
@@ -153,6 +179,9 @@ public class Global
 		Global.QuestManager = save.questManager;
 		Global.UnlockedItems = save.unlockedItems;
 		Global.Funds = save.funds;
+		Global.Market = save.market;
+		Global.Missions = save.missions;
+		Global.Loadout = save.loadout;
 
 		return save;
 	}
@@ -172,6 +201,9 @@ public class Global
 		save.questManager = QuestManager;
 		save.unlockedItems = UnlockedItems;
 		save.funds = Funds;
+		save.market = Market;
+		save.missions = Missions;
+		save.loadout = Loadout;
 
 		if (save.questManager.currentLevel != null)
 		{
@@ -187,6 +219,11 @@ public class Global
 		QuestManager = new QuestManager();
 		UnlockedItems.clear();
 		Funds = 500;
+		Market.clear();
+		Missions.clear();
+
+		fillMissions();
+		fillMarket();
 
 		GameScreen.Instance.queueMessage( "Controls",
 										  "Click in a direction to move there (or use the arrow keys)." +

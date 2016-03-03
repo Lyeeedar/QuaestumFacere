@@ -1,0 +1,15 @@
+<Recipe>
+    <Names>
+        <Piercing />
+        <Penetrating />
+        <Drilling />
+        <Cutting />
+        <Vorpal />
+    </Names>
+
+    <Events>
+        <Constant>
+            <Penetration>5*quality</Penetration>
+        </Constant>
+    </Events>
+</Recipe>

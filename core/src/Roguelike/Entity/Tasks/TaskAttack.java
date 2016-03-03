@@ -471,16 +471,30 @@ public class TaskAttack extends AbstractTask
 			for ( GameTile tile : attackedTiles )
 			{
 				// do misses
+
+				// Base value
 				int hitPercent = entity.getVariable( Global.Statistic.ACCURACY );
 
 				int dist = Global.TaxiDist( entity.tile[0][0].x, entity.tile[0][0].y, tile.x, tile.y );
-				if (dist <= 1)
+
+				if (dist > 1)
 				{
-					hitPercent = (int)((float)hitPercent * 1.9f);
+					hitPercent -= (dist - 1) * 10; // 10 % per tile away
 				}
-				else if (dist == 2)
+
+				if (entity.tile[0][0].prevEntity != entity)
 				{
-					hitPercent = (int)((float)hitPercent * 1.3f);
+					hitPercent -= 10; // If attacker moved, -10
+				}
+
+				if (tile.entity != null && tile.prevEntity != tile.entity)
+				{
+					hitPercent -= 10; // If attacker moved, -10
+				}
+
+				if (tile.entity != null && tile.entity.size > 1)
+				{
+					hitPercent += (tile.entity.size-1) * 10;
 				}
 
 				if ( hitPercent < 100 )

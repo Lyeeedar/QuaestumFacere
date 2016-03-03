@@ -1,0 +1,15 @@
+<Recipe>
+    <Names>
+        <Damaging />
+        <Harming />
+        <Wounding />
+        <Torturing />
+        <Deadly />
+    </Names>
+
+    <Events>
+        <Constant>
+            <Attack>4*quality</Attack>
+        </Constant>
+    </Events>
+</Recipe>

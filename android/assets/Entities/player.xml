@@ -8,7 +8,7 @@
     </Factions>
 
     <Sprite>
-        <Name>Oryx/Custom/heroes/Merc</Name>
+        <Name>Oryx/Custom/heroes/wanderer</Name>
         <DrawActualSize>true</DrawActualSize>
     </Sprite>
 

@@ -78,7 +78,7 @@ public final class SaveFile
 	public int funds;
 	public Array<Item> market;
 	public Array<Quest> missions;
-	public FastEnumMap<Item.EquipmentSlot, Item> loadout;
+	public FastEnumMap<Item.EquipmentSlot, Integer> loadout;
 
 	public void save()
 	{

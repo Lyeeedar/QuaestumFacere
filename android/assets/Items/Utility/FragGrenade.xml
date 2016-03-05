@@ -1,9 +1,9 @@
 <Item>
     <Name>Fragmentation Grenade</Name>
     <Description>A grenade filled with high explosive materials and surrounded by a shell designed to turn into deadly shrapnel. Throw at your foe to truely end them.</Description>
-    <Sprite>
+    <Icon>
         <Name>Oryx/Custom/items/Grenade</Name>
-    </Sprite>
+    </Icon>
     <Value>120</Value>
     <Ability>
         <Active>

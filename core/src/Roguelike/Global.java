@@ -14,6 +14,7 @@ import Roguelike.RoguelikeGame.ScreenEnum;
 import Roguelike.Save.SaveFile;
 import Roguelike.Save.SaveLevel;
 import Roguelike.Screens.GameScreen;
+import Roguelike.Screens.HubScreen;
 import Roguelike.Screens.LoadingScreen;
 import Roguelike.Sound.Mixer;
 import Roguelike.Sound.RepeatingSoundEffect;
@@ -108,7 +109,7 @@ public class Global
 	public static int Funds = 500;
 	public static Array<Item> Market = new Array<Item>(  );
 	public static Array<Quest> Missions = new Array<Quest>(  );
-	public static FastEnumMap<Item.EquipmentSlot, Item> Loadout = new FastEnumMap<Item.EquipmentSlot, Item>( Item.EquipmentSlot.class );
+	public static FastEnumMap<Item.EquipmentSlot, Integer> Loadout = new FastEnumMap<Item.EquipmentSlot, Integer>( Item.EquipmentSlot.class );
 
 	// ----------------------------------------------------------------------
 	public static Level CurrentLevel;
@@ -162,6 +163,34 @@ public class Global
 	public static void fillMissions()
 	{
 		Missions = Global.QuestManager.getQuests( );
+	}
+
+	// ----------------------------------------------------------------------
+	public static Item getLoadoutItem( Item.EquipmentSlot slot )
+	{
+		Integer current = Loadout.get( slot );
+
+		if (current != null)
+		{
+			return getItem( current );
+		}
+
+		return null;
+	}
+
+	// ----------------------------------------------------------------------
+	public static Item getItem(int hashCode)
+	{
+		for (int i = 0; i < UnlockedItems.size; i++)
+		{
+			Item item = UnlockedItems.get( i );
+			if (item.hashCode == hashCode)
+			{
+				return item;
+			}
+		}
+
+		return null;
 	}
 
 	// ----------------------------------------------------------------------
@@ -226,6 +255,11 @@ public class Global
 
 		fillMissions();
 		fillMarket();
+
+		HubScreen.Instance.queueMessage("Quaestum Facere",
+										"After many years of working as a part time mercenary and vagabond, you have finally decided to settle down and retire." +
+										" The only problem with this plan is your complete lack of funds. Work hard on jobs, earn some money and retire into a cushy" +
+										" comfortable life. Just be careful not to die.");
 
 		GameScreen.Instance.queueMessage( "Controls",
 										  "Click in a direction to move there (or use the arrow keys)." +
@@ -542,6 +576,12 @@ public class Global
 		buttonStyle.up = new NinePatchDrawable( new NinePatch( AssetManager.loadTextureRegion( "Sprites/GUI/Button.png" ), 12, 12, 12, 12 ) );
 		buttonStyle.over = ((NinePatchDrawable)buttonStyle.up).tint( new Color( 0.8f, 0.8f, 0.8f, 1.0f ) );
 		skin.add( "default", buttonStyle );
+
+		Button.ButtonStyle buttonToggleStyle = new Button.ButtonStyle(  );
+		buttonToggleStyle.up = new NinePatchDrawable( new NinePatch( AssetManager.loadTextureRegion( "Sprites/GUI/Button.png" ), 12, 12, 12, 12 ) );
+		buttonToggleStyle.over = ((NinePatchDrawable)buttonStyle.up).tint( new Color( 0.8f, 0.8f, 0.8f, 1.0f ) );
+		buttonToggleStyle.checked = new NinePatchDrawable( new NinePatch( AssetManager.loadTextureRegion( "Sprites/GUI/ButtonDown.png" ), 12, 12, 12, 12 ) );
+		skin.add( "toggle", buttonToggleStyle );
 
 		Button.ButtonStyle sheathButton = new Button.ButtonStyle(  );
 		sheathButton.up = new LayeredDrawable(

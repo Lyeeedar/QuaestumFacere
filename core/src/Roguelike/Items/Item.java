@@ -56,6 +56,8 @@ public final class Item extends GameEventHandler
 
 	public Array<SpriteGroup> spriteGroups = new Array<SpriteGroup>(  );
 
+	public int hashCode;
+
 	// ----------------------------------------------------------------------
 	public Item()
 	{
@@ -78,6 +80,7 @@ public final class Item extends GameEventHandler
 		Item item = new Item();
 
 		item.internalLoad( name );
+		item.hashCode = item.hashCode();
 
 		return item;
 	}
@@ -115,6 +118,8 @@ public final class Item extends GameEventHandler
 
 		item.value = xml.getInt( "Value", 0 );
 
+		item.hashCode = item.hashCode();
+
 		return item;
 	}
 
@@ -140,6 +145,7 @@ public final class Item extends GameEventHandler
 		}
 
 		item.value = xml.getInt( "Value", 0 );
+		item.hashCode = item.hashCode();
 
 		return item;
 	}

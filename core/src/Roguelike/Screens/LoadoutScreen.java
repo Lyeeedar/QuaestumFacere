@@ -72,6 +72,8 @@ public class LoadoutScreen implements Screen, InputProcessor
 		items.clear();
 		desc.clear();
 
+		items.defaults().pad( 2, 10, 2, 5 );
+
 		Skin skin = Global.loadSkin();
 
 		keyboardHelper = new ButtonKeyboardHelper(  );
@@ -110,7 +112,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 				for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
 				{
-					Item item = Global.Loadout.get( slot );
+					Item item = Global.getLoadoutItem( slot );
 
 					if (item != null)
 					{
@@ -151,19 +153,24 @@ public class LoadoutScreen implements Screen, InputProcessor
 		button.addListener( button.getClickListener() );
 
 		Label slotLabel = new Label( Global.capitalizeString( slot.toString() ), skin );
-		slotLabel.setFontScale( 0.5f );
+		slotLabel.setFontScale( 0.6f );
 		button.add( slotLabel ).expandX(  ).left();
 		button.row();
 
-		final Item current = Global.Loadout.get( slot );
+		final Item current = Global.getLoadoutItem( slot );
 		Table itemTable = new Table(  );
 		itemTable.defaults().pad( 5 );
+		button.add( itemTable ).width( Value.percentWidth( 0.8f, button ) ).height( 32 );
 
 		if (current != null)
 		{
 			SpriteWidget sprite = new SpriteWidget( current.getIcon(), 24, 24 );
 			itemTable.add( sprite );
-			itemTable.add( new Label( current.getName(), skin ) );
+
+			Label name = new Label( current.getName(), skin );
+			name.setEllipsis( true );
+
+			itemTable.add( name ).expandX().width( Value.percentWidth( 0.7f, itemTable ) ).left();
 			itemTable.row();
 		}
 
@@ -193,7 +200,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 				{
 					if ( (activeSlot.isUtility() && item.slot.isUtility()) || item.slot == activeSlot )
 					{
-						if (!Global.Loadout.containsValue( item ))
+						if (!Global.Loadout.containsValue( item.hashCode ))
 						{
 							i++;
 						}
@@ -213,14 +220,12 @@ public class LoadoutScreen implements Screen, InputProcessor
 				}
 			}
 		} );
-
-		button.add( itemTable ).expandX().fillX().left().height( 32 );
 	}
 
 	private void fillDescriptionTable( Item item, Item.EquipmentSlot slot)
 	{
 		desc.clear();
-		desc.add( item.createTable( Global.loadSkin(), Global.Loadout.get( slot ) ) ).expand().fill();
+		desc.add( item.createTable( Global.loadSkin(), Global.getLoadoutItem( slot ) ) ).expand().fill();
 	}
 
 	private void fillSlotTable()
@@ -254,7 +259,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 		Skin skin = Global.loadSkin();
 
-		ButtonGroup<Button> group = new ButtonGroup<Button>(  );
+		//ButtonGroup<Button> group = new ButtonGroup<Button>(  );
 
 		for (final Item item : Global.UnlockedItems)
 		{
@@ -262,20 +267,20 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 			if (activeSlot.isUtility())
 			{
-				if (item.slot.isUtility() && !Global.Loadout.containsValue( item ))
+				if (item.slot.isUtility() && !Global.Loadout.containsValue( item.hashCode ))
 				{
 					display = true;
 				}
 			}
-			else
+			else if (!Global.Loadout.containsValue( item.hashCode ))
 			{
 				display = item.slot == activeSlot;
 			}
 
 			if ( display )
 			{
-				Button button = new Button( skin );
-				group.add( button );
+				Button button = new Button( skin, "toggle" );
+				//group.add( button );
 
 				button.addListener( new InputListener()
 				{
@@ -294,7 +299,9 @@ public class LoadoutScreen implements Screen, InputProcessor
 						desc.clear();
 
 						item.slot = activeSlot;
-						Global.Loadout.put( activeSlot, item );
+						Global.Loadout.put( activeSlot, item.hashCode );
+						Global.save();
+
 						fillSlotButton( activeSlot );
 						fillSlotTable();
 					}
@@ -302,15 +309,19 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 				SpriteWidget sprite = new SpriteWidget( item.getIcon(), 24, 24 );
 				button.add( sprite );
-				button.add( new Label( item.getName(), skin ) );
+
+				Label name = new Label( item.getName(), skin );
+				name.setEllipsis( true );
+
+				button.add( name ).expandX().width( Value.percentWidth( 0.7f, button ) ).left();
 				button.row();
 
 				items.add( button ).expandX().fillX();
 				items.row();
 
-				if (item == Global.Loadout.get( activeSlot ))
+				if (item == Global.getLoadoutItem( activeSlot ))
 				{
-					button.setChecked( true );
+					//button.setChecked( true );
 				}
 
 				itemHelper.add( button );
@@ -325,7 +336,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 		ScrollPane scrollPane = slotHelper.scrollPane;
 		slotHelper.clearGrid();
 
-		int numUtilSlots = Global.Loadout.get( Item.EquipmentSlot.ARMOUR ) != null ? Global.Loadout.get( Item.EquipmentSlot.ARMOUR ).utilSlots : 0;
+		int numUtilSlots = Global.Loadout.get( Item.EquipmentSlot.ARMOUR ) != null ? Global.getLoadoutItem( Item.EquipmentSlot.ARMOUR ).utilSlots : 0;
 		for (int i = 0; i < Item.EquipmentSlot.UtilitySlots.length; i++)
 		{
 			Item.EquipmentSlot slot = Item.EquipmentSlot.UtilitySlots[i];

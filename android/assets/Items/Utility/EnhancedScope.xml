@@ -1,10 +1,10 @@
 <Item>
     <Name>Enhanced Scope</Name>
     <Description>A scope, used for aiming at your foe. The smart targetting software and automatic laser painting within it increase your accuracy by a moderate amount.</Description>
-    <Sprite>
+    <Icon>
         <Name>Oryx/Custom/items/Scope</Name>
         <Colour><RGB>255,230,230</RGB></Colour>
-    </Sprite>
+    </Icon>
     <Events>
         <Constant>
             <Accuracy>10</Accuracy>

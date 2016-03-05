@@ -63,7 +63,7 @@ public final class FastEnumMap<T extends Enum<T>, V>
 	{
 		for (int i = 0; i < items.length; i++)
 		{
-			if (items[i] == value)
+			if ( items[i] != null && items[i].equals( value ) )
 			{
 				return true;
 			}

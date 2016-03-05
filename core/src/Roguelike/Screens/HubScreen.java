@@ -145,6 +145,47 @@ public class HubScreen implements Screen, InputProcessor
 	}
 
 	// ----------------------------------------------------------------------
+	public void queueMessage(String titleString, String messageString)
+	{
+		Skin skin = Global.loadSkin();
+
+		Table message = new Table();
+		message.defaults().pad( 10 );
+
+		Label title = new Label(titleString, skin, "title");
+		message.add( title ).expandX().left();
+		message.row();
+
+		message.add( new Seperator( skin ) ).expandX().fillX();
+		message.row();
+
+		Table messageBody = new Table();
+		Label messageText = new Label( messageString, skin);
+		messageText.setWrap( true );
+		messageBody.add( messageText ).expand().fillX();
+		messageBody.row();
+
+		message.add( messageBody ).expand().fill();
+		message.row();
+
+		message.add( new Seperator( skin ) ).expandX().fillX();
+		message.row();
+
+		TextButton continueButton = new TextButton( "Continue", skin );
+		continueButton.addListener( new ClickListener(  )
+		{
+			public void clicked( InputEvent event, float x, float y )
+			{
+				HubScreen.Instance.clearContextMenu( );
+			}
+		} );
+		message.add( continueButton ).colspan( 2 ).expandX().fillX();
+		message.row();
+
+		HubScreen.Instance.queueContextMenu( message, new ButtonKeyboardHelper( continueButton ) );
+	}
+
+	// ----------------------------------------------------------------------
 	public void showRewardMessage( String messageString, final int reward )
 	{
 		Skin skin = Global.loadSkin();
@@ -196,6 +237,9 @@ public class HubScreen implements Screen, InputProcessor
 				Global.fillMarket();
 				Global.fillMissions();
 
+				HubScreen.Instance.queueMessage( "Market",
+												 "New items are available for purchase in the market.");
+
 				clearContextMenu();
 			}
 		} );
@@ -231,6 +275,10 @@ public class HubScreen implements Screen, InputProcessor
 		missionHelper.clearGrid();
 		marketHelper.clearGrid();
 		stashHelper.clearGrid();
+
+		missionList.defaults().padRight( 5 );
+		marketList.defaults().padRight( 5 );
+		stashList.defaults().padRight( 5 );
 
 		keyboardHelper = new ButtonKeyboardHelper(  );
 
@@ -333,9 +381,11 @@ public class HubScreen implements Screen, InputProcessor
 			button.add( sprite );
 
 			Table right = new Table(  );
-			button.add( right ).expand().left();
+			button.add( right ).expand().fill().left();
 
-			right.add( new Label( item.name, skin ) ).left();
+			Label name = new Label( item.name, skin );
+			name.setEllipsis( true );
+			right.add( name ).width( Value.percentWidth( 1, right ) );
 			right.row();
 			right.add( new Label( ""+item.reward, skin ) ).left();
 			right.row();
@@ -415,9 +465,11 @@ public class HubScreen implements Screen, InputProcessor
 				button.add( sprite );
 
 				Table right = new Table();
-				button.add( right ).expand().left();
+				button.add( right ).expand().fill().left();
 
-				right.add( new Label( item.getName(), skin ) ).left();
+				Label name = new Label( item.getName(), skin );
+				name.setEllipsis( true );
+				right.add( name ).width( Value.percentWidth( 1, right ) );
 				right.row();
 
 				Label valueLabel = new Label( "" + item.value, skin );
@@ -524,9 +576,11 @@ public class HubScreen implements Screen, InputProcessor
 				button.add( sprite );
 
 				Table right = new Table();
-				button.add( right ).expand().left();
+				button.add( right ).expand().fill().left();
 
-				right.add( new Label( item.getName(), skin ) ).left();
+				Label name = new Label( item.getName(), skin );
+				name.setEllipsis( true );
+				right.add( name ).width( Value.percentWidth( 1, right ) );
 				right.row();
 				right.add( new Label( "" + item.value, skin ) ).left();
 				right.row();
@@ -554,7 +608,7 @@ public class HubScreen implements Screen, InputProcessor
 
 								for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
 								{
-									if (Global.Loadout.get( slot ) == item)
+									if (Global.Loadout.get( slot ) != null && Global.Loadout.get( slot ) == item.hashCode)
 									{
 										Global.Loadout.put( slot, null );
 									}
@@ -575,7 +629,7 @@ public class HubScreen implements Screen, InputProcessor
 					}
 				} );
 
-				stashList.add( button ).expandX().fillX();
+				stashList.add( button ).expandX().fillX().width( Value.percentWidth( 1, stashList ) );
 				stashList.row();
 
 				helper.add( button );

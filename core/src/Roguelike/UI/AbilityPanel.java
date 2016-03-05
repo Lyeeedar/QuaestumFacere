@@ -34,7 +34,7 @@ public class AbilityPanel extends TilePanel
 
 	public AbilityPanel( Skin skin, Stage stage )
 	{
-		super( skin, stage, AssetManager.loadSprite( "GUI/TileBackground" ), AssetManager.loadSprite( "GUI/TileBorder" ), 1, 10, 48, false );
+		super( skin, stage, AssetManager.loadSprite( "GUI/TileBackground" ), AssetManager.loadSprite( "GUI/TileBorder" ), 1, 1, 48, false );
 
 		drawHorizontalBackground = false;
 		font = skin.getFont( "default" );

@@ -30,7 +30,7 @@ public class EquipmentPanel extends TilePanel
 
 	public EquipmentPanel( Skin skin, Stage stage )
 	{
-		super( skin, stage, AssetManager.loadSprite( "GUI/TileBackground" ), AssetManager.loadSprite( "GUI/TileBorder" ), 1, Item.EquipmentSlot.values().length, 48, false );
+		super( skin, stage, AssetManager.loadSprite( "GUI/TileBackground" ), AssetManager.loadSprite( "GUI/TileBorder" ), 1, 1, 48, false );
 
 		drawHorizontalBackground = false;
 		font = skin.getFont( "default" );
@@ -44,18 +44,24 @@ public class EquipmentPanel extends TilePanel
 	{
 		tileData.clear();
 
+		int i = 0;
 		for ( Item.EquipmentSlot slot : Item.EquipmentSlot.values() )
 		{
-			Item item = Global.CurrentLevel.player.getInventory().getEquip( slot );
+			if (i < viewHeight)
+			{
+				Item item = Global.CurrentLevel.player.getInventory().getEquip( slot );
 
-			if ( item == null )
-			{
-				tileData.add( slot );
+				if ( item == null )
+				{
+					tileData.add( slot );
+				}
+				else
+				{
+					tileData.add( item );
+				}
 			}
-			else
-			{
-				tileData.add( item );
-			}
+
+			i++;
 		}
 	}
 
@@ -92,14 +98,6 @@ public class EquipmentPanel extends TilePanel
 
 			return table;
 		}
-		else if ( data instanceof Integer )
-		{
-			Table table = new Table();
-
-			table.add( new Label( "Upgrade Stones: " + data.toString(), skin ) );
-
-			return table;
-		}
 
 		return ( (Item) data ).createTable( skin, Global.CurrentLevel.player );
 	}
@@ -121,13 +119,7 @@ public class EquipmentPanel extends TilePanel
 	@Override
 	public void onDrawItem( Object data, Batch batch, int x, int y, int width, int height )
 	{
-		if ( data instanceof Integer )
-		{
-			String text = data.toString() + "\n" + "stones";
-			layout.setText( font, text, Color.WHITE, 0, Align.center, false );
 
-			font.draw( batch, layout, x + width / 2, y + height / 2 + layout.height / 2 );
-		}
 	}
 
 	@Override

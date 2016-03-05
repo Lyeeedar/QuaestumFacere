@@ -336,7 +336,8 @@ public class LoadoutScreen implements Screen, InputProcessor
 		ScrollPane scrollPane = slotHelper.scrollPane;
 		slotHelper.clearGrid();
 
-		int numUtilSlots = Global.Loadout.get( Item.EquipmentSlot.ARMOUR ) != null ? Global.getLoadoutItem( Item.EquipmentSlot.ARMOUR ).utilSlots : 0;
+		Item armour = Global.getLoadoutItem( Item.EquipmentSlot.ARMOUR );
+		int numUtilSlots = armour != null ? armour.utilSlots : 1;
 		for (int i = 0; i < Item.EquipmentSlot.UtilitySlots.length; i++)
 		{
 			Item.EquipmentSlot slot = Item.EquipmentSlot.UtilitySlots[i];

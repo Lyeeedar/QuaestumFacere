@@ -31,8 +31,8 @@ public abstract class TilePanel extends Widget
 	protected int targetWidth;
 	protected int targetHeight;
 
-	protected int viewWidth;
-	protected int viewHeight;
+	public int viewWidth;
+	public int viewHeight;
 
 	protected int dataWidth;
 	protected int dataHeight;

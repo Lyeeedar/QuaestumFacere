@@ -85,6 +85,19 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 
 		Gdx.input.setInputProcessor( inputMultiplexer );
 
+		if (Global.CurrentLevel.player.slottedAbilities.size == 0)
+		{
+			abilityPanel.setVisible( false );
+		}
+		else
+		{
+			abilityPanel.setVisible( true );
+			abilityPanel.viewHeight = Global.CurrentLevel.player.slottedAbilities.size;
+		}
+
+		Item armour = Global.getLoadoutItem( Item.EquipmentSlot.ARMOUR );
+		equipmentPanel.viewHeight = 2 + ( armour != null ? armour.utilSlots : 1 );
+
 		resize( Global.ScreenSize[ 0 ], Global.ScreenSize[ 1 ] );
 
 		relayoutUI();

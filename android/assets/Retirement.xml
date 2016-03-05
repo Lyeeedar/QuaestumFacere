@@ -1,0 +1,19 @@
+<Retirement>
+
+    <Location>
+        <Name>Yarvil 7</Name>
+        <Description>A small apartment in the busy planet city of Yarvil 7. Cheap and cost effective, the price is driven down by the high crime index and large levels of pollution.</Description>
+        <Image>Unpacked/Yarvil7</Image>
+        <Cost>1000</Cost>
+        <Message>You retire to the apartment in the distant Yarvil 7. Though cheap the apartment has lots of space, allowing you to fill it up to being a comfortable home. A few years of breathing the smog has however meant you have developed a deep cough that shakes your entire body. A few months later you go to sleep but never wake up.</Message>
+    </Location>
+
+    <Location>
+        <Name>Kelco 2</Name>
+        <Description>A semi detached house, looking out over the beautiful blue waters of the Ber estuary. A short distance walk to the nature preserve and unforgettable diamond caverns.</Description>
+        <Image>Unpacked/Kelco2</Image>
+        <Cost>10000</Cost>
+        <Message>The idyllic house in the bleached white neighbourhood on Kelco 2 is what anyone would dream of eventually owning. The neighbors are friendly and the environments beautiful. However, as time passed you realised there was something missing. The spark of excitement you so craved in your life was gone. You took to spelunking in the diamond caves, until one day your line sheered on the razor edge of a ridge and you plunged to your death.</Message>
+    </Location>
+
+</Retirement>

@@ -28,7 +28,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.io.IOException;
 
 /**
  * Created by Philip on 28-Feb-16.
@@ -142,6 +145,49 @@ public class HubScreen implements Screen, InputProcessor
 		contextMenu.addAction( new SequenceAction( parallelAction, Actions.removeAction( parallelAction ) ) );
 
 		this.keyboardHelper = keyboardHelper;
+	}
+
+	// ----------------------------------------------------------------------
+	public void queueEndGame(String titleString, String messageString)
+	{
+		Skin skin = Global.loadSkin();
+
+		Table message = new Table();
+		message.defaults().pad( 10 );
+
+		Label title = new Label(titleString, skin, "title");
+		message.add( title ).expandX().left();
+		message.row();
+
+		message.add( new Seperator( skin ) ).expandX().fillX();
+		message.row();
+
+		Table messageBody = new Table();
+		Label messageText = new Label( messageString, skin);
+		messageText.setWrap( true );
+		messageBody.add( messageText ).expand().fillX();
+		messageBody.row();
+
+		message.add( messageBody ).expand().fill();
+		message.row();
+
+		message.add( new Seperator( skin ) ).expandX().fillX();
+		message.row();
+
+		TextButton continueButton = new TextButton( "Continue", skin );
+		continueButton.addListener( new ClickListener(  )
+		{
+			public void clicked( InputEvent event, float x, float y )
+			{
+				clearContextMenu();
+				Global.delete();
+				RoguelikeGame.Instance.switchScreen( RoguelikeGame.ScreenEnum.MAINMENU );
+			}
+		} );
+		message.add( continueButton ).colspan( 2 ).expandX().fillX();
+		message.row();
+
+		HubScreen.Instance.queueContextMenu( message, new ButtonKeyboardHelper( continueButton ) );
 	}
 
 	// ----------------------------------------------------------------------
@@ -271,14 +317,18 @@ public class HubScreen implements Screen, InputProcessor
 		marketContent.clear();
 		stashList.clear();
 		stashContent.clear();
+		locationList.clear();
+		locationContent.clear();
 
 		missionHelper.clearGrid();
 		marketHelper.clearGrid();
 		stashHelper.clearGrid();
+		locationHelper.clearGrid();
 
 		missionList.defaults().padRight( 5 );
 		marketList.defaults().padRight( 5 );
 		stashList.defaults().padRight( 5 );
+		locationList.defaults().padRight( 5 );
 
 		keyboardHelper = new ButtonKeyboardHelper(  );
 
@@ -311,6 +361,13 @@ public class HubScreen implements Screen, InputProcessor
 		stashScrollPane.setScrollbarsOnTop( false );
 		stashScrollPane.setForceScroll( false, true );
 
+		final ScrollPane locationScrollPane = new ScrollPane( locationList, skin );
+		locationScrollPane.setScrollingDisabled( true, false );
+		locationScrollPane.setVariableSizeKnobs( true );
+		locationScrollPane.setFadeScrollBars( false );
+		locationScrollPane.setScrollbarsOnTop( false );
+		locationScrollPane.setForceScroll( false, true );
+
 		Table missionTab = new Table(  );
 		missionTab.add( missionScrollPane ).expandY().fillY().width( Value.percentWidth( 0.4f, missionTab ) );
 		missionTab.add( missionContent ).expandY().fillY().width( Value.percentWidth( 0.6f, missionTab ) );
@@ -326,16 +383,23 @@ public class HubScreen implements Screen, InputProcessor
 		stashTab.add( stashContent ).expandY().fillY().width( Value.percentWidth( 0.6f, stashTab ) );
 		tabPanel.addTab( "Stash", stashTab );
 
+		Table locationTab = new Table(  );
+		locationTab.add( locationScrollPane ).expandY().fill().width( Value.percentWidth( 0.4f, locationTab ) );
+		locationTab.add( locationContent ).expandY().fillY().width( Value.percentWidth( 0.6f, locationTab ) );
+		tabPanel.addTab( "Retirement", locationTab );
+
 		table.add( tabPanel ).colspan( 2 ).expand().fill().pad( 25 );
 		table.row();
 
 		createMissions( Global.Missions, missionHelper );
 		createMarket( Global.Market, marketHelper );
 		createStash( stashHelper );
+		createLocation( locationHelper );
 
 		missionHelper.scrollPane = missionScrollPane;
 		marketHelper.scrollPane = marketScrollPane;
 		stashHelper.scrollPane = stashScrollPane;
+		locationHelper.scrollPane = locationScrollPane;
 
 		tabPanel.addListener( new ChangeListener() {
 			@Override
@@ -354,6 +418,10 @@ public class HubScreen implements Screen, InputProcessor
 				else if (tabPanel.getSelectedIndex() == 2)
 				{
 					keyboardHelper = stashHelper;
+				}
+				else if (tabPanel.getSelectedIndex() == 3)
+				{
+					keyboardHelper = locationHelper;
 				}
 
 				keyboardHelper.trySetCurrent( oldHelper.currentx, oldHelper.currenty, oldHelper.currentz );
@@ -640,6 +708,87 @@ public class HubScreen implements Screen, InputProcessor
 		helper.trySetCurrent(  );
 	}
 
+	public void createLocation( final ButtonKeyboardHelper helper )
+	{
+		ScrollPane scrollPane = helper.scrollPane;
+		helper.clearGrid();
+
+		for (Actor a : tabPanel.tabTitleTable.getChildren())
+		{
+			helper.add( a, 0, 0 );
+		}
+
+		final Skin skin = Global.loadSkin();
+
+		locationList.clear();
+		locationContent.clear();
+
+		int i = 0;
+		for (final LocationData location : locationDataList.locations)
+		{
+			Button button = new Button( skin );
+			button.defaults().pad( 5 );
+
+			Table right = new Table();
+			button.add( right ).expand().fill().left();
+
+			Label name = new Label( location.name, skin );
+			name.setEllipsis( true );
+			right.add( name ).width( Value.percentWidth( 1, right ) );
+			right.row();
+
+			Label valueLabel = new Label( "" + location.cost, skin );
+
+			if ( Global.Funds < location.cost )
+			{
+				valueLabel.setColor( Color.RED );
+			}
+
+			right.add( valueLabel ).left();
+			right.row();
+
+			final int currenti = i++;
+			button.addListener( new ClickListener()
+			{
+				public void clicked( InputEvent event, float x, float y )
+				{
+					locationContent.clear();
+
+					locationContent.add( location.createTable( ) ).expand().fill();
+					locationContent.row();
+
+					helper.clearColumn( 1 );
+
+					if (Global.Funds >= location.cost)
+					{
+						TextButton retire = new TextButton( "Retire here for " + location.cost, skin );
+						retire.addListener( new ClickListener()
+						{
+							public void clicked( InputEvent event, float x, float y )
+							{
+
+								queueEndGame( "Retirement", location.message );
+							}
+						} );
+
+						locationContent.add( retire ).expandX().right();
+						locationContent.row();
+
+						helper.replace( retire, 1, currenti );
+					}
+				}
+			} );
+
+			locationList.add( button ).expandX().fillX().width( Value.percentWidth( 1, locationList ) );
+			locationList.row();
+
+			helper.add( button );
+		}
+
+		helper.scrollPane = scrollPane;
+		helper.trySetCurrent(  );
+	}
+
 	// ----------------------------------------------------------------------
 	public OrthographicCamera camera;
 
@@ -662,12 +811,16 @@ public class HubScreen implements Screen, InputProcessor
 	Table stashList = new Table(  );
 	Table stashContent = new Table(  );
 
+	Table locationList = new Table(  );
+	Table locationContent = new Table(  );
+
 	Label funds;
 	int lastFunds;
 
 	final ButtonKeyboardHelper missionHelper = new ButtonKeyboardHelper(  );
 	final ButtonKeyboardHelper marketHelper = new ButtonKeyboardHelper(  );
 	final ButtonKeyboardHelper stashHelper = new ButtonKeyboardHelper(  );
+	final ButtonKeyboardHelper locationHelper = new ButtonKeyboardHelper(  );
 
 	Stage stage;
 
@@ -679,6 +832,7 @@ public class HubScreen implements Screen, InputProcessor
 
 	Texture background;
 
+	LocationList locationDataList = new LocationList();
 
 	@Override
 	public void show()
@@ -897,4 +1051,85 @@ public class HubScreen implements Screen, InputProcessor
 		return false;
 	}
 
+	private class LocationList
+	{
+		public Array<LocationData> locations = new Array<LocationData>(  );
+
+		public LocationList()
+		{
+			XmlReader reader = new XmlReader();
+			XmlReader.Element xml = null;
+
+			try
+			{
+				xml = reader.parse( Gdx.files.internal( "Retirement.xml" ) );
+			}
+			catch ( IOException e )
+			{
+				e.printStackTrace();
+			}
+
+			for (int i = 0; i < xml.getChildCount(); i++)
+			{
+				XmlReader.Element el = xml.getChild( i );
+
+				locations.add( new LocationData( el ) );
+			}
+		}
+	}
+
+	private class LocationData
+	{
+		public String name;
+		public String description;
+		public Texture image;
+		public int cost;
+		public String message;
+
+		public LocationData( XmlReader.Element xml )
+		{
+			name = xml.get( "Name" );
+			description = xml.get( "Description" );
+			cost = xml.getInt( "Cost" );
+
+			String texName = xml.get( "Image" );
+
+			texName = "Sprites/" + texName + ".png";
+			image = AssetManager.loadTexture( texName );
+
+			message = xml.get( "Message" );
+		}
+
+		public Table createTable()
+		{
+			Skin skin = Global.loadSkin();
+			Table table = new Table();
+
+			table.defaults().pad( 10 );
+
+			table.add( new Label( name, skin, "title" ) ).expandX().left();
+			table.row();
+
+			table.add( new Seperator( skin ) ).expandX().fillX();
+			table.row();
+
+			Label desc = new Label( description, skin );
+			desc.setWrap( true );
+			table.add( desc ).expandX().fillX().left();
+			table.row();
+
+			Image image = new Image( this.image );
+			table.add( image ).expandX().fillX();
+			table.row();
+
+			Label rew = new Label( "Cost: " + cost, skin );
+			rew.setColor( Color.GOLD );
+
+			table.add( rew ).expandX().left();
+			table.row();
+
+			return table;
+		}
+
+	}
 }

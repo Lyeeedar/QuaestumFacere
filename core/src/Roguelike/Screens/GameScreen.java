@@ -1965,10 +1965,8 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 									   " Became permanently deceased." +
 									   " Bit the dust." +
 									   " Met your maker." +
-									   " Unfortunately perished." +
-									   " Your adventure has gone completely belly up.\n\n" +
-									   "Your body is left where it dropped, slowly rotting away, providing a nice pile of loot for the next adventurer to stumble this way.\n\n" +
-									   "Oh well, better luck in your next life.", skin);
+									   " Unfortunately perished.\n\n" +
+									   "You never managed to retire to the relaxing life you were saving for. How sad.\n\n", skin);
 
 		ScrollPane scrollPane = new ScrollPane( messageLabel );
 		messageLabel.setWrap( true );

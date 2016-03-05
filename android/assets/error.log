@@ -1,5 +1,11 @@
 java.lang.NullPointerException
-	at Roguelike.Screens.HubScreen.render(HubScreen.java:670)
+	at Roguelike.Ability.ActiveAbility.EffectType.EffectTypeDamage.applyToEntity(EffectTypeDamage.java:96)
+	at Roguelike.Ability.ActiveAbility.EffectType.EffectTypeDamage.update(EffectTypeDamage.java:41)
+	at Roguelike.Ability.ActiveAbility.ActiveAbility$1.evaluate(ActiveAbility.java:502)
+	at Roguelike.Sprite.Sprite.update(Sprite.java:94)
+	at Roguelike.Levels.Level.updateSpriteEffectsForTile(Level.java:676)
+	at Roguelike.Levels.Level.advance(Level.java:1388)
+	at Roguelike.Screens.GameScreen.render(GameScreen.java:236)
 	at com.badlogic.gdx.Game.render(Game.java:46)
 	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:218)
 	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:123)

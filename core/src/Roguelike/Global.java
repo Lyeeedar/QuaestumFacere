@@ -144,14 +144,16 @@ public class Global
 	// ----------------------------------------------------------------------
 	public static void fillMarket()
 	{
+		Random ran = new Random( QuestManager.seed );
+
 		Market.clear();
 		for (int i = 0; i < 10; i++)
 		{
 			int quality = Global.QuestManager.difficulty;
-			quality += MathUtils.random( -1, 1 );
+			quality += ran.nextInt( 3 ) - 1;
 			if (quality < 1) { quality = 1; }
 
-			Item item = TreasureGenerator.generateRandom( quality, MathUtils.random ).get( 0 );
+			Item item = TreasureGenerator.generateRandom( quality, ran ).get( 0 );
 			Market.add(item);
 		}
 	}

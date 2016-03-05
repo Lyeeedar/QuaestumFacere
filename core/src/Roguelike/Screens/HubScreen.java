@@ -144,6 +144,7 @@ public class HubScreen implements Screen, InputProcessor
 		this.keyboardHelper = keyboardHelper;
 	}
 
+	// ----------------------------------------------------------------------
 	public void showRewardMessage( String messageString, final int reward )
 	{
 		Skin skin = Global.loadSkin();
@@ -184,6 +185,7 @@ public class HubScreen implements Screen, InputProcessor
 				Global.QuestManager.currentQuest = null;
 				Global.QuestManager.currentLevel = null;
 				Global.QuestManager.count++;
+				Global.QuestManager.seed++;
 
 				if (Global.QuestManager.count == 2)
 				{

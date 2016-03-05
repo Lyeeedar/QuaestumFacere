@@ -580,6 +580,19 @@ public final class Item extends GameEventHandler
 		UTILITY_4;
 
 		public static EquipmentSlot[] UtilitySlots = { EquipmentSlot.UTILITY_1, EquipmentSlot.UTILITY_2, EquipmentSlot.UTILITY_3, EquipmentSlot.UTILITY_4 };
+
+		public boolean isUtility()
+		{
+			for (int i = 0; i < UtilitySlots.length; i++)
+			{
+				if (UtilitySlots[i] == this)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
 	}
 
 	// ----------------------------------------------------------------------

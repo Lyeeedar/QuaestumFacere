@@ -1,0 +1,13 @@
+<Item>
+    <Name>Scope</Name>
+    <Description>A small scope, used for enhancing your foe. The smart targetting software within it increase your accuracy by a small amount.</Description>
+    <Sprite>
+        <Name>Oryx/Custom/items/Scope</Name>
+    </Sprite>
+    <Events>
+        <Constant>
+            <Accuracy>5</Accuracy>
+        </Constant>
+    </Events>
+    <Value>100</Value>
+</Item>

@@ -54,6 +54,18 @@ public class AbilityLoader
 			{
 				return PassiveAbility.load( xml );
 			}
+
+			// Try first child
+			xml = xml.getChild( 0 );
+
+			if (xml.getName().equalsIgnoreCase("Active"))
+			{
+				return ActiveAbility.load( xml );
+			}
+			else if (xml.getName().equalsIgnoreCase( "Passive" ))
+			{
+				return PassiveAbility.load( xml );
+			}
 		}
 
 		return null;

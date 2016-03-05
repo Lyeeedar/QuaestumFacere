@@ -59,6 +59,19 @@ public final class FastEnumMap<T extends Enum<T>, V>
 		return items[key.ordinal()];
 	}
 
+	public boolean containsValue( V value )
+	{
+		for (int i = 0; i < items.length; i++)
+		{
+			if (items[i] == value)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public boolean containsKey( T key )
 	{
 		return items[key.ordinal()] != null;

@@ -119,11 +119,13 @@ public class LoadoutScreen implements Screen, InputProcessor
 						if (item.ability1 != null)
 						{
 							player.slottedAbilities.add( item.ability1 );
+							item.ability1.setCaster( player );
 						}
 
 						if (item.ability2 != null)
 						{
 							player.slottedAbilities.add( item.ability2 );
+							item.ability2.setCaster( player );
 						}
 					}
 				}
@@ -189,12 +191,11 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 				for (final Item item : Global.UnlockedItems)
 				{
-					if ( item.slot == activeSlot )
+					if ( (activeSlot.isUtility() && item.slot.isUtility()) || item.slot == activeSlot )
 					{
-						i++;
-						if (item == Global.Loadout.get( activeSlot ))
+						if (!Global.Loadout.containsValue( item ))
 						{
-							break;
+							i++;
 						}
 					}
 				}
@@ -257,7 +258,21 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 		for (final Item item : Global.UnlockedItems)
 		{
-			if (item.slot == activeSlot)
+			boolean display = false;
+
+			if (activeSlot.isUtility())
+			{
+				if (item.slot.isUtility() && !Global.Loadout.containsValue( item ))
+				{
+					display = true;
+				}
+			}
+			else
+			{
+				display = item.slot == activeSlot;
+			}
+
+			if ( display )
 			{
 				Button button = new Button( skin );
 				group.add( button );
@@ -278,6 +293,7 @@ public class LoadoutScreen implements Screen, InputProcessor
 						keyboardHelper = slotHelper;
 						desc.clear();
 
+						item.slot = activeSlot;
 						Global.Loadout.put( activeSlot, item );
 						fillSlotButton( activeSlot );
 						fillSlotTable();
@@ -330,6 +346,10 @@ public class LoadoutScreen implements Screen, InputProcessor
 			if (button.isVisible())
 			{
 				slotHelper.add( button );
+			}
+			else
+			{
+				Global.Loadout.put( slot, null );
 			}
 		}
 

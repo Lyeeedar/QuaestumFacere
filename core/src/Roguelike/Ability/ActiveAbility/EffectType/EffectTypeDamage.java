@@ -76,7 +76,7 @@ public class EffectTypeDamage extends AbstractEffectType
 
 		Array<String> lines = new Array<String>();
 
-		float damage = variableMap.get( Statistic.ATTACK.toString() );
+		float damage = variableMap.get( Statistic.ATTACK.toString().toLowerCase() );
 
 		lines.add( "Damage: " + (int)damage );
 
@@ -93,7 +93,7 @@ public class EffectTypeDamage extends AbstractEffectType
 
 	private void applyToEntity( Entity target, ActiveAbility aa, HashMap<String, Integer> variableMap )
 	{
-		float damage = variableMap.get( Statistic.ATTACK.toString() );
+		float damage = variableMap.get( Statistic.ATTACK.toString().toLowerCase() );
 
 		int pen = variableMap.get( Statistic.PENETRATION.toString().toLowerCase() );
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.XmlReader;
+import exp4j.Helpers.EquationHelper;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,6 +38,10 @@ public class TreasureGenerator
 			else if ( type.equals( "weapon" ) )
 			{
 				items.addAll( TreasureGenerator.generateWeapon( quality, ran ) );
+			}
+			else if ( type.equals( "utility" ) )
+			{
+				items.addAll( TreasureGenerator.generateUtility( quality, ran ) );
 			}
 			else if ( type.equals( "item" ) )
 			{
@@ -71,7 +76,8 @@ public class TreasureGenerator
 		int[] chances = {
 			0, // currency
 			3, // armour
-			3 // weapons
+			3, // weapons
+			2 // utilities
 		};
 
 		int count = 0;
@@ -102,6 +108,13 @@ public class TreasureGenerator
 			return items;
 		}
 		chance -= chances[2];
+
+		if ( chance < chances[3] )
+		{
+			items.addAll( TreasureGenerator.generateUtility( quality, ran ) );
+			return items;
+		}
+		chance -= chances[3];
 
 		return items;
 	}
@@ -138,6 +151,33 @@ public class TreasureGenerator
 		RecipeData recipe = recipeList.weaponRecipes.get( ran.nextInt( recipeList.weaponRecipes.size ) );
 
 		items.add( itemFromRecipe( recipe, quality, ran ) );
+
+		return items;
+	}
+
+	public static Array<Item> generateUtility( int quality, Random ran )
+	{
+		Array<Item> items = new Array<Item>(  );
+
+		HashMap<String, Integer> variableMap = new HashMap<String, Integer>(  );
+		variableMap.put("quality", quality);
+
+		Array<UtilityData> valid = new Array<UtilityData>(  );
+		for (UtilityData ud : utilityList.utilityDatas)
+		{
+			if ( EquationHelper.evaluate( ud.condition, variableMap ) > 0 )
+			{
+				valid.add( ud );
+			}
+		}
+
+		String path = valid.get( ran.nextInt( valid.size ) ).path;
+		Item item = Item.load( "Utility/"+path );
+		item.category = Item.ItemCategory.UTILITY;
+		item.applyQuality( quality );
+		item.slot = Item.EquipmentSlot.UTILITY_1;
+
+		items.add( item );
 
 		return items;
 	}
@@ -195,7 +235,51 @@ public class TreasureGenerator
 	}
 
 	public static final RecipeList recipeList = new RecipeList( "Items/Recipes/Recipes.xml" );
+	public static final UtilityList utilityList = new UtilityList( "Items/Utility/Utilities.xml" );
 	private static final HashMap<String, QualityMap> materialLists = new HashMap<String, QualityMap>(  );
+
+	public static class UtilityList
+	{
+		public Array<UtilityData> utilityDatas = new Array<UtilityData>(  );
+
+		public UtilityList(String path)
+		{
+			XmlReader reader = new XmlReader();
+			XmlReader.Element xml = null;
+
+			try
+			{
+				xml = reader.parse( Gdx.files.internal( path ) );
+			}
+			catch ( IOException e )
+			{
+				e.printStackTrace();
+			}
+
+			for (int i = 0; i < xml.getChildCount(); i++)
+			{
+				XmlReader.Element utilEl = xml.getChild( i );
+
+				utilityDatas.add( new UtilityData( utilEl.getName(), utilEl.getText() ) );
+			}
+		}
+	}
+
+	public static class UtilityData
+	{
+		public String path;
+		public String condition;
+
+		public UtilityData(String path, String cond)
+		{
+			this.path = path;
+			this.condition = cond;
+			if (cond == null || cond == "")
+			{
+				condition = "1";
+			}
+		}
+	}
 
 	public static class RecipeList
 	{

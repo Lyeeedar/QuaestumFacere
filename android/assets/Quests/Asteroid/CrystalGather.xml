@@ -49,7 +49,9 @@
             </Symbols>
 
             <Rows>
-                <Row>c</Row>
+                <Row>...</Row>
+                <Row>.c.</Row>
+                <Row>...</Row>
             </Rows>
         </Room>
     </Rooms>

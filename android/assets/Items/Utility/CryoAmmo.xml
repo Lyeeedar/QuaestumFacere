@@ -26,6 +26,7 @@
                 <Description>Ammo which freezes the target, slowing their movements..</Description>
                 <Duration>8</Duration>
                 <DurationType>Processed</DurationType>
+                <Stackable>false</Stackable>
                 <Events>
                     <OnHit>
                         <Status Stacks="rnd(3)+1">Chilled</Status>

@@ -26,6 +26,7 @@
                 <Description>Ammo with a hard point designed to penetrate armoured foes.</Description>
                 <Duration>8</Duration>
                 <DurationType>Processed</DurationType>
+                <Stackable>false</Stackable>
                 <Events>
                     <Constant>
                         <Penetration>15</Penetration>

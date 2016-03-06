@@ -334,7 +334,7 @@ public final class SaveFile
 			{
 				output.writeString( object.creationPath );
 				kryo.writeObjectOrNull( output, object.creationData, Element.class);
-				output.writeInt( object.cooldown );
+				output.writeInt( object.cooldownAccumulator );
 			}
 
 			@Override
@@ -354,7 +354,7 @@ public final class SaveFile
 					ab = ActiveAbility.load( creationData );
 				}
 
-				ab.cooldown = cooldown;
+				ab.cooldownAccumulator = cooldown;
 
 				return ab;
 			}

@@ -26,6 +26,7 @@
                 <Description>Ammo which bursts into flame on impact.</Description>
                 <Duration>8</Duration>
                 <DurationType>Processed</DurationType>
+                <Stackable>false</Stackable>
                 <Events>
                     <OnHit>
                         <Status Stacks="rnd(3)+1">Burning</Status>

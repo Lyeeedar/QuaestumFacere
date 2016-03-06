@@ -26,16 +26,7 @@ public class AbilityLoader
 			e.printStackTrace();
 		}
 
-		if (xmlElement.getName().equalsIgnoreCase( "Active" ))
-		{
-			return ActiveAbility.load( name );
-		}
-		else if (xmlElement.getName().equalsIgnoreCase( "Passive" ))
-		{
-			return PassiveAbility.load( name );
-		}
-
-		return null;
+		return loadAbility( xmlElement );
 	}
 
 	public static IAbility loadAbility( XmlReader.Element xml )
@@ -56,18 +47,19 @@ public class AbilityLoader
 			}
 
 			// Try first child
-			xml = xml.getChild( 0 );
+			XmlReader.Element child = xml.getChild( 0 );
 
-			if (xml.getName().equalsIgnoreCase("Active"))
+			if (child.getName().equalsIgnoreCase("Active"))
 			{
-				return ActiveAbility.load( xml );
+				return ActiveAbility.load( child );
 			}
-			else if (xml.getName().equalsIgnoreCase( "Passive" ))
+			else if (child.getName().equalsIgnoreCase( "Passive" ))
 			{
-				return PassiveAbility.load( xml );
+				return PassiveAbility.load( child );
 			}
+
+			// Try self as active
+			return ActiveAbility.load( xml );
 		}
-
-		return null;
 	}
 }

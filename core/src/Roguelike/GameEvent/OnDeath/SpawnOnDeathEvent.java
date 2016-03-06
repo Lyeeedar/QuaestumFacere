@@ -3,6 +3,7 @@ package Roguelike.GameEvent.OnDeath;
 import Roguelike.Entity.Entity;
 import Roguelike.Entity.GameEntity;
 import Roguelike.Global;
+import Roguelike.Sprite.SpriteAnimation.StretchAnimation;
 import Roguelike.Tiles.GameTile;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -60,6 +61,7 @@ public class SpawnOnDeathEvent extends AbstractOnDeathEvent
 				if ( newTile.entity == null && newTile.getPassable( newEntity.getTravelType(), newEntity ) )
 				{
 					newTile.addGameEntity( newEntity );
+					newEntity.sprite.spriteAnimation = new StretchAnimation( 0.25f, null, 0, StretchAnimation.StretchEquation.EXPAND );
 				}
 			}
 		}

@@ -26,6 +26,7 @@
                 <Description>Ammo designed to stun the target, leaving them temporarily vulnerable.</Description>
                 <Duration>8</Duration>
                 <DurationType>Processed</DurationType>
+                <Stackable>false</Stackable>
                 <Events>
                     <OnHit>
                         <Status>Stun</Status>

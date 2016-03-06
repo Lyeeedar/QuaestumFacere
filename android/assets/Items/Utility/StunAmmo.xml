@@ -1,0 +1,37 @@
+<Item>
+    <Name>Stun Ammo</Name>
+    <Description>Ammo designed to stun the target, leaving them temporarily vulnerable.</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/AmmoStun</Name>
+    </Icon>
+    <Value>350</Value>
+    <Ability>
+        <Name>Load Stun Ammo</Name>
+        <Description>Load the ammo into your current weapon</Description>
+
+        <Cooldown>3</Cooldown>
+        <CooldownType>Wait</CooldownType>
+
+        <Range>1</Range>
+
+        <Icon>
+            <Name>Oryx/Custom/items/AmmoStun</Name>
+        </Icon>
+
+        <HitType><Self/></HitType>
+
+        <Effect>
+            <Status>
+                <Name>Stun Ammo</Name>
+                <Description>Ammo designed to stun the target, leaving them temporarily vulnerable.</Description>
+                <Duration>8</Duration>
+                <DurationType>Processed</DurationType>
+                <Events>
+                    <OnHit>
+                        <Status>Stun</Status>
+                    </OnHit>
+                </Events>
+            </Status>
+        </Effect>
+    </Ability>
+</Item>

@@ -518,20 +518,23 @@ public class ActiveAbility implements IAbility, IGameObject
 				}
 				else
 				{
+					final GameTile hitTile = tile;
+					final GameEntity hitEntity = !hitEntities.contains( hitTile.entity ) ? hitTile.entity : null;
+					final EnvironmentEntity hitEnvEntity = !hitEntities.contains( hitTile.environmentEntity ) ? hitTile.environmentEntity : null;
+					final ActiveAbility thisAbility = this;
+
+					if (hitEntity != null)
+					{
+						hitEntities.add( hitEntity );
+					}
+					if (hitEnvEntity != null)
+					{
+						hitEntities.add( hitEnvEntity );
+					}
+
 					for ( AbstractEffectType effect : effectTypes )
 					{
-						effect.update( this, 1, tile,
-									   !hitEntities.contains( tile.entity ) ? tile.entity : null,
-									   !hitEntities.contains( tile.environmentEntity ) ? tile.environmentEntity : null );
-
-						if (tile.entity != null)
-						{
-							hitEntities.add( tile.entity );
-						}
-						if (tile.environmentEntity != null)
-						{
-							hitEntities.add( tile.environmentEntity );
-						}
+						effect.update( thisAbility, 1, hitTile, hitEntity, hitEnvEntity );
 					}
 				}
 			}

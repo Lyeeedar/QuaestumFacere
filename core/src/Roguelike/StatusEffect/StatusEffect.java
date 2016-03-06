@@ -171,7 +171,7 @@ public final class StatusEffect extends GameEventHandler
 
 			if ( se.icon == null )
 			{
-				se.icon = parent != null ? parent.getIcon().copy() : AssetManager.loadSprite( "white" );
+				se.icon = parent != null && parent.getIcon() != null ? parent.getIcon().copy() : AssetManager.loadSprite( "white" );
 			}
 		}
 

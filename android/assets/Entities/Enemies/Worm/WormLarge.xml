@@ -1,0 +1,15 @@
+<Entity Extends="Enemies/Worm/WormBase">
+
+    <Sprite>
+        <Name>Oryx/uf_split/uf_heroes/worm_giant</Name>
+        <Colour><RGB>255,245,255</RGB></Colour>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Statistics>
+        <Attack>val+3</Attack>
+        <Defense>val+5</Defense>
+        <Vitality>val+2</Vitality>
+    </Statistics>
+
+</Entity>

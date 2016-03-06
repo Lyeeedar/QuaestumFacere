@@ -1,6 +1,7 @@
 package Roguelike.Save;
 
 import Roguelike.Ability.ActiveAbility.ActiveAbility;
+import Roguelike.Ability.PassiveAbility.PassiveAbility;
 import Roguelike.AssetManager;
 import Roguelike.DungeonGeneration.DungeonFileParser.DFPRoom;
 import Roguelike.DungeonGeneration.Room;
@@ -13,9 +14,12 @@ import Roguelike.GameEvent.Damage.*;
 import Roguelike.GameEvent.OnDeath.AbstractOnDeathEvent;
 import Roguelike.GameEvent.OnDeath.FieldOnDeathEvent;
 import Roguelike.GameEvent.OnDeath.HealOnDeathEvent;
+import Roguelike.GameEvent.OnDeath.SpawnOnDeathEvent;
 import Roguelike.GameEvent.OnExpire.AbilityOnExpireEvent;
 import Roguelike.GameEvent.OnExpire.KillOnExpireEvent;
 import Roguelike.GameEvent.OnHit.AbilityOnHitEvent;
+import Roguelike.GameEvent.OnHit.DummyOnHitEvent;
+import Roguelike.GameEvent.OnHit.StatusOnHitEvent;
 import Roguelike.GameEvent.OnTask.CancelTaskEvent;
 import Roguelike.GameEvent.OnTask.CostTaskEvent;
 import Roguelike.GameEvent.OnTask.DamageTaskEvent;
@@ -464,6 +468,7 @@ public final class SaveFile
 		kryo.register( AnimationMode.class );
 		kryo.register( QuestManager.class );
 		kryo.register( TilingSprite.class );
+		kryo.register( PassiveAbility.class );
 
 		kryo.register( HashMap.class );
 		kryo.register( String[].class );
@@ -512,6 +517,9 @@ public final class SaveFile
 		kryo.register( AbilityOnExpireEvent.class );
 		kryo.register( AdditionalSprite.class );
 		kryo.register( AbilityOnHitEvent.class );
+		kryo.register( SpawnOnDeathEvent.class );
+		kryo.register( DummyOnHitEvent.class );
+		kryo.register( StatusOnHitEvent.class );
 
 		kryo.register( Quest.class );
 		kryo.register( QuestInputFlagPresent.class );
@@ -527,6 +535,7 @@ public final class SaveFile
 		kryo.register( ActivationActionSetEnabled.class );
 		kryo.register( ActivationActionSetPassable.class );
 		kryo.register( ActivationActionSetSprite.class );
+		kryo.register( ActivationActionSetLight.class );
 		kryo.register( ActivationActionSpawnEntity.class );
 		kryo.register( ActivationActionActivate.class );
 		kryo.register( ActivationActionSpawnField.class );

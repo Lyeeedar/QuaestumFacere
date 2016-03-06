@@ -31,6 +31,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public final class Item extends GameEventHandler
 {
@@ -53,6 +54,8 @@ public final class Item extends GameEventHandler
 	public int quality = 1;
 	public int value;
 	public int utilSlots;
+
+	public Array<String> modifiers = new Array<String>(  );
 
 	public Array<SpriteGroup> spriteGroups = new Array<SpriteGroup>(  );
 
@@ -94,25 +97,14 @@ public final class Item extends GameEventHandler
 
 		Item item = Recipe.createRecipe( data.itemTemplate, quality, data.getName( quality ) );
 
-		Element prefixElement = xml.getChildByName( "Prefix" );
-		if ( prefixElement != null )
+		Element modifiersElement = xml.getChildByName( "Modifiers" );
+		if ( modifiersElement != null )
 		{
-			String[] prefixes = prefixElement.getText().split( "," );
+			String[] modifiers = modifiersElement.getText().split( "," );
 
-			for (String prefix : prefixes)
+			for (String modifier : modifiers)
 			{
-				Recipe.applyModifer( item, prefix, quality, true );
-			}
-		}
-
-		Element suffixElement = xml.getChildByName( "Suffix" );
-		if ( suffixElement != null )
-		{
-			String[] suffixes = suffixElement.getText().split( "," );
-
-			for (String suffix : suffixes)
-			{
-				Recipe.applyModifer( item, suffix, quality, false );
+				Recipe.applyModifer( item, modifier, quality );
 			}
 		}
 
@@ -208,6 +200,8 @@ public final class Item extends GameEventHandler
 	// ----------------------------------------------------------------------
 	private Table createArmourTable( Item other, Skin skin )
 	{
+		boolean seperator = false;
+
 		Table table = new Table();
 		table.defaults().pad( 5 );
 
@@ -235,6 +229,23 @@ public final class Item extends GameEventHandler
 
 		table.add( new Seperator( skin, false ) ).expandX().fillX();
 		table.row();
+		seperator = true;
+
+		if (modifiers.size > 0)
+		{
+			table.add( new Label("Modifiers:", skin) ).expandX().fillX();
+			table.row();
+
+			for (String modifier : modifiers)
+			{
+				table.add( new Label(modifier, skin) ).expandX().fillX().padLeft( 20 );
+				table.row();
+			}
+
+			table.add( new Seperator( skin, false ) ).expandX().fillX();
+			table.row();
+			seperator = true;
+		}
 
 		for (Statistic stat : Statistic.values())
 		{
@@ -257,6 +268,8 @@ public final class Item extends GameEventHandler
 				Label statLabel = new Label( Global.capitalizeString( stat.toString() ) + ": " + value, skin );
 				table.add( statLabel ).expandX().left().width( com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth( 1, table ) );
 				table.row();
+
+				seperator = false;
 			}
 		}
 
@@ -276,18 +289,26 @@ public final class Item extends GameEventHandler
 			}
 
 			table.row();
+
+			seperator = false;
 		}
 
 		if (ability1 != null)
 		{
-			table.add( new Seperator( skin ) ).expandX().fillX();
+			if (!seperator)
+			{
+				table.add( new Seperator( skin ) ).expandX().fillX();
+				table.row();
+			}
+
+			table.add( new Label( "Abilities:", skin ) ).expandX().fillX();
 			table.row();
 
 			Table ability1Table = new Table(  );
 			ability1Table.add( new SpriteWidget( ability1.getIcon(), 24, 24 ) );
 			ability1Table.add( new Label( ability1.getName(), skin ) );
 
-			table.add( ability1Table ).expandX().left();
+			table.add( ability1Table ).expandX().left().padLeft( 20 );
 			table.row();
 
 			if (ability2 != null)
@@ -296,7 +317,7 @@ public final class Item extends GameEventHandler
 				ability2Table.add( new SpriteWidget( ability2.getIcon(), 24, 24 ) );
 				ability2Table.add( new Label( ability2.getName(), skin ) );
 
-				table.add( ability2Table ).expandX().left();
+				table.add( ability2Table ).expandX().left().padLeft( 20 );
 				table.row();
 			}
 		}
@@ -307,6 +328,8 @@ public final class Item extends GameEventHandler
 	// ----------------------------------------------------------------------
 	private Table createWeaponTable( Item other, Skin skin )
 	{
+		boolean seperator = false;
+
 		Table table = new Table();
 		table.defaults().pad( 5 );
 
@@ -367,6 +390,26 @@ public final class Item extends GameEventHandler
 		table.add( new Label("Accuracy: " + getStatistic( Statistic.emptyMap, Statistic.ACCURACY ), skin ) ).expandX().fillX();
 		table.row();
 
+		table.add( new Seperator( skin, false ) ).expandX().fillX();
+		table.row();
+		seperator = true;
+
+		if (modifiers.size > 0)
+		{
+			table.add( new Label("Modifiers:", skin) ).expandX().fillX();
+			table.row();
+
+			for (String modifier : modifiers)
+			{
+				table.add( new Label(modifier, skin) ).expandX().fillX().padLeft( 20 );
+				table.row();
+			}
+
+			table.add( new Seperator( skin, false ) ).expandX().fillX();
+			table.row();
+			seperator = true;
+		}
+
 		Array<String> lines = toString( Statistic.emptyMap, true );
 		for (String line : lines)
 		{
@@ -383,18 +426,26 @@ public final class Item extends GameEventHandler
 			}
 
 			table.row();
+
+			seperator = false;
 		}
 
 		if (ability1 != null)
 		{
-			table.add( new Seperator( skin ) ).expandX().fillX();
+			if (!seperator)
+			{
+				table.add( new Seperator( skin ) ).expandX().fillX();
+				table.row();
+			}
+
+			table.add( new Label( "Abilities:", skin ) ).expandX().fillX();
 			table.row();
 
 			Table ability1Table = new Table(  );
 			ability1Table.add( new SpriteWidget( ability1.getIcon(), 24, 24 ) );
 			ability1Table.add( new Label( ability1.getName(), skin ) );
 
-			table.add( ability1Table ).expandX().left();
+			table.add( ability1Table ).expandX().left().padLeft( 20 );
 			table.row();
 
 			if (ability2 != null)
@@ -403,7 +454,7 @@ public final class Item extends GameEventHandler
 				ability2Table.add( new SpriteWidget( ability2.getIcon(), 24, 24 ) );
 				ability2Table.add( new Label( ability2.getName(), skin ) );
 
-				table.add( ability2Table ).expandX().left();
+				table.add( ability2Table ).expandX().left().padLeft( 20 );
 				table.row();
 			}
 		}
@@ -415,6 +466,21 @@ public final class Item extends GameEventHandler
 	@Override
 	public String getName()
 	{
+		String name = this.name;
+
+		if (modifiers.size > 0)
+		{
+			Iterator<String> itr = modifiers.iterator();
+			String out = ""+itr.next().charAt( 0 );
+
+			while (itr.hasNext())
+			{
+				out += ", " + itr.next().charAt( 0 );
+			}
+
+			name += " (" + out + ")";
+		}
+
 		return name;
 	}
 

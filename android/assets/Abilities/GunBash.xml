@@ -1,0 +1,20 @@
+<Active>
+    <Name>Gun Bash</Name>
+    <Description>Strike an adjacent opponent with your weapon, potentially stunning them.</Description>
+    <Icon>
+        <Name>Icons/PenetratingShot</Name>
+    </Icon>
+
+    <CooldownType>Attack</CooldownType>
+    <Cooldown>6</Cooldown>
+    <Range>1</Range>
+
+    <HitType><Enemy/></HitType>
+
+    <Effect>
+        <Damage Scaled="true">
+            <Attack>120</Attack>
+        </Damage>
+        <Status Condition="chance(1, 2)">Stunned</Status>
+    </Effect>
+</Active>

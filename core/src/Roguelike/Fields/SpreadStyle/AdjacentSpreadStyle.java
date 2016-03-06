@@ -42,14 +42,6 @@ public class AdjacentSpreadStyle extends AbstractSpreadStyle
 				{
 
 				}
-				else if ( tile.entity != null )
-				{
-					check = true;
-				}
-				else if ( tile.environmentEntity != null && tile.environmentEntity.canTakeDamage )
-				{
-					check = true;
-				}
 				else if ( tile.fields.size > 0 && spreadTags.length > 0 )
 				{
 					outer:
@@ -63,7 +55,7 @@ public class AdjacentSpreadStyle extends AbstractSpreadStyle
 								{
 									for ( String tag : otherfield.tags )
 									{
-										if ( spreadTag.equals( tag ) )
+										if ( spreadTag.equalsIgnoreCase( tag ) )
 										{
 											check = true;
 											break outer;

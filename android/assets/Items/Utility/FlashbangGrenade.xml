@@ -1,0 +1,45 @@
+<Item>
+    <Name>Flashbang Grenade</Name>
+    <Description>This grenade is designed to disorient and confuse those caught in the blast area</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/GrenadeFlash</Name>
+    </Icon>
+    <Value>150</Value>
+    <Ability>
+        <Active>
+            <Name>Throw Flashbang Grenade</Name>
+            <Description>Throw the grenade at your target</Description>
+
+            <Cooldown>10</Cooldown>
+            <CooldownType>Attack</CooldownType>
+
+            <Range>4</Range>
+            <AOE>1</AOE>
+            <ScreenShake>10</ScreenShake>
+
+            <Icon>
+                <Name>Oryx/Custom/items/GrenadeFlash</Name>
+            </Icon>
+
+            <MovementSprite>
+                <Name>Oryx/Custom/items/GrenadeFlash</Name>
+            </MovementSprite>
+
+            <HitSprite>
+                <Name>EffectSprites/Shout/Shout</Name>
+                <UpdateRate>0.05</UpdateRate>
+                <SingleSprite>true</SingleSprite>
+                <Sound><Name>Explosion</Name></Sound>
+            </HitSprite>
+
+            <HitType><Any/></HitType>
+
+            <Effect>
+                <Damage>
+                    <Attack>20</Attack>
+                </Damage>
+                <Status>Disoriented</Status>
+            </Effect>
+        </Active>
+    </Ability>
+</Item>

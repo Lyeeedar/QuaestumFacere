@@ -22,7 +22,9 @@
     </ItemTemplate>
 
     <AllowedAbilities>
-        <PowerShot MinQuality="3"></PowerShot>
+        <AimedShot></AimedShot>
+        <GunBash></GunBash>
+        <FullAuto></FullAuto>
     </AllowedAbilities>
 
     <Names>

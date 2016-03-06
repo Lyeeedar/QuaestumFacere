@@ -49,6 +49,7 @@ public abstract class AbstractActivationAction
 		ClassMap.put( "SETSPRITE", ActivationActionSetSprite.class );
 		ClassMap.put( "SETPASSABLE", ActivationActionSetPassable.class );
 		ClassMap.put( "SETENABLED", ActivationActionSetEnabled.class );
+		ClassMap.put( "SETLIGHT", ActivationActionSetLight.class );
 		ClassMap.put( "SPAWNENTITY", ActivationActionSpawnEntity.class );
 		ClassMap.put( "ACTIVATE", ActivationActionActivate.class );
 		ClassMap.put( "KILLTHIS", ActivationActionKillThis.class );

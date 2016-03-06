@@ -56,6 +56,8 @@ public class SpriteWidget extends Widget
 
 	public void draw (Batch batch, float parentAlpha)
 	{
+		if (drawable == null) return;
+
 		validate();
 
 		Color color = getColor();
@@ -91,6 +93,8 @@ public class SpriteWidget extends Widget
 	@Override
 	public void act(float delta)
 	{
+		if (drawable == null) return;
+
 		super.act(delta);
 		drawable.update(delta);
 	}

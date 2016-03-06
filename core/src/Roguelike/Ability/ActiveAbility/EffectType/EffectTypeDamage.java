@@ -128,7 +128,13 @@ public class EffectTypeDamage extends AbstractEffectType
 		if (scaled)
 		{
 			float atk = stats.get( Statistic.ATTACK );
-			float dam = aa.getVariableMap().get( Item.EquipmentSlot.WEAPON.toString() );
+			float dam = aa.getVariableMap().get( Statistic.ATTACK.toString().toLowerCase() );
+			Item wep = aa.getCaster().inventory.getEquip( Item.EquipmentSlot.WEAPON );
+			if (wep != null && wep.wepDef != null)
+			{
+				dam *= wep.wepDef.hitCount;
+			}
+
 			int damage = (int)(dam * (atk / 100.0f));
 
 			stats.put( Statistic.ATTACK, damage );

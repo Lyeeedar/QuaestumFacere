@@ -3,6 +3,7 @@ package Roguelike.GameEvent.OnHit;
 import Roguelike.Ability.ActiveAbility.ActiveAbility;
 import Roguelike.Entity.Entity;
 import Roguelike.Entity.GameEntity;
+import Roguelike.GameEvent.IGameObject;
 import Roguelike.Global;
 import Roguelike.Tiles.GameTile;
 import com.badlogic.gdx.utils.Array;
@@ -21,7 +22,7 @@ public class AbilityOnHitEvent extends AbstractOnHitEvent
 	private ActiveAbility ability;
 
 	@Override
-	public boolean handle( GameEntity entity, GameTile tile )
+	public boolean handle( GameEntity entity, GameTile tile, IGameObject parent )
 	{
 		HashMap<String, Integer> variableMap = entity.getVariableMap();
 		for ( String name : reliesOn )
@@ -71,7 +72,7 @@ public class AbilityOnHitEvent extends AbstractOnHitEvent
 	}
 
 	@Override
-	public Array<String> toString( HashMap<String, Integer> variableMap )
+	public Array<String> toString( HashMap<String, Integer> variableMap, IGameObject parent )
 	{
 		Array<String> lines = new Array<String>();
 

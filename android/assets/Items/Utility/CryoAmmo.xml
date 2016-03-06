@@ -1,0 +1,37 @@
+<Item>
+    <Name>Cryo Ammo</Name>
+    <Description>Ammo which freezes the target, slowing their movements.</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/AmmoCryo</Name>
+    </Icon>
+    <Value>200</Value>
+    <Ability>
+        <Name>Load Cryo Ammo</Name>
+        <Description>Load the ammo into your current weapon</Description>
+
+        <Cooldown>3</Cooldown>
+        <CooldownType>Wait</CooldownType>
+
+        <Range>1</Range>
+
+        <Icon>
+            <Name>Oryx/Custom/items/AmmoCryo</Name>
+        </Icon>
+
+        <HitType><Self/></HitType>
+
+        <Effect>
+            <Status>
+                <Name>Cryo Ammo</Name>
+                <Description>Ammo which freezes the target, slowing their movements..</Description>
+                <Duration>8</Duration>
+                <DurationType>Processed</DurationType>
+                <Events>
+                    <OnHit>
+                        <Status Stacks="rnd(3)+1">Chilled</Status>
+                    </OnHit>
+                </Events>
+            </Status>
+        </Effect>
+    </Ability>
+</Item>

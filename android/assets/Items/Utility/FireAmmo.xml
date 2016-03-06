@@ -1,0 +1,37 @@
+<Item>
+    <Name>Incendiary Ammo</Name>
+    <Description>Ammo which bursts into flame on impact.</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/AmmoFire</Name>
+    </Icon>
+    <Value>200</Value>
+    <Ability>
+        <Name>Load Incendiary Ammo</Name>
+        <Description>Load the ammo into your current weapon</Description>
+
+        <Cooldown>3</Cooldown>
+        <CooldownType>Wait</CooldownType>
+
+        <Range>1</Range>
+
+        <Icon>
+            <Name>Oryx/Custom/items/AmmoFire</Name>
+        </Icon>
+
+        <HitType><Self/></HitType>
+
+        <Effect>
+            <Status>
+                <Name>Incendiary Ammo</Name>
+                <Description>Ammo which bursts into flame on impact.</Description>
+                <Duration>8</Duration>
+                <DurationType>Processed</DurationType>
+                <Events>
+                    <OnHit>
+                        <Status Stacks="rnd(3)+1">Burning</Status>
+                    </OnHit>
+                </Events>
+            </Status>
+        </Effect>
+    </Ability>
+</Item>

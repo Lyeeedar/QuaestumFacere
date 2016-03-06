@@ -1,0 +1,37 @@
+<Item>
+    <Name>Poison Ammo</Name>
+    <Description>Ammo filled with a deadly toxin.</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/AmmoPoison</Name>
+    </Icon>
+    <Value>250</Value>
+    <Ability>
+        <Name>Load Poison Ammo</Name>
+        <Description>Load the ammo into your current weapon</Description>
+
+        <Cooldown>3</Cooldown>
+        <CooldownType>Wait</CooldownType>
+
+        <Range>1</Range>
+
+        <Icon>
+            <Name>Oryx/Custom/items/AmmoPoison</Name>
+        </Icon>
+
+        <HitType><Self/></HitType>
+
+        <Effect>
+            <Status>
+                <Name>Poison Ammo</Name>
+                <Description>Ammo filled with a deadly toxin.</Description>
+                <Duration>8</Duration>
+                <DurationType>Processed</DurationType>
+                <Events>
+                    <OnHit>
+                        <Status Stacks="rnd(3)+1">Poison</Status>
+                    </OnHit>
+                </Events>
+            </Status>
+        </Effect>
+    </Ability>
+</Item>

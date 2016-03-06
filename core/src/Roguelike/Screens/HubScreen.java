@@ -283,6 +283,8 @@ public class HubScreen implements Screen, InputProcessor
 				Global.fillMarket();
 				Global.fillMissions();
 
+				Global.save();
+
 				HubScreen.Instance.queueMessage( "Market",
 												 "New items are available for purchase in the market.");
 
@@ -568,12 +570,14 @@ public class HubScreen implements Screen, InputProcessor
 							{
 								public void clicked( InputEvent event, float x, float y )
 								{
-									item.value /= 2;
+
 									items.removeValue( item, true );
 									Global.UnlockedItems.add( item );
 
 									lastFunds = Global.Funds;
 									Global.Funds -= item.value;
+
+									item.value /= 2;
 
 									Global.save();
 

@@ -1,0 +1,30 @@
+<Active>
+    <Name>Run and Gun</Name>
+    <Description>For a short amount of time you may fire after moving instantly.</Description>
+
+    <CooldownType>Wait</CooldownType>
+    <Cooldown>6</Cooldown>
+    <Range>1</Range>
+
+    <HitType><Self/></HitType>
+
+    <Effect>
+        <Status>
+            <Duration>8</Duration>
+            <Events>
+                <OnMove>
+                    <Status>
+                        <Name>Prepared to shoot</Name>
+                        <Description>You can shoot for free</Description>
+                        <Duration>1</Duration>
+                        <Events>
+                            <OnAttack>
+                                <Cost>0</Cost>
+                            </OnAttack>
+                        </Events>
+                    </Status>
+                </OnMove>
+            </Events>
+        </Status>
+    </Effect>
+</Active>

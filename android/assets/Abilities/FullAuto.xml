@@ -1,0 +1,24 @@
+<Active>
+    <Name>Full Auto</Name>
+    <Description>Hold down the trigger and spray the area with death. Fire twice as fast as normal but with an accuracy penalty.</Description>
+
+    <CooldownType>Attack</CooldownType>
+    <Cooldown>15</Cooldown>
+    <Range>1</Range>
+
+    <HitType><Self/></HitType>
+
+    <Effect>
+        <Status>
+            <Duration>5</Duration>
+            <Events>
+                <Constant>
+                    <Accuracy>-20</Accuracy>
+                </Constant>
+                <OnAttack>
+                    <Cost>cost/2</Cost>
+                </OnAttack>
+            </Events>
+        </Status>
+    </Effect>
+</Active>

@@ -6,6 +6,7 @@ import Roguelike.AssetManager;
 import Roguelike.Entity.GameEntity;
 import Roguelike.GameEvent.OnExpire.AbstractOnExpireEvent;
 import Roguelike.GameEvent.OnHit.AbstractOnHitEvent;
+import Roguelike.GameEvent.OnHit.DummyOnHitEvent;
 import Roguelike.Global;
 import Roguelike.Global.Statistic;
 import Roguelike.Entity.Entity;
@@ -324,7 +325,7 @@ public abstract class GameEventHandler implements IGameObject
 		for ( AbstractOnHitEvent event : onHitEvents )
 		{
 			appendExtraVariables( entity.getVariableMap() );
-			boolean success = event.handle( entity, tile );
+			boolean success = event.handle( entity, tile, this );
 
 			if ( success )
 			{
@@ -488,6 +489,11 @@ public abstract class GameEventHandler implements IGameObject
 			{
 				Element onHitElement = onHitElements.getChild( i );
 				onHitEvents.add( AbstractOnHitEvent.load( onHitElement ) );
+			}
+
+			if (onHitElements.getChildCount() == 0)
+			{
+				onHitEvents.add( new DummyOnHitEvent() );
 			}
 		}
 
@@ -670,7 +676,7 @@ public abstract class GameEventHandler implements IGameObject
 
 			for ( AbstractOnHitEvent event : onHitEvents )
 			{
-				Array<String> elines = event.toString( variableMap );
+				Array<String> elines = event.toString( variableMap, this );
 				for ( String line : elines )
 				{
 					lines.add( "   " + line );

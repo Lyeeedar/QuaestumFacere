@@ -1,0 +1,38 @@
+<Item>
+    <Name>Penetrating Ammo</Name>
+    <Description>Ammo with a hard point designed to penetrate armoured foes.</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/Ammo</Name>
+    </Icon>
+    <Value>150</Value>
+    <Ability>
+        <Name>Load Penetrating Ammo</Name>
+        <Description>Load the ammo into your current weapon</Description>
+
+        <Cooldown>3</Cooldown>
+        <CooldownType>Wait</CooldownType>
+
+        <Range>1</Range>
+
+        <Icon>
+            <Name>Oryx/Custom/items/Ammo</Name>
+        </Icon>
+
+        <HitType><Self/></HitType>
+
+        <Effect>
+            <Status>
+                <Name>Penetrating Ammo</Name>
+                <Description>Ammo with a hard point designed to penetrate armoured foes.</Description>
+                <Duration>8</Duration>
+                <DurationType>Processed</DurationType>
+                <Events>
+                    <Constant>
+                        <Penetration>15</Penetration>
+                    </Constant>
+                    <OnHit></OnHit>
+                </Events>
+            </Status>
+        </Effect>
+    </Ability>
+</Item>

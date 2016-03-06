@@ -22,7 +22,8 @@
     </ItemTemplate>
 
     <AllowedAbilities>
-        <PowerShot MinQuality="3"></PowerShot>
+        <RunAndGun></RunAndGun>
+        <GunBash></GunBash>
     </AllowedAbilities>
 
     <Names>
@@ -33,7 +34,6 @@
     </Names>
 
     <AllowedModifiers>
-        <Accuracy></Accuracy>
         <Attack></Attack>
         <Penetration></Penetration>
         <Burning MinQuality="2"></Burning>

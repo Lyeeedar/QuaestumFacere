@@ -26,20 +26,13 @@ public class Recipe
 		return item;
 	}
 
-	public static void applyModifer( Item item, String modifierName, int quality, boolean isPrefix )
+	public static void applyModifer( Item item, String modifierName, int quality )
 	{
 		Item modifier = loadModifier(modifierName, quality);
 
 		combineItems( item, modifier );
 
-		if (isPrefix)
-		{
-			item.name = modifier.name + " " + item.name;
-		}
-		else
-		{
-			item.name += " of the " + modifier.name;
-		}
+		item.modifiers.add( modifier.name );
 	}
 
 	public static void combineItems( Item item1, Item item2 )

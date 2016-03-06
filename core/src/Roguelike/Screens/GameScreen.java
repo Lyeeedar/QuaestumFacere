@@ -142,44 +142,28 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 
 		stage = new Stage( new ScreenViewport() );
 
+		table = new Table(  );
+		table.setFillParent( true );
+		stage.addActor( table );
+
 		abilityPanel = new AbilityPanel( skin, stage );
 		equipmentPanel = new EquipmentPanel( skin, stage );
 		buttonsPanel = new ButtonsPanel( skin, stage );
+		contextMenuArea = new Table(  );
 
-		stage.addActor( abilityPanel );
-		stage.addActor( equipmentPanel );
-		stage.addActor( abilityPanel );
-		stage.addActor( buttonsPanel );
+		table.add( buttonsPanel ).colspan( 3 );
+		table.row();
 
-		relayoutUI();
+		table.add( abilityPanel ).expandY().center();
+		table.add( contextMenuArea ).expand().fill();
+		table.add( equipmentPanel ).expandY().center();
+
 	}
 
 	// ----------------------------------------------------------------------
 	public void relayoutUI()
 	{
-		abilityPanel.setX( 5 );
-		abilityPanel.setY( stage.getHeight() / 2 - abilityPanel.getHeight() / 2 );
-		abilityPanel.setWidth( abilityPanel.getMinWidth() );
-		abilityPanel.setHeight( abilityPanel.getMinHeight() );
 
-		equipmentPanel.setX( stage.getWidth() - equipmentPanel.getWidth() - 5 );
-		equipmentPanel.setY( stage.getHeight() / 2 - abilityPanel.getHeight() / 2 );
-		equipmentPanel.setWidth( equipmentPanel.getMinWidth() );
-		equipmentPanel.setHeight( equipmentPanel.getMinHeight() );
-
-		buttonsPanel.setX( stage.getWidth() / 2 - buttonsPanel.getWidth() / 2 );
-		buttonsPanel.setY( stage.getHeight() - buttonsPanel.getHeight() - 5 );
-		buttonsPanel.setWidth( buttonsPanel.getMinWidth() );
-		buttonsPanel.setHeight( buttonsPanel.getMinHeight() );
-
-		if (contextMenu != null)
-		{
-			boolean lock = lockContextMenu;
-			lockContextMenu = false;
-
-			contextMenu.remove();
-			displayContextMenu( contextMenu.Content, lock, keyboardHelper );
-		}
 	}
 
 	// endregion Create
@@ -1947,7 +1931,10 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 		contextMenu.setWidth( stage.getWidth() - ( abilityPanel.getWidth() + equipmentPanel.getWidth() + 40 ) );
 		contextMenu.setHeight( stage.getHeight() - ( buttonsPanel.getHeight() + 40 ) );
 
-		contextMenu.show( stage.getWidth() / 2 - contextMenu.getWidth() / 2 - 10, stage.getHeight() / 2 - contextMenu.getHeight() / 2 - 30, lock );
+		//contextMenu.show( stage.getWidth() / 2 - contextMenu.getWidth() / 2 - 10, stage.getHeight() / 2 - contextMenu.getHeight() / 2 - 30, lock );
+		contextMenuArea.clear();
+		contextMenuArea.add( contextMenu ).expand().fill().pad( 10 );
+		contextMenu.setVisible( true );
 
 		ParallelAction parallelAction = new ParallelAction(
 				new SequenceAction( Actions.alpha( 0 ), Actions.fadeIn( 0.25f ) ),
@@ -2203,10 +2190,6 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 	public OrthographicCamera camera;
 
 	// ----------------------------------------------------------------------
-	private Tooltip contextMenu;
-	public boolean lockContextMenu;
-
-	// ----------------------------------------------------------------------
 	public DragDropPayload dragDropPayload;
 	public float screenShakeRadius;
 	public float screenShakeAngle;
@@ -2256,6 +2239,12 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 	private EquipmentPanel equipmentPanel;
 	private ButtonsPanel buttonsPanel;
 	private Skin skin;
+	private Table table;
+	private Table contextMenuArea;
+
+	// ----------------------------------------------------------------------
+	private Tooltip contextMenu;
+	public boolean lockContextMenu;
 
 	// ----------------------------------------------------------------------
 	private long diff, start = System.currentTimeMillis();

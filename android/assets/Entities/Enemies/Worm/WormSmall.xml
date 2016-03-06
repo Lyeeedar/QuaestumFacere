@@ -1,0 +1,8 @@
+<Entity Extends="Enemies/Worm/WormBase">
+
+    <Sprite>
+        <Name>Oryx/uf_split/uf_heroes/worm</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+</Entity>

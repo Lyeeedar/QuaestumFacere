@@ -123,6 +123,18 @@ public abstract class TilePanel extends Widget
 	}
 
 	@Override
+	public float getPrefWidth()
+	{
+		return ( tileSize + padding ) * viewWidth + padding;
+	}
+
+	@Override
+	public float getPrefHeight()
+	{
+		return ( tileSize + padding ) * viewHeight + padding;
+	}
+
+	@Override
 	public float getMinWidth()
 	{
 		return ( tileSize + padding ) * targetWidth + padding;

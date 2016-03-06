@@ -1,5 +1,15 @@
 <Utilities>
     <Scope></Scope>
     <EnhancedScope>quality>=3</EnhancedScope>
+
     <FragGrenade></FragGrenade>
+    <FlashbangGrenade></FlashbangGrenade>
+    <PlasmaGrenade>quality>=4</PlasmaGrenade>
+    <IncendiaryGrenade>quality>=2</IncendiaryGrenade>
+
+    <PenetrationAmmo></PenetrationAmmo>
+    <FireAmmo>quality>=3</FireAmmo>
+    <CryoAmmo>quality>=2</CryoAmmo>
+    <PoisonAmmo>quality>=3</PoisonAmmo>
+    <StunAmmo>quality>=4</StunAmmo>
 </Utilities>

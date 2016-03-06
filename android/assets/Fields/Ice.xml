@@ -3,6 +3,10 @@
     <Tags>Cold</Tags>
     <Sprite>
         <Name>Oryx/uf_split/uf_terrain/water_lava</Name>
+        <Colour>
+            <RGB>255,255,255</RGB>
+            <Alpha>0.5</Alpha>
+        </Colour>
     </Sprite>
     <Interactions>
         <Hot>

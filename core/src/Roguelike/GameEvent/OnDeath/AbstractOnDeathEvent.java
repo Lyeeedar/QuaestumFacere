@@ -43,5 +43,6 @@ public abstract class AbstractOnDeathEvent
 		ClassMap.put( "ABILITY", AbilityOnDeathEvent.class );
 		ClassMap.put( "FIELD", FieldOnDeathEvent.class );
 		ClassMap.put( "HEAL", HealOnDeathEvent.class );
+		ClassMap.put( "SPAWN", SpawnOnDeathEvent.class );
 	}
 }

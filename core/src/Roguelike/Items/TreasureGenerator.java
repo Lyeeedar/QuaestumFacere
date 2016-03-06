@@ -186,7 +186,7 @@ public class TreasureGenerator
 	{
 		Item item = Recipe.createRecipe( recipe.itemTemplate, quality, recipe.getName( quality ) );
 
-		int numModifiers = ran.nextInt( Math.max( 1, quality / 2 ) );
+		int numModifiers = ran.nextInt( Math.max( 2, quality / 2 ) );
 
 		for (int i = 0; i < numModifiers; i++)
 		{
@@ -194,11 +194,11 @@ public class TreasureGenerator
 
 			if (modifier != null)
 			{
-				Recipe.applyModifer( item, modifier, quality, ran.nextBoolean() );
+				Recipe.applyModifer( item, modifier, quality );
 			}
 		}
 
-		int numAbilities = (int)( Math.min( recipe.acceptedAbilities.size, 2 ) * ran.nextFloat() * ran.nextFloat() );
+		int numAbilities = recipe.acceptedAbilities.size > 0 ? ran.nextInt( Math.min( recipe.acceptedAbilities.size + 1, 3 ) ) : 0;
 
 		if (numAbilities > 0)
 		{

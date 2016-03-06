@@ -197,7 +197,7 @@ public class Field implements IGameObject
 							fieldStore.put( field.layer, field );
 						}
 					}
-					else
+					else if (layer != newField.layer)
 					{
 						fieldStore.put( tileField.layer, tileField );
 					}
@@ -207,15 +207,7 @@ public class Field implements IGameObject
 
 		if ( !fieldStore.containsKey( newField.layer ) )
 		{
-			Field tileField = newTile.fields.get( newField.layer );
-			if ( tileField != null && tileField.stacks > 1 )
-			{
-				fieldStore.put( newField.layer, tileField );
-			}
-			else
-			{
-				fieldStore.put( newField.layer, newField );
-			}
+			fieldStore.put( newField.layer, newField );
 		}
 
 		for ( FieldLayer layer : FieldLayer.values() )

@@ -7,7 +7,7 @@
     <Icon>
         <Name>Icons/ConeOfCold</Name>
     </Icon>
-    <Faction>Spider</Faction>
+    <Faction>Worm</Faction>
     <Level>Asteroid</Level>
 
     <Rooms>
@@ -16,8 +16,12 @@
                 <Symbol Extends=".">
                     <Char>c</Char>
                     <EnvironmentData>
+                        <Light>
+                            <Colour><RGB>200,200,255</RGB></Colour>
+                            <Intensity>3</Intensity>
+                        </Light>
                         <Sprite>
-                            <Name>Oryx/Custom/terrain/ore_iron</Name>
+                            <Name>Oryx/Custom/terrain/CrystalFull</Name>
                             <DrawActualSize>true</DrawActualSize>
                         </Sprite>
                         <Passable>false</Passable>
@@ -25,6 +29,19 @@
                         <OnActivate>
                             <Group Name="Take Crystal">
                                 <SetEnabled Enabled="false">Take Crystal</SetEnabled>
+                                <SetSprite>
+                                    <Sprite>
+                                        <Name>Oryx/Custom/terrain/CrystalHarvested</Name>
+                                        <DrawActualSize>true</DrawActualSize>
+                                    </Sprite>
+                                </SetSprite>
+                                <SetLight>
+                                    <Colour>
+                                        <RGB>200,200,255</RGB>
+                                        <Alpha>0.2</Alpha>
+                                    </Colour>
+                                    <Intensity>3</Intensity>
+                                </SetLight>
                             </Group>
                         </OnActivate>
                     </EnvironmentData>

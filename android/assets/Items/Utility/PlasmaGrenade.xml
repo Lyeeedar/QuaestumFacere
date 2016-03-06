@@ -1,0 +1,45 @@
+<Item>
+    <Name>Plasma Grenade</Name>
+    <Description>A grenade filled with a advanced concoction that get converted into plasma on detonation. Annihilates the surrounding area.</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/GrenadePlasma</Name>
+    </Icon>
+    <Value>350</Value>
+    <Ability>
+        <Active>
+            <Name>Throw Plasma Grenade</Name>
+            <Description>Throw the grenade at your target</Description>
+
+            <Cooldown>10</Cooldown>
+            <CooldownType>Attack</CooldownType>
+
+            <Range>4</Range>
+            <AOE>1</AOE>
+            <ScreenShake>10</ScreenShake>
+
+            <Icon>
+                <Name>Oryx/Custom/items/GrenadePlasma</Name>
+            </Icon>
+
+            <MovementSprite>
+                <Name>Oryx/Custom/items/GrenadePlasma</Name>
+            </MovementSprite>
+
+            <HitSprite>
+                <Name>EffectSprites/Explosion2/Explosion2</Name>
+                <Colour><RGB>0,255,0</RGB></Colour>
+                <UpdateRate>0.05</UpdateRate>
+                <SingleSprite>true</SingleSprite>
+                <Sound><Name>Explosion</Name></Sound>
+            </HitSprite>
+
+            <HitType><Any/></HitType>
+
+            <Effect>
+                <Damage>
+                    <Attack>250</Attack>
+                </Damage>
+            </Effect>
+        </Active>
+    </Ability>
+</Item>

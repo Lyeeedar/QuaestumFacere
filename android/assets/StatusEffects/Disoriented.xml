@@ -1,0 +1,19 @@
+<StatusEffect>
+    <Name>Disoriented</Name>
+    <Description>You are disoriented.</Description>
+    <Duration>10</Duration>
+
+    <Icon>
+        <Name>Icons/SunderArmour</Name>
+    </Icon>
+
+    <Events>
+        <Constant>
+            <Accuracy>-25</Accuracy>
+        </Constant>
+        <OnTask>
+            <Cancel Condition="chance(1, 4)" />
+        </OnTask>
+    </Events>
+
+</StatusEffect>

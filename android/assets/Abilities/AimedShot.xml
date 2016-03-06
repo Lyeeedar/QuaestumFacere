@@ -1,0 +1,20 @@
+<Active>
+    <Name>Aimed Shot</Name>
+    <Description>Carefully take aim and shoot to kill.</Description>
+    <Icon>
+        <Name>Icons/PenetratingShot</Name>
+    </Icon>
+
+    <CooldownType>Attack</CooldownType>
+    <Cooldown>4</Cooldown>
+    <Range>4</Range>
+
+    <HitType><Enemy/></HitType>
+
+    <Effect>
+        <Damage Scaled="true">
+            <Attack>200</Attack>
+            <Penetration>15</Penetration>
+        </Damage>
+    </Effect>
+</Active>

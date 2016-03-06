@@ -1,6 +1,7 @@
 package Roguelike.GameEvent.OnHit;
 
 import Roguelike.Entity.GameEntity;
+import Roguelike.GameEvent.IGameObject;
 import Roguelike.Tiles.GameTile;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
@@ -10,11 +11,11 @@ import java.util.HashMap;
 
 public abstract class AbstractOnHitEvent
 {
-	public abstract boolean handle( GameEntity entity, GameTile tile );
+	public abstract boolean handle( GameEntity entity, GameTile tile, IGameObject parent );
 
 	public abstract void parse( XmlReader.Element xml );
 
-	public abstract Array<String> toString( HashMap<String, Integer> variableMap );
+	public abstract Array<String> toString( HashMap<String, Integer> variableMap, IGameObject parent );
 
 	public static AbstractOnHitEvent load( XmlReader.Element xml )
 	{
@@ -40,6 +41,7 @@ public abstract class AbstractOnHitEvent
 	static
 	{
 		ClassMap.put( "ABILITY", AbilityOnHitEvent.class );
+		ClassMap.put( "STATUS", StatusOnHitEvent.class );
 		//ClassMap.put( "FIELD", FieldOnHitEvent.class );
 	}
 }

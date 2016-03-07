@@ -1045,6 +1045,12 @@ public class Global
 			Statistic.SIGHT,
 			Statistic.SPEED };
 
+		public static Statistic[] ScaleValues = {
+			Statistic.ATTACK,
+			Statistic.DEFENSE,
+			Statistic.VITALITY
+		};
+
 		public static HashMap<String, Integer> emptyMap = new HashMap<String, Integer>();
 		static
 		{

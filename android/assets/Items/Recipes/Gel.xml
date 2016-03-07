@@ -3,7 +3,7 @@
     <ItemTemplate>
         <Name>Gel</Name>
         <Description>Nanomachine laden gel. Damaging impacts cause the machines to form a temporary protective surface, dispersing the attack.</Description>
-        <UtilitySlots>3</UtilitySlots>
+        <UtilitySlots>4</UtilitySlots>
         <Type>Gel</Type>
         <Value>120</Value>
 

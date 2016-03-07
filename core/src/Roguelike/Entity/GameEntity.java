@@ -50,7 +50,7 @@ public class GameEntity extends Entity
 	// ----------------------------------------------------------------------
 	public void applyDepthScaling()
 	{
-		for ( Global.Statistic stat : Global.Statistic.values() )
+		for ( Global.Statistic stat : Statistic.ScaleValues )
 		{
 			int current = statistics.get( stat );
 

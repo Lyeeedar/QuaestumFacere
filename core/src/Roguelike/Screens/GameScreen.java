@@ -2054,7 +2054,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 	}
 
 	// ----------------------------------------------------------------------
-	public void displayActionOptions(Array<ActivationActionGroup> actions, final EnvironmentEntity parent)
+	public void displayActionOptions(Array<ActivationActionGroup> actions, final GameEntity activatingEntity, final EnvironmentEntity parent)
 	{
 		Table table = new Table();
 		table.defaults().pad( 5 );
@@ -2073,21 +2073,32 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 
 		for (final ActivationActionGroup action : actions)
 		{
-			TextButton button = new TextButton( action.name, skin );
-			button.addListener( new ClickListener()
+			if (action.checkCondition( parent, activatingEntity, 1 ))
 			{
-				public void clicked( InputEvent event, float x, float y )
+				TextButton button = new TextButton( action.name, skin );
+				button.addListener( new ClickListener()
 				{
-					clearContextMenu( true );
+					public void clicked( InputEvent event, float x, float y )
+					{
+						clearContextMenu( true );
 
-					action.activate( parent, Global.CurrentLevel.player, 1 );
-					Global.CurrentLevel.player.tasks.add( new TaskWait() );
-				}
-			} );
-			actionTable.add( button ).expandX().width( 200 ).center();
-			actionTable.row();
+						action.activate( parent, activatingEntity, 1 );
+						activatingEntity.tasks.add( new TaskWait() );
+					}
+				} );
+				actionTable.add( button ).expandX().width( 200 ).center();
+				actionTable.row();
 
-			keyboardHelper.add( button );
+				keyboardHelper.add( button );
+			}
+			else if (action.failMessage != null)
+			{
+				Label label = new Label(action.failMessage, skin);
+				label.setWrap( true );
+
+				actionTable.add( label ).expandX().width( 200 ).center();
+				actionTable.row();
+			}
 		}
 
 		table.add( actionTable ).expand().fill();

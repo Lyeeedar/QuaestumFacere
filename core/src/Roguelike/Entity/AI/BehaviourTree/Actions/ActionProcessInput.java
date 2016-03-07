@@ -155,7 +155,7 @@ public class ActionProcessInput extends AbstractAction
 					{
 						for ( ActivationActionGroup action : tile.environmentEntity.onActivateActions )
 						{
-							if ( action.enabled && action.checkCondition( tile.environmentEntity, entity, 1 ) )
+							if ( action.enabled )
 							{
 								entityWithinRange = Math.abs( Global.CurrentLevel.player.tile[0][0].x - tile.x ) <= 1
 													&& Math.abs( Global.CurrentLevel.player.tile[0][0].y - tile.y ) <= 1;
@@ -183,7 +183,7 @@ public class ActionProcessInput extends AbstractAction
 				Array<ActivationActionGroup> valid = new Array<ActivationActionGroup>(  );
 				for ( ActivationActionGroup action : tile.environmentEntity.onActivateActions )
 				{
-					if ( action.enabled && action.checkCondition( tile.environmentEntity, entity, 1 ) )
+					if ( action.enabled && ( action.failMessage != null || action.checkCondition( tile.environmentEntity, entity, 1 ) ) )
 					{
 						valid.add( action );
 						break;
@@ -192,7 +192,7 @@ public class ActionProcessInput extends AbstractAction
 
 				if (valid.size > 0)
 				{
-					GameScreen.Instance.displayActionOptions(valid, tile.environmentEntity);
+					GameScreen.Instance.displayActionOptions(valid, entity, tile.environmentEntity);
 				}
 			}
 			else if ( isWait )

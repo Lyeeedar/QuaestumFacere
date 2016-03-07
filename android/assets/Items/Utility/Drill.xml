@@ -1,0 +1,9 @@
+<Item>
+    <Name>Drill</Name>
+    <Description>A small drill used for extracting precious minerals from rocks.</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/drill</Name>
+    </Icon>
+
+    <Value>200</Value>
+</Item>

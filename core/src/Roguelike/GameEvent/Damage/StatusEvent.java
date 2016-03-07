@@ -25,8 +25,15 @@ public final class StatusEvent extends AbstractOnDamageEvent
 	@Override
 	public void applyQuality( int quality )
 	{
-		condition = condition.replace( "quality", ""+quality );
-		stacksEqn = stacksEqn.replace( "quality", ""+quality );
+		if (condition != null)
+		{
+			condition = condition.replace( "quality", ""+quality );
+		}
+
+		if (stacksEqn != null)
+		{
+			stacksEqn = stacksEqn.replace( "quality", ""+quality );
+		}
 	}
 
 	@Override

@@ -232,6 +232,54 @@ public class HubScreen implements Screen, InputProcessor
 	}
 
 	// ----------------------------------------------------------------------
+	public void showTreasureSellMessage( final int val )
+	{
+		Skin skin = Global.loadSkin();
+
+		Table message = new Table();
+		message.defaults().pad( 10 );
+
+		Label title = new Label("Reward", skin, "title");
+		message.add( title ).expandX().left();
+		message.row();
+
+		message.add( new Seperator( skin ) ).expandX().fillX();
+		message.row();
+
+		Table messageBody = new Table();
+		Label messageText = new Label( "Selling the treasures you found nets you some extra funds.", skin);
+		messageText.setWrap( true );
+		messageBody.add( messageText ).expand().fillX();
+		messageBody.row();
+
+		message.add( messageBody ).expand().fill();
+		message.row();
+
+		Label rewardMessage = new Label( "Reward: " +val, skin );
+		rewardMessage.setColor( Color.GOLD );
+		message.add( rewardMessage ).expandX();
+		message.row();
+
+		message.add( new Seperator( skin ) ).expandX().fillX();
+		message.row();
+
+		TextButton continueButton = new TextButton( "Continue", skin );
+		continueButton.addListener( new ClickListener(  )
+		{
+			public void clicked( InputEvent event, float x, float y )
+			{
+				Global.Funds += val;
+
+				clearContextMenu();
+			}
+		} );
+		message.add( continueButton ).expandX();
+		message.row();
+
+		queueContextMenu(message, new ButtonKeyboardHelper( continueButton ));
+	}
+
+	// ----------------------------------------------------------------------
 	public void showRewardMessage( String messageString, final int reward )
 	{
 		Skin skin = Global.loadSkin();
@@ -269,6 +317,16 @@ public class HubScreen implements Screen, InputProcessor
 			public void clicked( InputEvent event, float x, float y )
 			{
 				Global.Funds += reward;
+
+				int treasure = 0;
+				for (Item item : Global.CurrentLevel.player.inventory.m_items)
+				{
+					if ( item.category == Item.ItemCategory.TREASURE )
+					{
+						treasure += item.value;
+					}
+				}
+
 				Global.QuestManager.currentQuest = null;
 				Global.QuestManager.currentLevel = null;
 				Global.QuestManager.count++;
@@ -282,6 +340,11 @@ public class HubScreen implements Screen, InputProcessor
 
 				Global.fillMarket();
 				Global.fillMissions();
+
+				if (treasure > 0)
+				{
+					showTreasureSellMessage( treasure );
+				}
 
 				Global.save();
 

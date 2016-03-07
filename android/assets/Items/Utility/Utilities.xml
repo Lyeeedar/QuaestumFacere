@@ -12,4 +12,6 @@
     <CryoAmmo>quality>=2</CryoAmmo>
     <PoisonAmmo>quality>=3</PoisonAmmo>
     <StunAmmo>quality>=4</StunAmmo>
+
+    <Drill></Drill>
 </Utilities>

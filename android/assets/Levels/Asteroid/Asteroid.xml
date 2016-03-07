@@ -83,6 +83,54 @@
 
     <Rooms>
         <Padding Condition="2 + rnd(2)"></Padding>
+
+        <Ferrusite Condition="1 + rnd(2)">
+
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>o</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/ore_iron</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                        <OnActivate>
+                            <Group Name="Mine Ore">
+                                <Conditions FailMessage="You need a Drill to mine this">
+                                    <HasItem>Drill</HasItem>
+                                </Conditions>
+                                <Actions>
+                                    <SetEnabled Enabled="false">Mine Ore</SetEnabled>
+                                    <AddItem>
+                                        <Name>Ferrusite Ore</Name>
+                                        <Description>Ore from which the valuable metal Ferrusite is extracted. Used in a great many of applications, as it provides both strength and is not heavy.</Description>
+                                        <Category>Treasure</Category>
+                                        <Icon>
+                                            <Name>Oryx/Custom/items/ferrusite</Name>
+                                        </Icon>
+                                        <Value>50</Value>
+                                    </AddItem>
+                                    <SetSprite>
+                                        <Sprite>
+                                            <Name>Oryx/Custom/terrain/ore_mined</Name>
+                                            <DrawActualSize>true</DrawActualSize>
+                                        </Sprite>
+                                    </SetSprite>
+                                </Actions>
+                            </Group>
+                        </OnActivate>
+                    </EnvironmentData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>...</Row>
+                <Row>.o.</Row>
+                <Row>...</Row>
+            </Rows>
+        </Ferrusite>
     </Rooms>
 
 </Level>

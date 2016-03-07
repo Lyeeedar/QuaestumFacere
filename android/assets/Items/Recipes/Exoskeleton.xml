@@ -3,7 +3,7 @@
     <ItemTemplate>
         <Name>Exoskeleton</Name>
         <Description>Powered suit of heavy plate. Provides lots of protection.</Description>
-        <UtilitySlots>1</UtilitySlots>
+        <UtilitySlots>2</UtilitySlots>
         <Type>Exoskeleton</Type>
         <Value>120</Value>
 

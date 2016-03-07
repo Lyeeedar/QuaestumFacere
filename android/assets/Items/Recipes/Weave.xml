@@ -3,7 +3,7 @@
     <ItemTemplate>
         <Name>Weave</Name>
         <Description>Nano fabric designed to absorb and disperse wounding attacks along a series of hardened plates.</Description>
-        <UtilitySlots>2</UtilitySlots>
+        <UtilitySlots>3</UtilitySlots>
         <Type>Weave</Type>
         <Value>100</Value>
 

@@ -13,6 +13,7 @@ public class ActivationActionGroup
 	// ----------------------------------------------------------------------
 	public String name;
 	public boolean enabled;
+	public String failMessage;
 	public Array<AbstractActivationCondition> conditions = new Array<AbstractActivationCondition>(  );
 	public Array<AbstractActivationAction> actions = new Array<AbstractActivationAction>(  );
 
@@ -74,6 +75,7 @@ public class ActivationActionGroup
 		{
 			if (conditionsElement != null)
 			{
+				failMessage = conditionsElement.getAttribute( "FailMessage", null );
 				for (int i = 0; i < conditionsElement.getChildCount(); i++)
 				{
 					XmlReader.Element el = conditionsElement.getChild( i );

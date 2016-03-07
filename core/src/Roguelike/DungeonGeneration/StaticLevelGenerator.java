@@ -128,7 +128,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 		{
 			for ( int y = 0; y < height; y++ )
 			{
-				if (grid[x][y].metaValue != null && grid[x][y].metaValue.equalsIgnoreCase( "roomseed" ))
+				if (grid[x][y].metaValue.size > 0)
 				{
 					boolean skip = false;
 					for (RoomLocationData data : roomLocations)
@@ -145,15 +145,17 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 						continue;
 					}
 
-					// find the room
-					roomLocations.add( findRoom( x, y ) );
+					for (String val : grid[x][y].metaValue)
+					{
+						roomLocations.add( findRoom( x, y, val ) );
+					}
 				}
 			}
 		}
 	}
 
 	// ----------------------------------------------------------------------
-	private RoomLocationData findRoom(int sx, int sy)
+	private RoomLocationData findRoom(int sx, int sy, String key)
 	{
 		Point min = new Point(sx, sy);
 		Point max = new Point(sx, sy);
@@ -168,18 +170,27 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 			if (!minxCollided)
 			{
 				min.x--;
-				//walking along (minx,miny) to (minx,maxy) is there a collison
-				for ( int i = 0; i < (max.y - min.y)+1; i++ )
+
+				if (min.x < 0)
 				{
-					int y = min.y + i;
-
-					Symbol symbol = grid[ min.x ][ y ];
-
-					if ( symbol.metaValue == null || !symbol.metaValue.equalsIgnoreCase( "roomseed" ) )
+					min.x = 0;
+					minxCollided = true;
+				}
+				else
+				{
+					//walking along (minx,miny) to (minx,maxy) is there a collison
+					for ( int i = 0; i < ( max.y - min.y ) + 1; i++ )
 					{
-						min.x++;
-						minxCollided = true;
-						break;
+						int y = min.y + i;
+
+						Symbol symbol = grid[ min.x ][ y ];
+
+						if ( !grid[ min.x ][ y ].metaValue.contains( key, false ) )
+						{
+							min.x++;
+							minxCollided = true;
+							break;
+						}
 					}
 				}
 			}
@@ -187,18 +198,27 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 			if (!minyCollided)
 			{
 				min.y--;
-				//walking along (minx,miny) to (maxx,miny) is there a collison
-				for ( int i = 0; i < (max.x - min.x)+1; i++ )
+
+				if (min.y < 0)
 				{
-					int x = min.x + i;
-
-					Symbol symbol = grid[ x ][ min.y ];
-
-					if ( symbol.metaValue == null || !symbol.metaValue.equalsIgnoreCase( "roomseed" ) )
+					min.y = 0;
+					minyCollided = true;
+				}
+				else
+				{
+					//walking along (minx,miny) to (maxx,miny) is there a collison
+					for ( int i = 0; i < ( max.x - min.x ) + 1; i++ )
 					{
-						min.y++;
-						minyCollided = true;
-						break;
+						int x = min.x + i;
+
+						Symbol symbol = grid[ x ][ min.y ];
+
+						if ( !symbol.metaValue.contains( key, false ) )
+						{
+							min.y++;
+							minyCollided = true;
+							break;
+						}
 					}
 				}
 			}
@@ -206,18 +226,27 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 			if (!maxxCollided)
 			{
 				max.x++;
-				//walking along (maxx,miny) to (maxx,maxy) is there a collison
-				for ( int i = 0; i < (max.y - min.y)+1; i++ )
+
+				if (max.x == width)
 				{
-					int y = min.y + i;
-
-					Symbol symbol = grid[ max.x ][ y ];
-
-					if ( symbol.metaValue == null || !symbol.metaValue.equalsIgnoreCase( "roomseed" ) )
+					max.x = width-1;
+					maxxCollided = true;
+				}
+				else
+				{
+					//walking along (maxx,miny) to (maxx,maxy) is there a collison
+					for ( int i = 0; i < ( max.y - min.y ) + 1; i++ )
 					{
-						max.x--;
-						maxxCollided = true;
-						break;
+						int y = min.y + i;
+
+						Symbol symbol = grid[ max.x ][ y ];
+
+						if ( !symbol.metaValue.contains( key, false ) )
+						{
+							max.x--;
+							maxxCollided = true;
+							break;
+						}
 					}
 				}
 			}
@@ -225,18 +254,27 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 			if (!maxyCollided)
 			{
 				max.y++;
-				//walking along (minx,maxy) to (maxx,maxy) is there a collison
-				for ( int i = 0; i < (max.x - min.x)+1; i++ )
+
+				if (max.y == height)
 				{
-					int x = min.x + i;
-
-					Symbol symbol = grid[ x ][ max.y ];
-
-					if ( symbol.metaValue == null || !symbol.metaValue.equalsIgnoreCase( "roomseed" ) )
+					max.y = height-1;
+					maxyCollided = true;
+				}
+				else
+				{
+					//walking along (minx,maxy) to (maxx,maxy) is there a collison
+					for ( int i = 0; i < ( max.x - min.x ) + 1; i++ )
 					{
-						max.y--;
-						maxyCollided = true;
-						break;
+						int x = min.x + i;
+
+						Symbol symbol = grid[ x ][ max.y ];
+
+						if ( !symbol.metaValue.contains( key, false ) )
+						{
+							max.y--;
+							maxyCollided = true;
+							break;
+						}
 					}
 				}
 			}
@@ -248,6 +286,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 		}
 
 		RoomLocationData data = new RoomLocationData();
+		data.key = key;
 		data.x = min.x;
 		data.y = min.y;
 		data.width = (max.x - min.x)+1;
@@ -268,13 +307,16 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 
 			for (RoomLocationData locationData : roomLocations)
 			{
-				if (room.width <= locationData.width && room.height <= locationData.height)
+				if (room.roomData.placementHint == null || locationData.key.equalsIgnoreCase( room.roomData.placementHint ))
 				{
-					data.validLocations.add( locationData );
-				}
-				else if (room.height <= locationData.width && room.width <= locationData.height)
-				{
-					data.validLocations.add( locationData );
+					if (room.width <= locationData.width && room.height <= locationData.height)
+					{
+						data.validLocations.add( locationData );
+					}
+					else if (room.height <= locationData.width && room.width <= locationData.height)
+					{
+						data.validLocations.add( locationData );
+					}
 				}
 			}
 
@@ -312,20 +354,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 			boolean fitsVertical = location.width <= width && location.height <= height;
 			boolean fitsHorizontal = location.height <= width && location.width <= height;
 
-			if ( data.room.roomData.lockRotation )
-			{
-				if ( fitsVertical )
-				{
-					fits = true;
-					flipVert = true;
-
-					if ( ran.nextBoolean() )
-					{
-						flipHori = true;
-					}
-				}
-			}
-			else
+			if ( !data.room.roomData.lockRotation )
 			{
 				if ( fitsVertical || fitsHorizontal )
 				{
@@ -459,6 +488,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 	// ----------------------------------------------------------------------
 	private class RoomLocationData
 	{
+		public String key;
 		public int x;
 		public int y;
 		public int width;

@@ -200,7 +200,7 @@ public final class SaveFile
 			@Override
 			public void setGenerics( Kryo kryo, Class[] generics )
 			{
-				if ( kryo.isFinal( generics[ 0 ] ) )
+				if ( generics != null && kryo.isFinal( generics[ 0 ] ) )
 				{
 					genericType = generics[ 0 ];
 				}

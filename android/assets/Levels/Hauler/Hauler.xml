@@ -1,0 +1,88 @@
+<Level>
+
+    <Generator>Static</Generator>
+
+    <Ambient>
+        <Red>0.04</Red>
+        <Green>0.1</Green>
+        <Blue>0.1</Blue>
+    </Ambient>
+
+    <Sound>
+        <BGM>Satiate</BGM>
+        <Ambient>
+            <Sound><Name>spooky1</Name><Repeat>100</Repeat></Sound>
+            <Sound><Name>spooky3</Name><Repeat>100</Repeat></Sound>
+            <Sound><Name>spooky5</Name><Repeat>100</Repeat></Sound>
+            <Sound><Name>spooky7</Name><Repeat>100</Repeat></Sound>
+            <Sound><Name>thump1</Name></Sound>
+        </Ambient>
+    </Sound>
+
+     <Symbols>
+
+        <Symbol>
+            <Char>.</Char>
+            <TileData>
+                <Opaque>false</Opaque>
+                <Passable>true</Passable>
+                <Sprite>
+                    <Name>Oryx/uf_split/uf_terrain/floor_extra_16</Name>
+                </Sprite>
+            </TileData>
+        </Symbol>
+
+        <Symbol>
+            <Char>#</Char>
+            <TileData>
+                <Opaque>true</Opaque>
+                <Passable>false</Passable>
+
+                <TilingSprite>
+                    <Name>Wall</Name>
+                    <Top>
+                        <Name>Oryx/Custom/terrain/RustWallTop</Name>
+                    </Top>
+                    <Front>
+                        <Name>Oryx/Custom/terrain/RustWallFront</Name>
+                    </Front>
+                    <Overhang>
+                        <Name>Oryx/Custom/terrain/RustWallOverhang</Name>
+                    </Overhang>
+                </TilingSprite>
+
+            </TileData>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>,</Char>
+            <MetaValue>room</MetaValue>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>+</Char>
+            <EnvironmentData>
+                <Type>Door</Type>
+            </EnvironmentData>
+        </Symbol>
+
+         <Symbol Extends=".">
+             <Char>s</Char>
+             <MetaValue>Ship</MetaValue>
+         </Symbol>
+
+         <Symbol Extends=".">
+             <Char>c</Char>
+             <EnvironmentData>
+                 <Sprite>
+                     <Name>Oryx/uf_split/uf_terrain/crate</Name>
+                     <DrawActualSize>true</DrawActualSize>
+                 </Sprite>
+             </EnvironmentData>
+         </Symbol>
+
+    </Symbols>
+
+    <Rows>Hauler/Hauler</Rows>
+
+</Level>

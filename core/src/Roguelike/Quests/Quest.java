@@ -173,6 +173,9 @@ public class Quest
 		table.add( desc ).expandX().fillX().left();
 		table.row();
 
+		table.add( new Label( "Location: " + level, skin ) ).expandX().fillX().left();
+		table.row();
+
 		Label rew = new Label( "Reward: " + reward, skin );
 		rew.setColor( Color.GOLD );
 

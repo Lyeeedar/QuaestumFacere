@@ -22,6 +22,11 @@
         <Polygon><Weight>1</Weight></Polygon>
     </RoomGenerators>
 
+    <CorridorStyle>
+        <PathStyle>Wandering</PathStyle>
+        <Width>2</Width>
+    </CorridorStyle>
+
     <MinWidth>20</MinWidth>
     <MinHeight>20</MinHeight>
 

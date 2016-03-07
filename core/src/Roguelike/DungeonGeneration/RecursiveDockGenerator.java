@@ -291,12 +291,10 @@ public class RecursiveDockGenerator extends AbstractDungeonGenerator
 				if ( room.roomData.placement == DungeonFileParser.DFPRoom.Placement.NORTH )
 				{
 					northRooms.add( room );
-					room.flipVertical();
 				}
 				else if ( room.roomData.placement == DungeonFileParser.DFPRoom.Placement.SOUTH )
 				{
 					southRooms.add( room );
-					room.flipVertical();
 				}
 				else if ( room.roomData.placement == DungeonFileParser.DFPRoom.Placement.EAST )
 				{

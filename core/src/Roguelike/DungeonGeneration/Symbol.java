@@ -9,6 +9,7 @@ import Roguelike.Pathfinding.PathfindingTile;
 import Roguelike.Tiles.TileData;
 import Roguelike.Util.EnumBitflag;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
 //----------------------------------------------------------------------
@@ -28,7 +29,7 @@ public final class Symbol implements PathfindingTile
 
 	public Element fieldData;
 
-	public String metaValue;
+	public Array<String> metaValue = new Array<String>(  );
 
 	// ----------------------------------------------------------------------
 	private long processedTileData;
@@ -139,7 +140,11 @@ public final class Symbol implements PathfindingTile
 			symbol.fieldData = fieldElement;
 		}
 
-		symbol.metaValue = xml.get( "MetaValue", symbol.metaValue );
+		Element metaElement = xml.getChildByName( "MetaValue" );
+		if (metaElement != null)
+		{
+			symbol.metaValue = new Array<String>( metaElement.getText().toLowerCase().split( "," ) );
+		}
 
 		return symbol;
 	}

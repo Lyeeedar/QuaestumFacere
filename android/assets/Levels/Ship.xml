@@ -1,6 +1,8 @@
 <Room>
     <Faction>none</Faction>
     <Placement>South</Placement>
+    <PlacementHint>Ship</PlacementHint>
+    <LockRotation>true</LockRotation>
     <Symbols>
         <Symbol>
             <Char>.</Char>

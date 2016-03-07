@@ -160,6 +160,10 @@ public class DungeonFileParser
 			room.spawnEquation = xml.getAttribute( "Count", room.spawnEquation ).toLowerCase();
 
 			room.placementHint = xml.get( "PlacementHint", null );
+			if (room.placementHint != null)
+			{
+				room.placementHint = room.placementHint.toLowerCase();
+			}
 
 			room.faction = xml.get( "Faction", null );
 
@@ -201,7 +205,7 @@ public class DungeonFileParser
 					{
 						for ( int y = 0; y < height; y++ )
 						{
-							room.roomDef[x][y] = rowsElement.getChild( y ).getText().charAt( x );
+							room.roomDef[x][height-y-1] = rowsElement.getChild( y ).getText().charAt( x );
 						}
 					}
 				}
@@ -209,9 +213,10 @@ public class DungeonFileParser
 				{
 					// Rows in seperate csv file
 					String fileName = rowsElement.getText();
-					FileHandle handle = Gdx.files.internal( "Levels/" + fileName + ".txt" );
+					FileHandle handle = Gdx.files.internal( "Levels/" + fileName + ".csv" );
 					String content = handle.readString();
 					content = content.replace( "\u0000", "" );
+					content = content.replace( " ", "" );
 					content = content.replaceAll("[^\\p{ASCII}]", "");
 
 					String[] lines = content.split( "\n" );
@@ -629,9 +634,10 @@ public class DungeonFileParser
 			{
 				// Rows in seperate csv file
 				String fileName = rowsElement.getText();
-				FileHandle handle = Gdx.files.internal( "Levels/" + fileName + ".txt" );
+				FileHandle handle = Gdx.files.internal( "Levels/" + fileName + ".csv" );
 				String content = handle.readString();
 				content = content.replace( "\u0000", "" );
+				content = content.replace( " ", "" );
 				content = content.replaceAll("[^\\p{ASCII}]", "");
 
 				String[] lines = content.split( "\n" );

@@ -327,14 +327,11 @@ public class Global
 						for ( int y = 0; y < level.height; y++ )
 						{
 							GameTile tile = level.getGameTile( x, y );
-							if ( tile.metaValue != null )
+							if ( tile.metaValue.contains( travelKey, false ) )
 							{
-								if ( tile.metaValue.equals( travelKey ) )
-								{
-									tile.addGameEntity( player );
-									placed = true;
-									break outer;
-								}
+								tile.addGameEntity( player );
+								placed = true;
+								break outer;
 							}
 						}
 					}

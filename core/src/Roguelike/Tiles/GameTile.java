@@ -42,7 +42,7 @@ public class GameTile implements PathfindingTile
 	public Level level;
 	public Array<SpriteEffect> spriteEffects = new Array<SpriteEffect>();
 	public Array<Item> items = new Array<Item>( false, 16 );
-	public String metaValue;
+	public Array<String> metaValue = new Array<String>(  );
 	public boolean visible;
 	public boolean tempVisible;
 	public boolean seen;

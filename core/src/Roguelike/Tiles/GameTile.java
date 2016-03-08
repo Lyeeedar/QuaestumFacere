@@ -23,7 +23,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameTile implements PathfindingTile
+public final class GameTile implements PathfindingTile
 {
 	private static final Color tempColour = new Color();
 	public int x;

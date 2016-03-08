@@ -1,7 +1,7 @@
 <Factions>
     <Creatures>
-        <WormSmall><Cost>1</Cost></WormSmall>
-        <WormLarge><Cost>2</Cost></WormLarge>
-        <WormHuge><Cost>4</Cost></WormHuge>
+        <WormSmall>1</WormSmall>
+        <WormLarge>2</WormLarge>
+        <WormHuge>4</WormHuge>
     </Creatures>
 </Factions>

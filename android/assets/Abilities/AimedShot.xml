@@ -2,7 +2,7 @@
     <Name>Aimed Shot</Name>
     <Description>Carefully take aim and shoot to kill.</Description>
     <Icon>
-        <Name>Icons/PenetratingShot</Name>
+        <Name>Icons/Aim</Name>
     </Icon>
 
     <CooldownType>Attack</CooldownType>

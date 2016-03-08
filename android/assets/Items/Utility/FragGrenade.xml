@@ -22,7 +22,7 @@
             </Icon>
 
             <MovementSprite>
-                <Name>Oryx/Custom/items/Grenade</Name>
+                <Name>Oryx/Custom/terrain/Grenade</Name>
             </MovementSprite>
 
             <HitSprite>

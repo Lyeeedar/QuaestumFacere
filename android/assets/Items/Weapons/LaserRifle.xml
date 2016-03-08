@@ -1,0 +1,21 @@
+<Weapon>
+
+    <HitType>Closest(1)</HitType>
+
+    <HitSprite>
+        <Name>EffectSprites/Beam/Beam</Name>
+        <Animation><Stretch/></Animation>
+        <UpdateRate>0.1</UpdateRate>
+        <Colour><RGB>255,0,0</RGB></Colour>
+        <Sound><Name>Wand</Name></Sound>
+    </HitSprite>
+
+    <HitPattern>
+        <Line>....###....</Line>
+        <Line>....###....</Line>
+        <Line>....###....</Line>
+        <Line>.....#.....</Line>
+        <Line>.....x.....</Line>
+    </HitPattern>
+
+</Weapon>

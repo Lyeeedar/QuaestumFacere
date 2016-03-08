@@ -229,6 +229,16 @@ public final class Item extends GameEventHandler
 
 		table.add( new Seperator( skin, false ) ).expandX().fillX();
 		table.row();
+
+		if (slot == EquipmentSlot.ARMOUR)
+		{
+			table.add( new Label( "Utility Slots: " + utilSlots, skin ) ).expandX().fillX().left();
+			table.row();
+
+			table.add( new Seperator( skin, false ) ).expandX().fillX();
+			table.row();
+		}
+
 		seperator = true;
 
 		if (modifiers.size > 0)
@@ -388,6 +398,9 @@ public final class Item extends GameEventHandler
 		table.row();
 
 		table.add( new Label("Accuracy: " + getStatistic( Statistic.emptyMap, Statistic.ACCURACY ), skin ) ).expandX().fillX();
+		table.row();
+
+		table.add( new Label("Penetration: " + getStatistic( Statistic.emptyMap, Statistic.PENETRATION ), skin ) ).expandX().fillX();
 		table.row();
 
 		table.add( new Seperator( skin, false ) ).expandX().fillX();

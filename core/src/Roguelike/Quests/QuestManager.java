@@ -16,7 +16,7 @@ import java.util.Random;
 /**
  * Created by Philip on 23-Jan-16.
  */
-public class QuestManager
+public final class QuestManager
 {
 	public Array<Quest> availableQuests = new Array<Quest>(  );
 

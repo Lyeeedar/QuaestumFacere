@@ -1,0 +1,65 @@
+<Quest>
+
+    <Name>Pirate Hunt</Name>
+    <Description>A group of pirates have taken over the Feldspar, a mining ship returning from the outer belt. The leader has a small bounty on his head for his indiscriminate killing of those ships he hijacks. Kill him and return his head for the reward.</Description>
+    <Reward>350</Reward>
+    <Difficulty>3</Difficulty>
+    <Icon>
+        <Name>Icons/Hunt</Name>
+    </Icon>
+    <Faction>Pirate</Faction>
+    <Level>Hauler</Level>
+    <LevelText>Feldspar (X76 class Hauler)</LevelText>
+
+    <Rooms>
+        <Room>
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>b</Char>
+                    <EntityData Extends="Enemies/Pirate/PirateCaptain">
+                        <Inventory>
+                            <Item>
+                                <Name>Pirate Head</Name>
+                                <Description>The severed head of the pirate captain. Return this to the local authorities to claim the bounty on it.</Description>
+                                <Icon>
+                                    <Name>Oryx/Custom/items/pirate_head</Name>
+                                </Icon>
+                            </Item>
+                        </Inventory>
+                    </EntityData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>...</Row>
+                <Row>9b.</Row>
+                <Row>..2</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <GotHead>
+
+            <Message>You turn in the head at the local authorities. They thank you for your efforts and pay you the bounty on his head, reminding you to watch your back in case any of his associates decide to get revenge.</Message>
+            <Reward>350</Reward>
+
+            <Conditions>
+                <HasItem>Pirate Head</HasItem>
+            </Conditions>
+        </GotHead>
+
+        <NoHead>
+
+            <Message>You escape the ship without the captains head, and therefore nothing to turn in for a payout.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <HasItem Not="true">Pirate Head</HasItem>
+            </Conditions>
+        </NoHead>
+
+    </Outputs>
+
+</Quest>

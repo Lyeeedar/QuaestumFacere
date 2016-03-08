@@ -110,6 +110,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 		height = dfp.roomDef[0].length;
 
 		grid = new Symbol[width][height];
+		processed = new boolean[width][height];
 
 		for (int x = 0; x < width; x++)
 		{
@@ -128,26 +129,23 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 		{
 			for ( int y = 0; y < height; y++ )
 			{
-				if (grid[x][y].metaValue.size > 0)
+				if (grid[x][y].metaValue.size > 0 && !processed[x][y])
 				{
-					boolean skip = false;
-					for (RoomLocationData data : roomLocations)
+					if (grid[x][y].metaValue.size > 1)
 					{
-						if (x >= data.x && x <= data.x+data.width && y >= data.y && y <= data.y+data.height)
+						throw new RuntimeException( "Too many meta values! " + Global.join( ",", grid[x][y].metaValue ) );
+					}
+
+					RoomLocationData data = findRoom( x, y, grid[x][y].metaValue.get( 0 ) );
+					roomLocations.add( data );
+
+					// mark processed
+					for (int ix = 0; ix < data.width; ix++)
+					{
+						for (int iy = 0; iy < data.height; iy++)
 						{
-							skip = true;
-							break;
+							processed[data.x + ix][data.y + iy] = true;
 						}
-					}
-
-					if (skip)
-					{
-						continue;
-					}
-
-					for (String val : grid[x][y].metaValue)
-					{
-						roomLocations.add( findRoom( x, y, val ) );
 					}
 				}
 			}
@@ -185,7 +183,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 
 						Symbol symbol = grid[ min.x ][ y ];
 
-						if ( !grid[ min.x ][ y ].metaValue.contains( key, false ) )
+						if ( processed[min.x][y] || !symbol.metaValue.contains( key, false ) )
 						{
 							min.x++;
 							minxCollided = true;
@@ -213,7 +211,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 
 						Symbol symbol = grid[ x ][ min.y ];
 
-						if ( !symbol.metaValue.contains( key, false ) )
+						if ( processed[x][min.y] || !symbol.metaValue.contains( key, false ) )
 						{
 							min.y++;
 							minyCollided = true;
@@ -241,7 +239,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 
 						Symbol symbol = grid[ max.x ][ y ];
 
-						if ( !symbol.metaValue.contains( key, false ) )
+						if ( processed[max.x][y] || !symbol.metaValue.contains( key, false ) )
 						{
 							max.x--;
 							maxxCollided = true;
@@ -269,7 +267,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 
 						Symbol symbol = grid[ x ][ max.y ];
 
-						if ( !symbol.metaValue.contains( key, false ) )
+						if ( processed[x][max.y] || !symbol.metaValue.contains( key, false ) )
 						{
 							max.y--;
 							maxyCollided = true;
@@ -307,7 +305,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 
 			for (RoomLocationData locationData : roomLocations)
 			{
-				if (room.roomData.placementHint == null || locationData.key.equalsIgnoreCase( room.roomData.placementHint ))
+				if (room.roomData.placementHint == null || room.roomData.placementHint.length() == 0 || locationData.key.equalsIgnoreCase( room.roomData.placementHint ))
 				{
 					if (room.width <= locationData.width && room.height <= locationData.height)
 					{
@@ -436,7 +434,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 			placedRooms.add( data.room );
 		}
 
-		// Fill rest with faction stuff
+		// Fill the rest with faction stuff
 		for (RoomLocationData location : roomLocations)
 		{
 			Room room = new Room();
@@ -484,6 +482,7 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 
 	// ----------------------------------------------------------------------
 	private Symbol[][] grid;
+	private boolean[][] processed;
 
 	// ----------------------------------------------------------------------
 	private class RoomLocationData

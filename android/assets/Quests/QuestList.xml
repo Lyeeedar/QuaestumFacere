@@ -1,4 +1,5 @@
 <Quests>
 	<Quest>Asteroid/CrystalGather</Quest>
-	<Quest>Hauler/CrystalGather</Quest>
+	<Quest>Hauler/PirateHunt</Quest>
+	<Quest>Hauler/ReplicatorEscape</Quest>
 </Quests>

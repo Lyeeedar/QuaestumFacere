@@ -1,0 +1,10 @@
+<Faction>
+    <Creatures>
+        <PirateRifle>3</PirateRifle>
+        <PiratePistol>3</PiratePistol>
+        <PirateGrenade>5</PirateGrenade>
+    </Creatures>
+    <Bosses>
+        <PirateCaptain></PirateCaptain>
+    </Bosses>
+</Faction>

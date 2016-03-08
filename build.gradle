@@ -97,7 +97,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        compile "com.esotericsoftware:kryo:3.0.3"
+        compile "com.esotericsoftware:kryo:3.1.0-SNAPSHOT"
         compile "net.objecthunter:exp4j:0.4.5"
     }
 }

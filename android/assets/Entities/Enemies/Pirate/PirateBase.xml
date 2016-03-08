@@ -1,0 +1,22 @@
+<Entity>
+    <Name>Pirate</Name>
+
+    <AI>basicMonster</AI>
+
+    <Factions>
+        <Faction>pirate</Faction>
+    </Factions>
+
+    <Statistics>
+
+        <Attack>4</Attack>
+        <Defense>15</Defense>
+        <Accuracy>60</Accuracy>
+
+        <Vitality>5</Vitality>
+        <Sight>5</Sight>
+        <Speed>7</Speed>
+
+    </Statistics>
+
+</Entity>

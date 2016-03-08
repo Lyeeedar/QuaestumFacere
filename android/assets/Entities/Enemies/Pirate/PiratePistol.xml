@@ -1,0 +1,15 @@
+<Entity Extends="Enemies/Pirate/PirateBase">
+    <Sprite>
+        <Name>Oryx/Custom/heroes/pirate_pistol</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Inventory>
+        <Equipment>
+            <Wep>
+                <Slot>Weapon</Slot>
+                <Type>DualPistol</Type>
+            </Wep>
+        </Equipment>
+    </Inventory>
+</Entity>

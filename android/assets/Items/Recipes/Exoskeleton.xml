@@ -16,7 +16,7 @@
 
         <Events>
             <Constant>
-                <Defense>20 + 5 * quality</Defense>
+                <Defense>30 + 6 * quality</Defense>
             </Constant>
         </Events>
     </ItemTemplate>
@@ -36,6 +36,5 @@
         <Accuracy></Accuracy>
         <Vitality></Vitality>
         <Speed></Speed>
-        <Regeneration MinQuality="3"></Regeneration>
     </AllowedModifiers>
 </Recipe>

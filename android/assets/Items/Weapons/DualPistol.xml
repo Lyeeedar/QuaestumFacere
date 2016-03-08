@@ -1,0 +1,22 @@
+<Weapon>
+
+    <HitType>Closest(1)</HitType>
+
+    <HitCount>2</HitCount>
+
+    <HitSprite>
+        <Name>EffectSprites/Shot/Shot</Name>
+        <Animation><Move/></Animation>
+        <UpdateRate>0.1</UpdateRate>
+        <Colour><RGB>200,200,200</RGB></Colour>
+        <Sound><Name>Wand</Name></Sound>
+    </HitSprite>
+
+    <HitPattern>
+        <Line>....###....</Line>
+        <Line>....###....</Line>
+        <Line>.....#.....</Line>
+        <Line>.....x.....</Line>
+    </HitPattern>
+
+</Weapon>

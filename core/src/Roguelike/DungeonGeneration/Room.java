@@ -463,15 +463,15 @@ public final class Room
 			{
 				if ( roomContents[x][y] != null && roomContents[x][y].isPassable( GeneratorPassability ) && roomContents[x][y].getEnvironmentEntityPassable( GeneratorPassability ) )
 				{
+					Point point = Global.PointPool.obtain().set( x, y );
 					if (  x > 0 && x < width - 1 && y > 0 && y < height - 1 )
 					{
-						Point point = Global.PointPool.obtain().set( x, y );
 						if (!isPosEnclosed( x, y ))
 						{
 							validList.add( point );
 						}
-						fullList.add( point );
 					}
+					fullList.add( point );
 				}
 			}
 		}

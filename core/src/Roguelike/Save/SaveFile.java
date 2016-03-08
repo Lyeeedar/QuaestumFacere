@@ -37,10 +37,7 @@ import Roguelike.Lights.Light;
 import Roguelike.Pathfinding.ShadowCastCache;
 import Roguelike.Quests.Input.QuestInputFlagEquals;
 import Roguelike.Quests.Input.QuestInputFlagPresent;
-import Roguelike.Quests.Output.QuestOuputConditionDialogueValue;
-import Roguelike.Quests.Output.QuestOutput;
-import Roguelike.Quests.Output.QuestOutputConditionActionEnabled;
-import Roguelike.Quests.Output.QuestOutputConditionEntityAlive;
+import Roguelike.Quests.Output.*;
 import Roguelike.Quests.Quest;
 import Roguelike.Quests.QuestManager;
 import Roguelike.Save.SaveLevel.SaveLevelItem;
@@ -66,12 +63,18 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.minlog.Log;
 import kryo.FastEnumMapSerializer;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import static com.esotericsoftware.minlog.Log.TRACE;
+import static com.esotericsoftware.minlog.Log.trace;
 
 public final class SaveFile
 {
@@ -152,6 +155,8 @@ public final class SaveFile
 
 			registerSerializers( kryo );
 			registerClasses( kryo );
+
+			//Log.set(Log.LEVEL_TRACE);
 		}
 	}
 
@@ -161,7 +166,7 @@ public final class SaveFile
 
 		kryo.register( Array.class, new Serializer<Array>()
 		{
-			private Class genericType;
+			private Class[] genericType;
 
 			{
 				setAcceptsNull( true );
@@ -170,6 +175,8 @@ public final class SaveFile
 			@Override
 			public void write( Kryo kryo, Output output, Array array )
 			{
+				if (TRACE) trace("kryo", "ArraySerializer.write array: " + array.toString());
+
 				int length = array.size;
 				output.writeInt( length, true );
 
@@ -181,11 +188,16 @@ public final class SaveFile
 
 				if ( genericType != null )
 				{
-					Serializer serializer = kryo.getSerializer( genericType );
+					Serializer serializer = kryo.getSerializer( genericType[0] );
+
+					if (TRACE) trace("kryo", "ArraySerializer writing objects of type: " + genericType[0]);
+
 					genericType = null;
 					for ( Object element : array )
 					{
+						if (TRACE) trace("kryo", "ArraySerializer.beginWrite: " + element);
 						kryo.writeObjectOrNull( output, element, serializer );
+						if (TRACE) trace("kryo", "ArraySerializer.endWrite: " + element);
 					}
 				}
 				else
@@ -200,9 +212,15 @@ public final class SaveFile
 			@Override
 			public void setGenerics( Kryo kryo, Class[] generics )
 			{
-				if ( generics != null && kryo.isFinal( generics[ 0 ] ) )
+				if (generics != null && kryo.isFinal( generics[0] ))
 				{
-					genericType = generics[ 0 ];
+					if (TRACE) trace("kryo", "ArraySerializer.setGenerics: " + generics[0]);
+					genericType = generics;
+				}
+				else
+				{
+					if (TRACE) trace("kryo", "ArraySerializer.setGenerics: null");
+					genericType = null;
 				}
 			}
 
@@ -218,8 +236,8 @@ public final class SaveFile
 
 				if ( genericType != null )
 				{
-					Class elementClass = genericType;
-					Serializer serializer = kryo.getSerializer( genericType );
+					Class elementClass = genericType[0];
+					Serializer serializer = kryo.getSerializer( elementClass );
 					genericType = null;
 
 					for ( int i = 0; i < length; i++ )
@@ -381,57 +399,203 @@ public final class SaveFile
 
 		kryo.register( ObjectMap.class, new Serializer<ObjectMap>()
 		{
-			@Override
-			public void write( Kryo kryo, Output output, ObjectMap object )
+			private Class[] genericType;
+
 			{
-				Array<Object[]> data = new Array<Object[]>(  );
-				for (Object key : object.keys())
-				{
-					Object value = object.get( key );
-					data.add( new Object[]{key, value} );
-				}
-				kryo.writeObject( output, data );
+				setAcceptsNull( true );
 			}
+
+			@Override
+			public void write( Kryo kryo, Output output, ObjectMap map )
+			{
+				int length = map.size;
+				output.writeInt( length, true );
+
+				if ( length == 0 )
+				{
+					genericType = null;
+					return;
+				}
+
+				if ( genericType != null )
+				{
+					Serializer keyserializer = kryo.getSerializer( genericType[0] );
+					Serializer valueserializer = kryo.getSerializer( genericType[1] );
+
+					genericType = null;
+					for ( Object key : map.keys() )
+					{
+						Object value = map.get( key );
+
+						kryo.writeObject( output, key, keyserializer );
+						kryo.writeObjectOrNull( output, value, valueserializer );
+					}
+				}
+				else
+				{
+					for ( Object key : map.keys() )
+					{
+						Object value = map.get( key );
+
+						kryo.writeClassAndObject( output, key );
+						kryo.writeClassAndObject( output, value );
+					}
+				}
+			}
+
+			@Override
+			public void setGenerics( Kryo kryo, Class[] generics )
+			{
+				if (generics != null && kryo.isFinal( generics[0] ) && kryo.isFinal( generics[1] ) )
+				{
+					if (TRACE) trace("kryo", "ObjectMapSerializer.setGenerics: " + generics[0] + ", " + generics[1] );
+					genericType = generics;
+				}
+				else
+				{
+					if (TRACE) trace("kryo", "ObjectMapSerializer.setGenerics: null");
+					genericType = null;
+				}
+			}
+
 
 			@Override
 			public ObjectMap read( Kryo kryo, Input input, Class<ObjectMap> type )
 			{
-				Array<Object[]> data = kryo.readObject( input, Array.class );
+				ObjectMap map = new ObjectMap();
+				kryo.reference( map );
 
-				ObjectMap map = new ObjectMap(  );
-				for (Object[] pair : data)
+				int length = input.readInt( true );
+				map.ensureCapacity( length );
+
+				if ( genericType != null )
 				{
-					map.put( pair[0], pair[1] );
+					Class keyClass = genericType[0];
+					Serializer keyserializer = kryo.getSerializer( keyClass );
+
+					Class valueClass = genericType[1];
+					Serializer valueserializer = kryo.getSerializer( valueClass );
+					genericType = null;
+
+					for ( int i = 0; i < length; i++ )
+					{
+						Object key = kryo.readObject( input, keyClass, keyserializer );
+						Object value = kryo.readObjectOrNull( input, valueClass, valueserializer );
+
+						map.put( key, value );
+					}
 				}
+				else
+				{
+					for ( int i = 0; i < length; i++ )
+					{
+						Object key = kryo.readClassAndObject( input );
+						Object value = kryo.readClassAndObject( input );
+
+						map.put( key, value );
+					}
+				}
+
 				return map;
 			}
 		} );
 
 		kryo.register( IntMap.class, new Serializer<IntMap>()
 		{
-			@Override
-			public void write( Kryo kryo, Output output, IntMap object )
-			{
-				Array<Object[]> data = new Array<Object[]>(  );
+			private Class[] genericType;
 
-				for (Object entryObj : object.entries())
-				{
-					IntMap.Entry entry = (IntMap.Entry)entryObj;
-					data.add( new Object[]{entry.key, entry.value} );
-				}
-				kryo.writeObject( output, data );
+			{
+				setAcceptsNull( true );
 			}
+
+			@Override
+			public void write( Kryo kryo, Output output, IntMap map )
+			{
+				int length = map.size;
+				output.writeInt( length, true );
+
+				if ( length == 0 )
+				{
+					genericType = null;
+					return;
+				}
+
+				if ( genericType != null )
+				{
+					Serializer valueserializer = kryo.getSerializer( genericType[0] );
+
+					genericType = null;
+
+					for (Object entryObj : map.entries())
+					{
+						IntMap.Entry entry = (IntMap.Entry)entryObj;
+
+						output.writeInt( entry.key );
+						kryo.writeObjectOrNull( output, entry.value, valueserializer );
+					}
+				}
+				else
+				{
+					for (Object entryObj : map.entries())
+					{
+						IntMap.Entry entry = (IntMap.Entry)entryObj;
+
+						output.writeInt( entry.key );
+						kryo.writeClassAndObject( output, entry.value );
+					}
+				}
+			}
+
+			@Override
+			public void setGenerics( Kryo kryo, Class[] generics )
+			{
+				if (generics != null && kryo.isFinal( generics[0] ))
+				{
+					if (TRACE) trace("kryo", "IntMapSerializer.setGenerics: " + generics[0]);
+					genericType = generics;
+				}
+				else
+				{
+					if (TRACE) trace("kryo", "IntMapSerializer.setGenerics: null");
+					genericType = null;
+				}
+			}
+
 
 			@Override
 			public IntMap read( Kryo kryo, Input input, Class<IntMap> type )
 			{
-				Array<Object[]> data = kryo.readObject( input, Array.class );
+				IntMap map = new IntMap();
+				kryo.reference( map );
 
-				IntMap map = new IntMap(  );
-				for (Object[] pair : data)
+				int length = input.readInt( true );
+				map.ensureCapacity( length );
+
+				if ( genericType != null )
 				{
-					map.put( (Integer)pair[0], pair[1] );
+					Class valueClass = genericType[0];
+					Serializer valueserializer = kryo.getSerializer( valueClass );
+					genericType = null;
+
+					for ( int i = 0; i < length; i++ )
+					{
+						int key = input.readInt();
+						Object value = kryo.readObjectOrNull( input, valueClass, valueserializer );
+
+						map.put( key, value );
+					}
 				}
+				else
+				{
+					for ( int i = 0; i < length; i++ )
+					{
+						int key = input.readInt();
+						Object value = kryo.readClassAndObject( input );
+
+						map.put( key, value );
+					}
+				}
+
 				return map;
 			}
 		} );
@@ -528,6 +692,7 @@ public final class SaveFile
 		kryo.register( QuestOutputConditionEntityAlive.class );
 		kryo.register( QuestOuputConditionDialogueValue.class );
 		kryo.register( QuestOutputConditionActionEnabled.class );
+		kryo.register( QuestOutputConditionHasItem.class );
 
 		kryo.register( ActivationActionGroup.class );
 		kryo.register( ActivationActionAbility.class );

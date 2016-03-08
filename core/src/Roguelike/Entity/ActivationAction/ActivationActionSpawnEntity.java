@@ -4,6 +4,7 @@ import Roguelike.Entity.Entity;
 import Roguelike.Entity.EnvironmentEntity;
 import Roguelike.Entity.GameEntity;
 import Roguelike.Global;
+import Roguelike.Sprite.SpriteAnimation.StretchAnimation;
 import Roguelike.Tiles.GameTile;
 import com.badlogic.gdx.utils.XmlReader;
 
@@ -65,8 +66,11 @@ public class ActivationActionSpawnEntity extends AbstractActivationAction
 
 			if (spawnTile != null)
 			{
+				ge.sprite.spriteAnimation = new StretchAnimation( 0.2f, null, 0, StretchAnimation.StretchEquation.EXPAND );
 				spawnTile.addGameEntity( ge );
 				numToSpawn--;
+
+				System.out.println( "Spawned Entity: " + ge.name );
 			}
 		}
 	}

@@ -1,0 +1,15 @@
+<Entity Extends="Enemies/Replicator/ReplicatorBase">
+    <Sprite>
+        <Name>Oryx/Custom/heroes/spiderturret</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Inventory>
+        <Equipment>
+            <Wep>
+                <Slot>Weapon</Slot>
+                <Type>LaserRifle</Type>
+            </Wep>
+        </Equipment>
+    </Inventory>
+</Entity>

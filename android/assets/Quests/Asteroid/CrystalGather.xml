@@ -5,10 +5,11 @@
     <Reward>100</Reward>
     <Difficulty>1</Difficulty>
     <Icon>
-        <Name>Icons/ConeOfCold</Name>
+        <Name>Icons/Gather</Name>
     </Icon>
     <Faction>Worm</Faction>
     <Level>Asteroid</Level>
+    <LevelText>672 Egeria (B-type Asteroid)</LevelText>
 
     <Rooms>
         <Room>

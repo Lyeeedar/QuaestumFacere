@@ -2,6 +2,10 @@
     <Name>Run and Gun</Name>
     <Description>For a short amount of time you may fire after moving instantly.</Description>
 
+    <Icon>
+        <Name>Icons/RunAndGun</Name>
+    </Icon>
+
     <CooldownType>Wait</CooldownType>
     <Cooldown>6</Cooldown>
     <Range>1</Range>

@@ -15,7 +15,7 @@
 
         <Events>
             <Constant>
-                <Attack>20 + 5 * quality</Attack>
+                <Attack>28 + 6.5 * quality</Attack>
                 <Accuracy>100 + 2 * quality</Accuracy>
             </Constant>
         </Events>

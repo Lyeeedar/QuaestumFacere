@@ -47,5 +47,6 @@ public abstract class AbstractQuestOutputCondition
 		ClassMap.put( "ENTITYALIVE", QuestOutputConditionEntityAlive.class );
 		ClassMap.put( "DIALOGUEVALUE", QuestOuputConditionDialogueValue.class );
 		ClassMap.put( "ACTIONENABLED", QuestOutputConditionActionEnabled.class );
+		ClassMap.put( "HASITEM", QuestOutputConditionHasItem.class );
 	}
 }

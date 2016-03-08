@@ -48,14 +48,16 @@ public class GameEntity extends Entity
 	// region Public Methods
 
 	// ----------------------------------------------------------------------
-	public void applyDepthScaling()
+	public void applyDepthScaling(int difficulty)
 	{
+		this.difficulty = difficulty;
+
 		for ( Global.Statistic stat : Statistic.ScaleValues )
 		{
 			int current = statistics.get( stat );
 
-			float scaleVal = (float) Math.sqrt( Global.QuestManager.difficulty );
-			scaleVal /= 10.0f;
+			float scaleVal = difficulty;
+			scaleVal /= 5.0f;
 			scaleVal += 1;
 
 			int scaledVal = (int) ( (float) current * scaleVal );
@@ -268,7 +270,10 @@ public class GameEntity extends Entity
 	{
 		super.applyDamage( dam, damager );
 
-		AI.setData( "EnemyPos", Global.PointPool.obtain().set( damager.tile[ 0 ][ 0 ].x, damager.tile[ 0 ][ 0 ].y ) );
+		if (damager != null && damager.tile[0][0] != null)
+		{
+			AI.setData( "EnemyPos", Global.PointPool.obtain().set( damager.tile[ 0 ][ 0 ].x, damager.tile[ 0 ][ 0 ].y ) );
+		}
 
 		if (blood != null)
 		{
@@ -465,6 +470,9 @@ public class GameEntity extends Entity
 	// endregion Public Methods
 	// ####################################################################//
 	// region Data
+
+	// ----------------------------------------------------------------------
+	public int difficulty;
 
 	// ----------------------------------------------------------------------
 	public boolean seen = false;

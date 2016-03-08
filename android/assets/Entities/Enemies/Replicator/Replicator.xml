@@ -1,0 +1,7 @@
+<Faction>
+    <Creatures>
+        <Scuttler></Scuttler>
+        <Grunt>2</Grunt>
+        <Turret>4</Turret>
+    </Creatures>
+</Faction>

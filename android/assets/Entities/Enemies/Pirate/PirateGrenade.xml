@@ -1,0 +1,38 @@
+<Entity Extends="Enemies/Pirate/PirateBase">
+    <Sprite>
+        <Name>Oryx/Custom/heroes/pirate_grenade</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Inventory>
+        <Equipment>
+            <Wep>
+                <Slot>Weapon</Slot>
+                <Type>DualPistol</Type>
+            </Wep>
+        </Equipment>
+    </Inventory>
+
+    <Abilities>
+        <Active>
+            <Cooldown>10</Cooldown>
+            <CooldownType>Turn</CooldownType>
+
+            <Range>4</Range>
+            <ScreenShake>2</ScreenShake>
+
+            <MovementSprite>
+                <Name>Oryx/Custom/terrain/Grenade</Name>
+            </MovementSprite>
+
+            <HitType><Enemy/></HitType>
+
+            <Effect>
+                <Damage>
+                    <Attack>5</Attack>
+                </Damage>
+                <Field Stacks="2">ArmedGrenade</Field>
+            </Effect>
+        </Active>
+    </Abilities>
+</Entity>

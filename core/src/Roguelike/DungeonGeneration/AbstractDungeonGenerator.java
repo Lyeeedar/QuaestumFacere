@@ -311,9 +311,7 @@ public abstract class AbstractDungeonGenerator
 				Symbol symbol = symbolGrid[x][y];
 
 				GameTile newTile = new GameTile( x, y, level, symbol.getTileData(), ran.nextFloat() );
-				newTile.metaValue = symbol.metaValue;
-
-				newTile.metaValue = symbol.metaValue;
+				newTile.metaValue.addAll( symbol.metaValue);
 
 				actualTiles[x][y] = newTile;
 
@@ -439,7 +437,7 @@ public abstract class AbstractDungeonGenerator
 						{
 							int index = Integer.parseInt( entityPath );
 
-							index = (int) ( ( index / 9.0f ) * fp.creatures.size );
+							index = (int) ( ( index / 9.0f ) * ( fp.creatures.size - 1 ) );
 
 							e = GameEntity.load( fp.creatures.get( index ).entityName );
 						}
@@ -460,7 +458,7 @@ public abstract class AbstractDungeonGenerator
 						newTile.addGameEntity( e );
 						e.spawnPos = new Point( newTile );
 
-						e.applyDepthScaling();
+						e.applyDepthScaling(quest.difficulty);
 						e.isVariableMapDirty = true;
 						e.HP = e.getMaxHP();
 					}

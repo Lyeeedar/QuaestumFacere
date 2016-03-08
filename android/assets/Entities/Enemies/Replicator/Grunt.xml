@@ -1,0 +1,10 @@
+<Entity Extends="Enemies/Replicator/ReplicatorBase">
+    <Sprite>
+        <Name>Oryx/Custom/heroes/spidergrunt</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Statistics>
+        <Attack>val+4</Attack>
+    </Statistics>
+</Entity>

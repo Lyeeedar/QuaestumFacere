@@ -2,6 +2,10 @@
     <Name>Full Auto</Name>
     <Description>Hold down the trigger and spray the area with death. Fire twice as fast as normal but with an accuracy penalty.</Description>
 
+    <Icon>
+        <Name>Icons/FullAuto</Name>
+    </Icon>
+
     <CooldownType>Attack</CooldownType>
     <Cooldown>15</Cooldown>
     <Range>1</Range>

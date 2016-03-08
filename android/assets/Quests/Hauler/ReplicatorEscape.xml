@@ -1,0 +1,83 @@
+<Quest>
+
+    <Name>Replicator Escape</Name>
+    <Description>The Jerico was carrying a replicator core beacon and it somehow got activated, converting a significant portion of the cargo and crew into replicators. Get in there and turn it off.</Description>
+    <Reward>200</Reward>
+    <Difficulty>2</Difficulty>
+    <Icon>
+        <Name>Icons/Action</Name>
+    </Icon>
+    <Faction>Replicator</Faction>
+    <Level>Hauler</Level>
+    <LevelText>Jerico (X76 class Hauler)</LevelText>
+
+    <Rooms>
+        <Room>
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>b</Char>
+                    <EnvironmentData>
+                        <Name>Beacon</Name>
+
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/ReplicatorBeaconActive</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+
+                        <OnActivate>
+                            <Group Name="Disable Beacon">
+                                <SetEnabled Enabled="false">Disable Beacon</SetEnabled>
+                                <SetEnabled Enabled="false">Spawn</SetEnabled>
+                                <SetSprite>
+                                    <Sprite>
+                                        <Name>Oryx/Custom/terrain/ReplicatorBeaconInactive</Name>
+                                        <DrawActualSize>true</DrawActualSize>
+                                    </Sprite>
+                                </SetSprite>
+                            </Group>
+                        </OnActivate>
+                        <OnTurn>
+                            <Group Name="Spawn">
+                                <SpawnEntity Delay="25" Num="10">Enemies/Replicator/Scuttler</SpawnEntity>
+                            </Group>
+                        </OnTurn>
+                    </EnvironmentData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>...</Row>
+                <Row>9b.</Row>
+                <Row>..2</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <BeaconDisabled>
+
+            <Message>You return and report that the beacon has been disabled, so it is now safe to send a cleanup crew on board to tidy away the rest of the replicators. The client thanks you and hands over slightly more than the agreed upon sum.</Message>
+            <Reward>225</Reward>
+
+            <Conditions>
+                <ActionEnabled Not="true">Disable Beacon</ActionEnabled>
+            </Conditions>
+        </BeaconDisabled>
+
+        <BeaconEnabled>
+
+            <Message>You return to the client and inform them that you were unable to locate and disable the beacon. The client quickly shoos you away in annoyance, flat out refusing to reimburse you for your efforts.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <ActionEnabled>Disable Beacon</ActionEnabled>
+            </Conditions>
+        </BeaconEnabled>
+
+    </Outputs>
+
+</Quest>

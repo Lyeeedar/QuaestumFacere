@@ -1,8 +1,20 @@
 <Flags>
+	<beacondisabled>
+		<true/>
+	</beacondisabled>
 	<nocrystal>
 		<true/>
 	</nocrystal>
+	<nohead>
+		<true/>
+	</nohead>
 	<gotcrystal>
 		<true/>
 	</gotcrystal>
+	<gothead>
+		<true/>
+	</gothead>
+	<beaconenabled>
+		<true/>
+	</beaconenabled>
 </Flags>

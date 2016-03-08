@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * Created by Philip on 23-Jan-16.
  */
-public class Quest
+public final class Quest
 {
 	public String name;
 	public String description;
@@ -35,6 +35,7 @@ public class Quest
 	public int reward;
 	public String faction;
 	public String level;
+	public String levelText;
 	public Global.Rarity rarity;
 	public int difficulty;
 
@@ -86,6 +87,7 @@ public class Quest
 		reward = xml.getInt( "Reward" );
 		faction = xml.get( "Faction" );
 		level = xml.get( "Level" );
+		levelText = xml.get( "LevelText" );
 		difficulty = xml.getInt( "Difficulty" );
 
 		rarity = Global.Rarity.valueOf( xml.get("Rarity", "Common").toUpperCase() );
@@ -173,7 +175,10 @@ public class Quest
 		table.add( desc ).expandX().fillX().left();
 		table.row();
 
-		table.add( new Label( "Location: " + level, skin ) ).expandX().fillX().left();
+		table.add( new Label( "Location: " + levelText, skin ) ).expandX().fillX().left();
+		table.row();
+
+		table.add( new Label( "Threat Level: " + difficulty, skin ) ).expandX().fillX().left();
 		table.row();
 
 		Label rew = new Label( "Reward: " + reward, skin );

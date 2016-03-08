@@ -1,0 +1,22 @@
+<Entity>
+    <Name>Replicator</Name>
+
+    <AI>basicMonster</AI>
+
+    <Factions>
+        <Faction>replicator</Faction>
+    </Factions>
+
+    <Statistics>
+
+        <Attack>5</Attack>
+        <Defense>25</Defense>
+        <Accuracy>90</Accuracy>
+
+        <Vitality>5</Vitality>
+        <Sight>6</Sight>
+        <Speed>6</Speed>
+
+    </Statistics>
+
+</Entity>

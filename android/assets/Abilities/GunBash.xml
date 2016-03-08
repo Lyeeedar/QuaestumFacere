@@ -2,7 +2,7 @@
     <Name>Gun Bash</Name>
     <Description>Strike an adjacent opponent with your weapon, potentially stunning them.</Description>
     <Icon>
-        <Name>Icons/PenetratingShot</Name>
+        <Name>Icons/Bash</Name>
     </Icon>
 
     <CooldownType>Attack</CooldownType>

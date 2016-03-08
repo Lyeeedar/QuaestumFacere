@@ -49,10 +49,6 @@ public class FactionParser
 
 		Array<Creature> chosen = new Array<Creature>();
 		float maxCost = difficulty;
-		if ( maxCost < 1 )
-		{
-			maxCost = 1;
-		}
 
 		while ( maxCost >= 0 && validCreatures.size > 0 )
 		{
@@ -231,10 +227,10 @@ public class FactionParser
 			Creature creature = new Creature();
 
 			creature.entityName = path + "/" + xml.getName();
-			creature.cost = xml.getFloat( "Cost", 1 );
+			creature.cost = Float.parseFloat( xml.getText() != null && xml.getText().length() > 0 ? xml.getText() : "1" );
 
-			creature.minInfluence = xml.getInt( "MinInfluence", 0 );
-			creature.maxInfluence = xml.getInt( "MaxInfluence", 100 );
+			creature.minInfluence = xml.getIntAttribute( "MinInfluence", 0 );
+			creature.maxInfluence = xml.getIntAttribute( "MaxInfluence", 100 );
 
 			return creature;
 		}

@@ -28,6 +28,7 @@ public final class SaveGameEntity extends SaveableObject<GameEntity>
 	public Inventory inventory;
 	public String UID;
 	public Point spawnPoint;
+	public int difficulty;
 
 	public HashMap<String, Integer> dialogueData;
 
@@ -56,6 +57,7 @@ public final class SaveGameEntity extends SaveableObject<GameEntity>
 
 		spawnPoint = obj.spawnPos;
 		quality = obj.quality;
+		difficulty = obj.difficulty;
 	}
 
 	@Override
@@ -90,9 +92,9 @@ public final class SaveGameEntity extends SaveableObject<GameEntity>
 		}
 		entity.quality = quality;
 
-		if (!isPlayer)
+		if (!isPlayer && difficulty > 0)
 		{
-			entity.applyDepthScaling();
+			entity.applyDepthScaling( difficulty );
 		}
 
 		entity.isVariableMapDirty = true;

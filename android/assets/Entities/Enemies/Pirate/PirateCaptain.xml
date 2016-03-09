@@ -15,7 +15,7 @@
 
     <Abilities>
         <Active>
-            <Cooldown>16</Cooldown>
+            <Cooldown>0</Cooldown>
             <CooldownType>Turn</CooldownType>
 
             <Range>4</Range>
@@ -37,9 +37,13 @@
 
             <Effect>
                 <Damage>
-                    <Attack>30</Attack>
+                    <Attack>25</Attack>
                 </Damage>
             </Effect>
         </Active>
     </Abilities>
+
+    <Statistics>
+        <Speed>2</Speed>
+    </Statistics>
 </Entity>

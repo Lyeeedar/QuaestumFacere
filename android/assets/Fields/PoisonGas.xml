@@ -6,6 +6,6 @@
         <Colour><RGB>0,255,100</RGB></Colour>
     </Sprite>
     <OnTurn>
-        <Damage>Stacks*5</Damage>
+        <Damage>5</Damage>
     </OnTurn>
 </Field>

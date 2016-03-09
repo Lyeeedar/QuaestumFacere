@@ -1,21 +1,21 @@
 <Entity>
-    <Name>Pirate</Name>
+    <Name>Belter</Name>
 
     <AI>basicMonster</AI>
 
     <Factions>
-        <Faction>pirate</Faction>
+        <Faction>belter</Faction>
     </Factions>
 
     <Statistics>
 
         <Attack>5</Attack>
         <Defense>5</Defense>
-        <Accuracy>60</Accuracy>
+        <Accuracy>70</Accuracy>
 
-        <Vitality>6</Vitality>
-        <Sight>5</Sight>
-        <Speed>7</Speed>
+        <Vitality>5</Vitality>
+        <Sight>6</Sight>
+        <Speed>6</Speed>
 
     </Statistics>
 

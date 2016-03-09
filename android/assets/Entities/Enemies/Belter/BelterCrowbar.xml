@@ -1,0 +1,6 @@
+<Entity Extends="Enemies/Belter/BelterBase">
+    <Sprite>
+        <Name>Oryx/Custom/heroes/belterfemale</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+</Entity>

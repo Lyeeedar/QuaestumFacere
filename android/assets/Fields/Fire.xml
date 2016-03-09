@@ -26,7 +26,7 @@
         </Adjacent>
     </Spread>
     <OnTurn>
-        <Damage>10</Damage>
+        <Damage>5</Damage>
         <Status>Burning</Status>
     </OnTurn>
     <OnDeath>

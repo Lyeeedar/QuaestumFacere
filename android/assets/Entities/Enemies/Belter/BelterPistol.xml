@@ -1,0 +1,15 @@
+<Entity Extends="Enemies/Belter/BelterBase">
+    <Sprite>
+        <Name>Oryx/Custom/heroes/beltergunner</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Inventory>
+        <Equipment>
+            <Wep>
+                <Slot>Weapon</Slot>
+                <Type>DualPistol</Type>
+            </Wep>
+        </Equipment>
+    </Inventory>
+</Entity>

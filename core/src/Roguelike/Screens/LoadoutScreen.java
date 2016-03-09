@@ -120,12 +120,14 @@ public class LoadoutScreen implements Screen, InputProcessor
 
 						if (item.ability1 != null)
 						{
+							item.ability1.setCooldown( 0 );
 							player.slottedAbilities.add( item.ability1 );
 							item.ability1.setCaster( player );
 						}
 
 						if (item.ability2 != null)
 						{
+							item.ability2.setCooldown( 0 );
 							player.slottedAbilities.add( item.ability2 );
 							item.ability2.setCaster( player );
 						}

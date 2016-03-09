@@ -37,7 +37,7 @@
 
             <Effect>
                 <Damage>
-                    <Attack>250</Attack>
+                    <Attack>90</Attack>
                 </Damage>
             </Effect>
         </Active>

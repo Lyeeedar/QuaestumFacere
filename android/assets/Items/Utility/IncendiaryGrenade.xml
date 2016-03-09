@@ -36,7 +36,7 @@
 
             <Effect>
                 <Damage>
-                    <Attack>60</Attack>
+                    <Attack>30</Attack>
                 </Damage>
                 <Status Stacks="rnd(3)+1">
                     Burning

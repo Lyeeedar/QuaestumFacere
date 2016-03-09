@@ -37,7 +37,7 @@
 
             <Effect>
                 <Damage>
-                    <Attack>30</Attack>
+                    <Attack>35</Attack>
                 </Damage>
                 <Status>
                     Frozen

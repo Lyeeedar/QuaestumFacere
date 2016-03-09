@@ -472,6 +472,12 @@ public class Global
 	}
 
 	// ----------------------------------------------------------------------
+	public static int TaxiDist(GameTile e1, GameTile e2)
+	{
+		return TaxiDist( e1.x, e1.y, e2.x, e2.y );
+	}
+
+	// ----------------------------------------------------------------------
 	public static int TaxiDist(Point p1, Point p2)
 	{
 		return TaxiDist( p1.x, p1.y, p2.x, p2.y );

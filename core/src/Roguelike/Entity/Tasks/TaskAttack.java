@@ -503,7 +503,23 @@ public class TaskAttack extends AbstractTask
 					{
 						// Argh! a miss! Hit a random surrounding tile
 
-						Direction dir = Direction.values()[ MathUtils.random( Direction.values().length - 1 ) ];
+						Array<Direction> validDirections = new Array<Direction>(  );
+
+						for (Direction dir : Direction.values())
+						{
+							if (dir != Direction.CENTER)
+							{
+								GameTile newTile = tile.level.getGameTile( tile.x + dir.getX(), tile.y + dir.getY() );
+								if ( newTile != null && newTile.getPassable( WeaponPassability, null ) && Global.TaxiDist( source, newTile ) > 1 )
+								{
+									validDirections.add( dir );
+								}
+							}
+						}
+
+						validDirections.add( Direction.CENTER );
+
+						Direction dir = validDirections.random();
 						GameTile newTile = tile.level.getGameTile( tile.x + dir.getX(), tile.y + dir.getY() );
 						if ( newTile != null )
 						{

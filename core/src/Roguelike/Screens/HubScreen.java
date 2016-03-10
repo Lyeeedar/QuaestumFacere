@@ -623,8 +623,9 @@ public class HubScreen implements Screen, InputProcessor
 					{
 						marketContent.clear();
 
-						ScrollPane scrollPane1 = new ScrollPane( item.createTable( skin ), skin );
-						marketContent.add( scrollPane1 ).expand().fill();
+						ScrollPane scrollPane = new ScrollPane( item.createTable( skin ), skin );
+						scrollPane.setScrollingDisabled( true, false );
+						marketContent.add( scrollPane ).expand().fill();
 						marketContent.row();
 
 						if ( Global.Funds >= item.value )
@@ -672,7 +673,7 @@ public class HubScreen implements Screen, InputProcessor
 
 	public void createStash( final ButtonKeyboardHelper helper )
 	{
-		ScrollPane scrollPane = helper.scrollPane;
+		final ScrollPane scrollPane = helper.scrollPane;
 		helper.clearGrid();
 
 		for (Actor a : tabPanel.tabTitleTable.getChildren())
@@ -730,6 +731,7 @@ public class HubScreen implements Screen, InputProcessor
 						stashContent.clear();
 
 						ScrollPane scrollPane1 = new ScrollPane( item.createTable( skin ), skin );
+						scrollPane.setScrollingDisabled( true, false );
 						stashContent.add( scrollPane1 ).expand().fill();
 						stashContent.row();
 

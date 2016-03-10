@@ -229,8 +229,9 @@ public class LoadoutScreen implements Screen, InputProcessor
 		desc.clear();
 
 		Skin skin = Global.loadSkin();
-		ScrollPane scrollPane1 = new ScrollPane( item.createTable( skin, Global.getLoadoutItem( slot ) ), skin );
-		desc.add( scrollPane1 ).expand().fill();
+		ScrollPane scrollPane = new ScrollPane( item.createTable( skin, Global.getLoadoutItem( slot ) ), skin );
+		scrollPane.setScrollingDisabled( true, false );
+		desc.add( scrollPane ).expand().fill();
 	}
 
 	private void fillSlotTable()

@@ -282,10 +282,13 @@ public class Global
 										" comfortable life. Just be careful not to die.");
 
 		GameScreen.Instance.queueMessage( "Controls",
-										  "Click in a direction to move there (or use the arrow keys)." +
-										  " Click on your character to pass a turn (or press space). " +
-										  "Move into an enemy to attack them, or into an NPC to talk to them." +
-										  " Click an ability on the left to ready it, then on a blue target to use it.");
+										  "Click in a direction to move there (or use the arrow keys).",
+										  "Click on your character to pass a turn (or press space). ",
+										  "Move into an enemy to attack them, or into an NPC to talk to them.",
+										  "Click an ability on the left to ready it, then on a blue target to use it. (Or use the number keys to ready, then directional keys to select a target)",
+										  "Autoattacking can be toggled on/off with the button at the top of the screen, or by pressing F.",
+										  "",
+										  "You can rebind the keys in the options menu.");
 	}
 
 	// ----------------------------------------------------------------------

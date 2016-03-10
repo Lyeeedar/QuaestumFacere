@@ -730,9 +730,9 @@ public class HubScreen implements Screen, InputProcessor
 					{
 						stashContent.clear();
 
-						ScrollPane scrollPane1 = new ScrollPane( item.createTable( skin ), skin );
+						ScrollPane scrollPane = new ScrollPane( item.createTable( skin ), skin );
 						scrollPane.setScrollingDisabled( true, false );
-						stashContent.add( scrollPane1 ).expand().fill();
+						stashContent.add( scrollPane ).expand().fill();
 						stashContent.row();
 
 						TextButton sell = new TextButton( "Sell for " + item.value, skin );

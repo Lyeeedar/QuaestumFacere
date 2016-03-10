@@ -26,10 +26,15 @@ public class Controls
 		ABILITY_2,
 		ABILITY_3,
 		ABILITY_4,
-		ABILITY_5
+		ABILITY_5,
+		ABILITY_6,
+		ABILITY_7,
+		ABILITY_8,
+		ABILITY_9,
+		ABILITY_10
 	}
 
-	public static Keys[] AbilityKeys = {Keys.ABILITY_1, Keys.ABILITY_2, Keys.ABILITY_3, Keys.ABILITY_4, Keys.ABILITY_5};
+	public static Keys[] AbilityKeys = {Keys.ABILITY_1, Keys.ABILITY_2, Keys.ABILITY_3, Keys.ABILITY_4, Keys.ABILITY_5, Keys.ABILITY_6, Keys.ABILITY_7, Keys.ABILITY_8, Keys.ABILITY_9, Keys.ABILITY_10 };
 
 	private FastEnumMap<Keys, Integer> keyMap = new FastEnumMap<Keys, Integer>( Keys.class );
 
@@ -54,6 +59,11 @@ public class Controls
 		keyMap.put( Keys.ABILITY_3, Input.Keys.NUM_3 );
 		keyMap.put( Keys.ABILITY_4, Input.Keys.NUM_4 );
 		keyMap.put( Keys.ABILITY_5, Input.Keys.NUM_5 );
+		keyMap.put( Keys.ABILITY_6, Input.Keys.NUM_6 );
+		keyMap.put( Keys.ABILITY_7, Input.Keys.NUM_7 );
+		keyMap.put( Keys.ABILITY_8, Input.Keys.NUM_8 );
+		keyMap.put( Keys.ABILITY_9, Input.Keys.NUM_9 );
+		keyMap.put( Keys.ABILITY_10, Input.Keys.NUM_0 );
 	}
 
 	public void defaultWASD()
@@ -72,6 +82,11 @@ public class Controls
 		keyMap.put( Keys.ABILITY_3, Input.Keys.NUM_3 );
 		keyMap.put( Keys.ABILITY_4, Input.Keys.NUM_4 );
 		keyMap.put( Keys.ABILITY_5, Input.Keys.NUM_5 );
+		keyMap.put( Keys.ABILITY_6, Input.Keys.NUM_6 );
+		keyMap.put( Keys.ABILITY_7, Input.Keys.NUM_7 );
+		keyMap.put( Keys.ABILITY_8, Input.Keys.NUM_8 );
+		keyMap.put( Keys.ABILITY_9, Input.Keys.NUM_9 );
+		keyMap.put( Keys.ABILITY_10, Input.Keys.NUM_0 );
 	}
 
 	public void defaultNumPad()
@@ -90,6 +105,11 @@ public class Controls
 		keyMap.put( Keys.ABILITY_3, Input.Keys.NUM_3 );
 		keyMap.put( Keys.ABILITY_4, Input.Keys.NUM_4 );
 		keyMap.put( Keys.ABILITY_5, Input.Keys.NUM_5 );
+		keyMap.put( Keys.ABILITY_6, Input.Keys.NUM_6 );
+		keyMap.put( Keys.ABILITY_7, Input.Keys.NUM_7 );
+		keyMap.put( Keys.ABILITY_8, Input.Keys.NUM_8 );
+		keyMap.put( Keys.ABILITY_9, Input.Keys.NUM_9 );
+		keyMap.put( Keys.ABILITY_10, Input.Keys.NUM_0 );
 	}
 
 	public void setKeyMap(Keys key, int keycode)

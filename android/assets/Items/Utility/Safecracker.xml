@@ -1,0 +1,9 @@
+<Item>
+    <Name>Safecracker</Name>
+    <Description>A small collection of items used to break into most makes of safe currently on the market. Uses an electromagnetic pulse to scan the safe, then advanced data processing to determine the cade it is locked with.</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/safecrack</Name>
+    </Icon>
+
+    <Value>300</Value>
+</Item>

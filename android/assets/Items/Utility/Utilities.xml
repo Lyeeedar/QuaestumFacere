@@ -7,13 +7,15 @@
     <PlasmaGrenade>quality>=4</PlasmaGrenade>
     <IncendiaryGrenade>quality>=2</IncendiaryGrenade>
 
-    <PenetrationAmmo></PenetrationAmmo>
+    <PenetrationAmmo>quality>=2</PenetrationAmmo>
     <FireAmmo>quality>=3</FireAmmo>
     <CryoAmmo>quality>=2</CryoAmmo>
     <PoisonAmmo>quality>=3</PoisonAmmo>
     <StunAmmo>quality>=4</StunAmmo>
 
     <Drill></Drill>
+    <Safecracker>quality>=2</Safecracker>
+    <Backdoors>quality>=2</Backdoors>
 
     <Medkit></Medkit>
     <MedkitPlus>quality>=3</MedkitPlus>

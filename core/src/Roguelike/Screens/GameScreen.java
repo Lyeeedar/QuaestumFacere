@@ -1871,7 +1871,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 	}
 
 	// ----------------------------------------------------------------------
-	public void queueMessage(String titleString, String messageString)
+	public void queueMessage(String titleString, String... messageString)
 	{
 		Skin skin = Global.loadSkin();
 
@@ -1886,10 +1886,14 @@ public class GameScreen implements Screen, InputProcessor, GestureListener
 		message.row();
 
 		Table messageBody = new Table();
-		Label messageText = new Label( messageString, skin);
-		messageText.setWrap( true );
-		messageBody.add( messageText ).expand().fillX();
-		messageBody.row();
+
+		for (String s : messageString)
+		{
+			Label messageText = new Label( s, skin);
+			messageText.setWrap( true );
+			messageBody.add( messageText ).expand().fillX();
+			messageBody.row();
+		}
 
 		message.add( messageBody ).expand().fill();
 		message.row();

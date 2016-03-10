@@ -2,6 +2,7 @@ package Roguelike.desktop;
 
 import Roguelike.Quests.Input.AbstractQuestInput;
 import Roguelike.Quests.Output.QuestOutput;
+import Roguelike.Quests.Quest;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
@@ -10,13 +11,14 @@ import com.badlogic.gdx.utils.XmlReader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Comparator;
 
 /**
  * Created by Philip on 24-Jan-16.
  */
 public class QuestProcessor
 {
-	public Array<String> questPaths = new Array<String>(  );
+	public Array<QuestData> questPaths = new Array<QuestData>(  );
 	public ObjectMap<String, OutputData> output = new ObjectMap<String, OutputData>(  );
 	public Array<InputData> input = new Array<InputData>(  );
 
@@ -63,10 +65,26 @@ public class QuestProcessor
 			}
 		}
 
+		questPaths.sort( new Comparator<QuestData>() {
+			@Override
+			public int compare( QuestData o1, QuestData o2 )
+			{
+				return o1.difficulty - o2.difficulty;
+			}
+		} );
+
 		String questListContents = "<Quests>\n";
-		for (String path : questPaths)
+
+		int difficulty = 1;
+		for (QuestData questData : questPaths)
 		{
-			questListContents += "\t<Quest>"+path+"</Quest>\n";
+			if (questData.difficulty > difficulty)
+			{
+				difficulty = questData.difficulty;
+				questListContents += "\n";
+			}
+
+			questListContents += "\t<Quest Difficulty=\"" + questData.difficulty + "\" Reward=\"" + questData.reward + "\">"+questData.path+"</Quest>\n";
 		}
 		questListContents += "</Quests>";
 
@@ -139,7 +157,12 @@ public class QuestProcessor
 		path = path.replace( "Quests/", "" );
 		path = path.replace( ".xml", "" );
 
-		questPaths.add( path );
+		QuestData questData = new QuestData();
+		questData.path = path;
+		questData.difficulty = xml.getInt( "Difficulty" );
+		questData.reward = xml.getInt( "Reward" );
+
+		questPaths.add( questData );
 
 		XmlReader.Element inputsElement = xml.getChildByName( "Inputs" );
 		if (inputsElement != null)
@@ -181,6 +204,13 @@ public class QuestProcessor
 				}
 			}
 		}
+	}
+
+	private static class QuestData
+	{
+		public String path;
+		public int difficulty;
+		public int reward;
 	}
 
 	private static class InputData

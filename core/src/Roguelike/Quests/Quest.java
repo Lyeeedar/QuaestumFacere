@@ -120,9 +120,14 @@ public final class Quest
 		for ( int i = 0; i < roomsElement.getChildCount(); i++ )
 		{
 			XmlReader.Element roomElement = roomsElement.getChild( i );
-			DungeonFileParser.DFPRoom room = DungeonFileParser.DFPRoom.parse( roomElement );
 
-			rooms.add( room );
+			int count = roomElement.getIntAttribute( "Count", 1 );
+			for (int ii = 0; ii < count; ii++)
+			{
+				DungeonFileParser.DFPRoom room = DungeonFileParser.DFPRoom.parse( roomElement );
+
+				rooms.add( room );
+			}
 		}
 	}
 

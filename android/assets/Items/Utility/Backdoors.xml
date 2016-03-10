@@ -2,7 +2,7 @@
     <Name>Backdoors</Name>
     <Description>A binder filled with backdoors into various systems. The government mandated holes in crypto has formed a thriving black market for all the system vulnerabilities.</Description>
     <Icon>
-        <Name>Oryx/Custom/items/binder</Name>
+        <Name>Oryx/Custom/items/folder</Name>
     </Icon>
 
     <Value>300</Value>

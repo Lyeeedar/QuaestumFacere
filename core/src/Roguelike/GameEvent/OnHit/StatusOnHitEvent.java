@@ -47,9 +47,9 @@ public class StatusOnHitEvent extends AbstractOnHitEvent
 
 		for ( int i = 0; i < stacks; i++ )
 		{
-			if (entity != null)
+			if (tile.entity != null)
 			{
-				entity.addStatusEffect( StatusEffect.load( status, parent ) );
+				tile.entity.addStatusEffect( StatusEffect.load( status, parent ) );
 			}
 
 			if (tile.environmentEntity != null)

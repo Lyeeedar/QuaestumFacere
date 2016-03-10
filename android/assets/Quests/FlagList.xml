@@ -2,24 +2,28 @@
 	<beacondisabled>
 		<true/>
 	</beacondisabled>
-	<savednoble>
+	<leftengines>
 		<true/>
-	</savednoble>
+	</leftengines>
 	<nocrystal>
 		<true/>
 	</nocrystal>
-	<leftnoble>
-		<true/>
-	</leftnoble>
 	<nohead>
 		<true/>
 	</nohead>
+	<noblequest>
+		<saved/>
+		<left/>
+	</noblequest>
 	<gotcrystal>
 		<true/>
 	</gotcrystal>
 	<gothead>
 		<true/>
 	</gothead>
+	<disabledengines>
+		<true/>
+	</disabledengines>
 	<beaconenabled>
 		<true/>
 	</beaconenabled>

@@ -2,6 +2,7 @@ package Roguelike.Entity.ActivationAction;
 
 import Roguelike.Entity.Entity;
 import Roguelike.Entity.EnvironmentEntity;
+import Roguelike.Global;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 
@@ -12,6 +13,7 @@ public class ActivationActionActivate extends AbstractActivationAction
 {
 	public String entityName;
 	public String actionName;
+	public int maxDist;
 
 	@Override
 	public void evaluate( EnvironmentEntity owningEntity, Entity activatingEntity, float delta )
@@ -23,7 +25,7 @@ public class ActivationActionActivate extends AbstractActivationAction
 
 			for (EnvironmentEntity ee : all)
 			{
-				if (ee.name.equals( entityName ))
+				if ( ee.name.equals( entityName ) && Global.TaxiDist( owningEntity.tile[0][0], ee.tile[0][0] ) <= maxDist)
 				{
 					apply( ee, owningEntity, delta );
 				}
@@ -59,5 +61,6 @@ public class ActivationActionActivate extends AbstractActivationAction
 	{
 		entityName = xml.getAttribute( "Entity", null );
 		actionName = xml.getText();
+		maxDist = xml.getIntAttribute( "MaxDist", Integer.MAX_VALUE );
 	}
 }

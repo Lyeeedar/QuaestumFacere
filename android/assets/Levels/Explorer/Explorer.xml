@@ -77,6 +77,28 @@
         </Symbol>
 
         <Symbol Extends=".">
+            <Char>E</Char>
+            <MetaValue>engine</MetaValue>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>e</Char>
+            <EnvironmentData>
+                <Name>engine</Name>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/enginepipe</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+                <Passable>false</Passable>
+                <Opaque>false</Opaque>
+                <Light>
+                    <Colour><RGB>180,200,255</RGB></Colour>
+                    <Intensity>2</Intensity>
+                </Light>
+            </EnvironmentData>
+        </Symbol>
+
+        <Symbol Extends=".">
             <Char>s</Char>
             <MetaValue>Ship</MetaValue>
         </Symbol>
@@ -135,6 +157,36 @@
                 </Sprite>
                 <Passable>false</Passable>
                 <Opaque>false</Opaque>
+            </EnvironmentData>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>t</Char>
+            <EnvironmentData>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/terminal</Name>
+                </Sprite>
+                <Passable>false</Passable>
+                <Opaque>false</Opaque>
+                <OnActivate>
+                    <Group Name="Hack">
+                        <Conditions FailMessage="You need backdoors to crack this">
+                            <HasItem>Backdoors</HasItem>
+                        </Conditions>
+                        <Actions>
+                            <SetEnabled Enabled="false">Hack</SetEnabled>
+                            <AddItem>
+                                <Name>Secrets</Name>
+                                <Description>A compressed data orb of all the ships flightlogs, passenger details and other details. Should sell well to someone.</Description>
+                                <Category>Treasure</Category>
+                                <Icon>
+                                    <Name>Oryx/uf_split/uf_items/crystal_cloud</Name>
+                                </Icon>
+                                <Value>75</Value>
+                            </AddItem>
+                        </Actions>
+                    </Group>
+                </OnActivate>
             </EnvironmentData>
         </Symbol>
 

@@ -1,0 +1,91 @@
+<Quest>
+
+    <Name>Engine Shutdown</Name>
+    <Description>A group of belters protesting their treatment have been making a nuisance of themselves, disrupting the transport lanes and aggravating traders. Get onto their ship, shut off the engines and leave so the authorities can tidy up.</Description>
+    <Reward>200</Reward>
+    <Difficulty>2</Difficulty>
+    <Icon>
+        <Name>Icons/Action</Name>
+    </Icon>
+    <Faction>Belter</Faction>
+    <Level>Explorer</Level>
+    <LevelText>Silvie (2nd Series Explorer)</LevelText>
+
+    <Rooms>
+        <Room Count="2">
+            <PlacementHint>engine</PlacementHint>
+            <LockRotation>true</LockRotation>
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>t</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/engineconsole</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+
+                        <Light>
+                            <Colour><RGB>180,200,255</RGB></Colour>
+                            <Intensity>2</Intensity>
+                        </Light>
+
+                        <OnActivate>
+                            <Group Name="Deactivate">
+                                <SetSprite>
+                                    <Sprite>
+                                        <Name>Oryx/Custom/terrain/engineconsoleoff</Name>
+                                        <DrawActualSize>true</DrawActualSize>
+                                    </Sprite>
+                                </SetSprite>
+                                <SetSprite Entity="engine" MaxDist="6">
+                                    <Sprite>
+                                        <Name>Oryx/Custom/terrain/enginepipeoff</Name>
+                                        <DrawActualSize>true</DrawActualSize>
+                                    </Sprite>
+                                </SetSprite>
+                                <SetLight></SetLight>
+                                <SetLight Entity="engine" MaxDist="6"></SetLight>
+                                <SetEnabled Enabled="false">Deactivate</SetEnabled>
+                            </Group>
+                        </OnActivate>
+                    </EnvironmentData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>.</Row>
+                <Row>.</Row>
+                <Row>.</Row>
+                <Row>t</Row>
+                <Row>.</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <DisabledEngines>
+
+            <Message>As you fly away from the ship you beam the coordinates of the now stranded vessel to the local authorities. Soon after you get a reply thanking you, and beaming the credits into your account.</Message>
+            <Reward>200</Reward>
+
+            <Conditions>
+                <ActionEnabled Not="true">Deactivate</ActionEnabled>
+            </Conditions>
+        </DisabledEngines>
+
+        <LeftEngines>
+
+            <Message>As you escape on your ship the belter vessel quickly surges away into the blackness. It will be a long time before the authorities can track them down again.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <ActionEnabled>Deactivate</ActionEnabled>
+            </Conditions>
+        </LeftEngines>
+
+    </Outputs>
+
+</Quest>

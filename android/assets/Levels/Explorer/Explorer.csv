@@ -6,7 +6,7 @@
 # . . . . . . . . . . . . . . . . . . . #
 # . . . . . . . . . . . . . . . . . . . #
 # # + # # # # # # # + # # # # # # # + # #
-# l . # l h h h h h . h h h h h l # . l #
+# l . # l h h h h h . h h h h h t # . l #
 # r r # . h h h h h . h h h h h . # r r #
 # r r # . h h h h h c c c . c . . # r r #
 # r r # . h h h h h . . c . c . . # r r #
@@ -15,9 +15,9 @@
 # r r # h h h h c . c c c c h h h # r r #
 # l . # h h h h c . . . . . h h h # . l #
 # # + # . . . c c c c c . . c . . # + # #
-# l . # l . . . . . . . . . c . l # . l #
-# r r # # # # s s s s s s s # # # # r r #
-# r r # # # # s s s s s s s # # # # r r #
-# r r # # # # s s s s s s s # # # # r r #
-# e e # # # # s s s s s s s # # # # e e #
+# e E # . . . . . . . . . . c . . # E e #
+# e E # # # # s s s s s s s # # # # E e #
+# e E # # # # s s s s s s s # # # # E e #
+# e E # # # # s s s s s s s # # # # E e #
+# e E # # # # s s s s s s s # # # # E e #
 # # # # # # # s s s s s s s # # # # # # #

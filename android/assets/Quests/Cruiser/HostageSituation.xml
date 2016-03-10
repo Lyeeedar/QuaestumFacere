@@ -1,15 +1,19 @@
 <Quest>
 
+    <Inputs>
+        <FlagPresent Not="true">NobleQuest</FlagPresent>
+    </Inputs>
+
     <Name>Hostage Situation</Name>
-    <Description>A group of belters protesting their treatment have mutinied and spaced the earth captain and officers of the Leana. The ship was also transporting an earth noble, who has been taken hostage. Get in there, rescue the noble and kill any belters who resist.</Description>
-    <Reward>250</Reward>
-    <Difficulty>2</Difficulty>
+    <Description>A group of pirates attacked and hijacked the Leana. The ship was also transporting an earth noble who has been taken hostage. Get in there, rescue the noble and kill anyone in your way.</Description>
+    <Reward>350</Reward>
+    <Difficulty>4</Difficulty>
     <Icon>
         <Name>Icons/Action</Name>
     </Icon>
-    <Faction>Belter</Faction>
-    <Level>Explorer</Level>
-    <LevelText>Leana (2nd Series Explorer)</LevelText>
+    <Faction>Pirate</Faction>
+    <Level>Cruiser</Level>
+    <LevelText>Leana (X series Cruiser)</LevelText>
 
     <Rooms>
         <Room>
@@ -48,17 +52,21 @@
 
     <Outputs>
 
-        <SavedNoble>
+        <NobleQuest>
+
+            <Data>Saved</Data>
 
             <Message>You escort the noble back to the client, the portly man quickly pulling the lady away as if you are about to dirty her with your filthy hands. With a haughty look he waves an aid over to pay you. As you turn to leave you look up to see the noble woman turn back to you and give you a grateful smile.</Message>
-            <Reward>250</Reward>
+            <Reward>350</Reward>
 
             <Conditions>
                 <MetaValue Entity="Noble">ship</MetaValue>
             </Conditions>
-        </SavedNoble>
+        </NobleQuest>
 
-        <LeftNoble>
+        <NobleQuest>
+
+            <Data>Left</Data>
 
             <Message>You return without the noble. The client is furious, his face turning red as he screams incoherently at you. Sick of the treatment you leave him to his rage, empty handed.</Message>
             <Reward>0</Reward>
@@ -66,7 +74,7 @@
             <Conditions>
                 <MetaValue Entity="Noble" Not="true">ship</MetaValue>
             </Conditions>
-        </LeftNoble>
+        </NobleQuest>
 
     </Outputs>
 

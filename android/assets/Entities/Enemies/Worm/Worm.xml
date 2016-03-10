@@ -2,6 +2,6 @@
     <Creatures>
         <WormSmall>1</WormSmall>
         <WormLarge>2</WormLarge>
-        <WormHuge>4</WormHuge>
+        <WormHuge>5</WormHuge>
     </Creatures>
 </Factions>

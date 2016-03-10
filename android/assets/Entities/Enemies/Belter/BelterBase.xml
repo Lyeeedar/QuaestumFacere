@@ -9,13 +9,13 @@
 
     <Statistics>
 
-        <Attack>5</Attack>
+        <Attack>6</Attack>
         <Defense>5</Defense>
         <Accuracy>70</Accuracy>
 
-        <Vitality>5</Vitality>
+        <Vitality>6</Vitality>
         <Sight>6</Sight>
-        <Speed>6</Speed>
+        <Speed>8</Speed>
 
     </Statistics>
 

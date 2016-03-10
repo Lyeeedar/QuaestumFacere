@@ -27,7 +27,7 @@
                 <Opaque>false</Opaque>
                 <Passable>true</Passable>
                 <Sprite>
-                    <Name>Oryx/uf_split/uf_terrain/floor_extra_16</Name>
+                    <Name>Oryx/Custom/terrain/floor_dark_tile</Name>
                 </Sprite>
             </TileData>
         </Symbol>
@@ -41,13 +41,13 @@
                 <TilingSprite>
                     <Name>Wall</Name>
                     <Top>
-                        <Name>Oryx/Custom/terrain/RustWallTop</Name>
+                        <Name>Oryx/Custom/terrain/TileWallTop</Name>
                     </Top>
                     <Front>
-                        <Name>Oryx/Custom/terrain/RustWallFront</Name>
+                        <Name>Oryx/Custom/terrain/TileWallFront</Name>
                     </Front>
                     <Overhang>
-                        <Name>Oryx/Custom/terrain/RustWallOverhang</Name>
+                        <Name>Oryx/Custom/terrain/TileWallOverhang</Name>
                     </Overhang>
                 </TilingSprite>
 
@@ -62,18 +62,13 @@
         </Symbol>
 
         <Symbol Extends=".">
-             <Char>s</Char>
-             <MetaValue>ship</MetaValue>
-         </Symbol>
-
-        <Symbol Extends=".">
-            <Char>E</Char>
-            <MetaValue>engine</MetaValue>
+            <Char>r</Char>
+            <MetaValue>room</MetaValue>
         </Symbol>
 
         <Symbol Extends=".">
-            <Char>r</Char>
-            <MetaValue>room</MetaValue>
+            <Char>d</Char>
+            <MetaValue>deck</MetaValue>
         </Symbol>
 
         <Symbol Extends=".">
@@ -82,36 +77,8 @@
         </Symbol>
 
         <Symbol Extends=".">
-             <Char>c</Char>
-             <EnvironmentData>
-                 <Sprite>
-                     <Name>Oryx/uf_split/uf_terrain/crate</Name>
-                     <DrawActualSize>true</DrawActualSize>
-                 </Sprite>
-             </EnvironmentData>
-         </Symbol>
-
-        <Symbol Extends=".">
-            <Char>l</Char>
-            <EnvironmentData>
-                <Sprite>
-                    <Name>Oryx/Custom/terrain/locker</Name>
-                    <DrawActualSize>true</DrawActualSize>
-                </Sprite>
-                <Passable>false</Passable>
-            </EnvironmentData>
-        </Symbol>
-
-        <Symbol Extends=".">
-            <Char>b</Char>
-            <EnvironmentData>
-                <Sprite>
-                    <Name>Oryx/Custom/terrain/bunk</Name>
-                    <DrawActualSize>true</DrawActualSize>
-                </Sprite>
-                <Passable>false</Passable>
-                <Opaque>false</Opaque>
-            </EnvironmentData>
+            <Char>E</Char>
+            <MetaValue>engine</MetaValue>
         </Symbol>
 
         <Symbol Extends=".">
@@ -132,7 +99,69 @@
         </Symbol>
 
         <Symbol Extends=".">
-            <Char>T</Char>
+            <Char>s</Char>
+            <MetaValue>Ship</MetaValue>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>c</Char>
+            <EnvironmentData>
+                <Sprite>
+                    <Name>Oryx/uf_split/uf_terrain/crate</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+            </EnvironmentData>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>l</Char>
+            <EnvironmentData>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/locker</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+                <Passable>false</Passable>
+            </EnvironmentData>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>f</Char>
+            <EnvironmentData>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/flightcomputer</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+                <Passable>false</Passable>
+                <Opaque>false</Opaque>
+            </EnvironmentData>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>v</Char>
+            <EnvironmentData>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/monitor</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+                <Passable>false</Passable>
+                <Opaque>false</Opaque>
+            </EnvironmentData>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>b</Char>
+            <EnvironmentData>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/bunk</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+                <Passable>false</Passable>
+                <Opaque>false</Opaque>
+            </EnvironmentData>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>t</Char>
             <EnvironmentData>
                 <Sprite>
                     <Name>Oryx/Custom/terrain/safe</Name>
@@ -161,38 +190,8 @@
             </EnvironmentData>
         </Symbol>
 
-        <Symbol Extends=".">
-            <Char>t</Char>
-            <EnvironmentData>
-                <Sprite>
-                    <Name>Oryx/Custom/terrain/terminal</Name>
-                </Sprite>
-                <Passable>false</Passable>
-                <Opaque>false</Opaque>
-                <OnActivate>
-                    <Group Name="Hack">
-                        <Conditions FailMessage="You need backdoors to crack this">
-                            <HasItem>Backdoors</HasItem>
-                        </Conditions>
-                        <Actions>
-                            <SetEnabled Enabled="false">Hack</SetEnabled>
-                            <AddItem>
-                                <Name>Secrets</Name>
-                                <Description>A compressed data orb of all the ships flightlogs, passenger details and other details. Should sell well to someone.</Description>
-                                <Category>Treasure</Category>
-                                <Icon>
-                                    <Name>Oryx/uf_split/uf_items/crystal_cloud</Name>
-                                </Icon>
-                                <Value>75</Value>
-                            </AddItem>
-                        </Actions>
-                    </Group>
-                </OnActivate>
-            </EnvironmentData>
-        </Symbol>
-
     </Symbols>
 
-    <Rows>Hauler/Hauler</Rows>
+    <Rows>Cruiser/Cruiser</Rows>
 
 </Level>

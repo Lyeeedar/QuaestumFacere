@@ -10,8 +10,8 @@
     <Statistics>
 
         <Attack>5</Attack>
-        <Defense>25</Defense>
-        <Accuracy>90</Accuracy>
+        <Defense>65</Defense>
+        <Accuracy>80</Accuracy>
 
         <Vitality>5</Vitality>
         <Sight>6</Sight>

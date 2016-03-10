@@ -62,18 +62,13 @@
         </Symbol>
 
         <Symbol Extends=".">
-             <Char>s</Char>
-             <MetaValue>ship</MetaValue>
-         </Symbol>
-
-        <Symbol Extends=".">
-            <Char>E</Char>
-            <MetaValue>engine</MetaValue>
+            <Char>r</Char>
+            <MetaValue>room</MetaValue>
         </Symbol>
 
         <Symbol Extends=".">
-            <Char>r</Char>
-            <MetaValue>room</MetaValue>
+            <Char>d</Char>
+            <MetaValue>deck</MetaValue>
         </Symbol>
 
         <Symbol Extends=".">
@@ -82,14 +77,19 @@
         </Symbol>
 
         <Symbol Extends=".">
-             <Char>c</Char>
-             <EnvironmentData>
-                 <Sprite>
-                     <Name>Oryx/uf_split/uf_terrain/crate</Name>
-                     <DrawActualSize>true</DrawActualSize>
-                 </Sprite>
-             </EnvironmentData>
-         </Symbol>
+            <Char>s</Char>
+            <MetaValue>Ship</MetaValue>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>c</Char>
+            <EnvironmentData>
+                <Sprite>
+                    <Name>Oryx/uf_split/uf_terrain/crate</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+            </EnvironmentData>
+        </Symbol>
 
         <Symbol Extends=".">
             <Char>l</Char>
@@ -99,6 +99,30 @@
                     <DrawActualSize>true</DrawActualSize>
                 </Sprite>
                 <Passable>false</Passable>
+            </EnvironmentData>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>f</Char>
+            <EnvironmentData>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/flightcomputer</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+                <Passable>false</Passable>
+                <Opaque>false</Opaque>
+            </EnvironmentData>
+        </Symbol>
+
+        <Symbol Extends=".">
+            <Char>v</Char>
+            <EnvironmentData>
+                <Sprite>
+                    <Name>Oryx/Custom/terrain/monitor</Name>
+                    <DrawActualSize>true</DrawActualSize>
+                </Sprite>
+                <Passable>false</Passable>
+                <Opaque>false</Opaque>
             </EnvironmentData>
         </Symbol>
 
@@ -116,6 +140,6 @@
 
     </Symbols>
 
-    <Rows>Hauler/Hauler</Rows>
+    <Rows>Explorer/Explorer</Rows>
 
 </Level>

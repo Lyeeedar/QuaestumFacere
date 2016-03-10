@@ -2,9 +2,15 @@
 	<beacondisabled>
 		<true/>
 	</beacondisabled>
+	<savednoble>
+		<true/>
+	</savednoble>
 	<nocrystal>
 		<true/>
 	</nocrystal>
+	<leftnoble>
+		<true/>
+	</leftnoble>
 	<nohead>
 		<true/>
 	</nohead>

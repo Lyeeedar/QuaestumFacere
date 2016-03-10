@@ -1,6 +1,7 @@
 <Field>
     <FieldName>Fire</FieldName>
     <Tags>Hot</Tags>
+    <Layer>Air</Layer>
     <Sprite>
         <Name>EffectSprites/Fire/Fire</Name>
         <UpdateRate>0.15</UpdateRate>

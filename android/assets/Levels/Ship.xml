@@ -12,6 +12,7 @@
                     <Name>Oryx/Custom/terrain/shipfloor</Name>
                 </Sprite>
             </TileData>
+            <MetaValue>ship</MetaValue>
         </Symbol>
         <Symbol>
             <Char>w</Char>

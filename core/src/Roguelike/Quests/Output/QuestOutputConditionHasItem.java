@@ -17,14 +17,12 @@ public class QuestOutputConditionHasItem extends AbstractQuestOutputCondition
 	{
 		boolean has = Global.CurrentLevel.player.inventory.getItemCount( name ) >= count;
 
-		if (has)
+		if (not)
 		{
-			return !not;
+			has = !has;
 		}
-		else
-		{
-			return not;
-		}
+
+		return has;
 	}
 
 	@Override

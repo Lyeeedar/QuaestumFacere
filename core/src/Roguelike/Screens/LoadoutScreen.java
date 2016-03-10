@@ -227,7 +227,10 @@ public class LoadoutScreen implements Screen, InputProcessor
 	private void fillDescriptionTable( Item item, Item.EquipmentSlot slot)
 	{
 		desc.clear();
-		desc.add( item.createTable( Global.loadSkin(), Global.getLoadoutItem( slot ) ) ).expand().fill();
+
+		Skin skin = Global.loadSkin();
+		ScrollPane scrollPane1 = new ScrollPane( item.createTable( skin, Global.getLoadoutItem( slot ) ), skin );
+		desc.add( scrollPane1 ).expand().fill();
 	}
 
 	private void fillSlotTable()

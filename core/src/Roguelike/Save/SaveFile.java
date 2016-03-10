@@ -693,6 +693,7 @@ public final class SaveFile
 		kryo.register( QuestOuputConditionDialogueValue.class );
 		kryo.register( QuestOutputConditionActionEnabled.class );
 		kryo.register( QuestOutputConditionHasItem.class );
+		kryo.register( QuestOutputConditionMetaValue.class );
 
 		kryo.register( ActivationActionGroup.class );
 		kryo.register( ActivationActionAbility.class );

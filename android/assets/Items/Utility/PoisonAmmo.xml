@@ -29,7 +29,7 @@
                 <Stackable>false</Stackable>
                 <Events>
                     <OnHit>
-                        <Status Stacks="rnd(3)+1">Poison</Status>
+                        <Status Stacks="rnd(3)+1">Poisoned</Status>
                     </OnHit>
                 </Events>
             </Status>

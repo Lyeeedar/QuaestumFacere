@@ -14,7 +14,7 @@
 
     <Effect>
         <Status>
-            <Duration>5</Duration>
+            <Duration>10</Duration>
             <Events>
                 <Constant>
                     <Accuracy>-20</Accuracy>

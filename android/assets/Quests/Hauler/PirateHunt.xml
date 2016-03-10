@@ -13,6 +13,8 @@
 
     <Rooms>
         <Room>
+            <PlacementHint>room</PlacementHint>
+
             <Symbols>
                 <Symbol Extends=".">
                     <Char>b</Char>

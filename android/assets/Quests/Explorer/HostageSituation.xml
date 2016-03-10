@@ -1,0 +1,73 @@
+<Quest>
+
+    <Name>Hostage Situation</Name>
+    <Description>A group of belters protesting their treatment have mutinied and spaced the earth captain and officers of the Leana. The ship was also transporting an earth noble, who has been taken hostage. Get in there, rescue the noble and kill any belters who resist.</Description>
+    <Reward>250</Reward>
+    <Difficulty>2</Difficulty>
+    <Icon>
+        <Name>Icons/Action</Name>
+    </Icon>
+    <Faction>Belter</Faction>
+    <Level>Explorer</Level>
+    <LevelText>Leana (2nd Series Explorer)</LevelText>
+
+    <Rooms>
+        <Room>
+            <PlacementHint>deck</PlacementHint>
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>n</Char>
+                    <EntityData Extends="NPC/HumanBase">
+                        <Name>Noble</Name>
+                        <AI>followPlayer</AI>
+                        <Sprite>
+                            <Name>Oryx/uf_split/uf_heroes/lady_a</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Factions>
+                            <Faction>belter</Faction>
+                        </Factions>
+                        <Dialogue>
+                            <Exclamations>
+                                <SeePlayer>
+                                    <Exclamation>Please, save me!</Exclamation>
+                                    <Exclamation>Thank the lord you are here!</Exclamation>
+                                    <Exclamation>Get me away from these dirty belters!</Exclamation>
+                                </SeePlayer>
+                            </Exclamations>
+                        </Dialogue>
+                    </EntityData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>n.9.9.9</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <SavedNoble>
+
+            <Message>You escort the noble back to the client, the portly man quickly pulling the lady away as if you are about to dirty her with your filthy hands. With a haughty look he waves an aid over to pay you. As you turn to leave you look up to see the noble woman turn back to you and give you a grateful smile.</Message>
+            <Reward>250</Reward>
+
+            <Conditions>
+                <MetaValue Entity="Noble">ship</MetaValue>
+            </Conditions>
+        </SavedNoble>
+
+        <LeftNoble>
+
+            <Message>You return without the noble. The client is furious, his face turning red as he screams incoherently at you. Sick of the treatment you leave him to his rage, empty handed.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <MetaValue Entity="Noble" Not="true">ship</MetaValue>
+            </Conditions>
+        </LeftNoble>
+
+    </Outputs>
+
+</Quest>

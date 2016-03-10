@@ -14,4 +14,7 @@
     <StunAmmo>quality>=4</StunAmmo>
 
     <Drill></Drill>
+
+    <Medkit></Medkit>
+    <MedkitPlus>quality>=3</MedkitPlus>
 </Utilities>

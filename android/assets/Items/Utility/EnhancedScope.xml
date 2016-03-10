@@ -7,7 +7,7 @@
     </Icon>
     <Events>
         <Constant>
-            <Accuracy>10</Accuracy>
+            <Accuracy>20</Accuracy>
         </Constant>
     </Events>
     <Value>240</Value>

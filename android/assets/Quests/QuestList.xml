@@ -1,5 +1,7 @@
 <Quests>
 	<Quest>Asteroid/CrystalGather</Quest>
+	<Quest>Explorer/BelterMutiny</Quest>
+	<Quest>Explorer/HostageSituation</Quest>
 	<Quest>Hauler/PirateHunt</Quest>
 	<Quest>Hauler/ReplicatorEscape</Quest>
 </Quests>

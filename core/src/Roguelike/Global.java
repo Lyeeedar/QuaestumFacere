@@ -257,15 +257,21 @@ public class Global
 		Random ran = new Random(QuestManager.seed);
 		Item weapon = TreasureGenerator.itemFromRecipe( TreasureGenerator.recipeList.weaponRecipes.get( ran.nextInt( TreasureGenerator.recipeList.weaponRecipes.size-1 ) ), 1, ran );
 		Item armour = TreasureGenerator.itemFromRecipe( TreasureGenerator.recipeList.armourRecipes.get( ran.nextInt( TreasureGenerator.recipeList.armourRecipes.size-1 ) ), 1, ran );
+		Item medkit = Item.load( "Utility/medkit" );
+		medkit.category = Item.ItemCategory.UTILITY;
+		medkit.slot = Item.EquipmentSlot.UTILITY_1;
 
 		weapon.value /= 2;
 		armour.value /= 2;
+		medkit.value /= 2;
 
 		UnlockedItems.add( weapon );
 		UnlockedItems.add( armour );
+		UnlockedItems.add( medkit );
 
 		Loadout.put( weapon.slot, weapon.hashCode );
 		Loadout.put( armour.slot, armour.hashCode );
+		Loadout.put( medkit.slot, medkit.hashCode );
 
 		fillMissions();
 		fillMarket();

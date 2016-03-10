@@ -1,0 +1,81 @@
+<Quest>
+
+    <Name>Belter Mutiny</Name>
+    <Description>A group of belters protesting their treatment have mutinied and spaced the earth captain and officers of the Ygritte. The ship was carrying valuable cargo, retrieve it and return. Kill any belters who resist you.</Description>
+    <Reward>200</Reward>
+    <Difficulty>2</Difficulty>
+    <Icon>
+        <Name>Icons/Action</Name>
+    </Icon>
+    <Faction>Belter</Faction>
+    <Level>Explorer</Level>
+    <LevelText>Ygritte (2nd Series Explorer)</LevelText>
+
+    <Rooms>
+        <Room>
+            <PlacementHint>room</PlacementHint>
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>t</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/uf_split/uf_items/chest_silver</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+
+                        <OnActivate>
+                            <Group Name="Open">
+                                <AddItem>
+                                    <Name>Data Crystal</Name>
+                                    <Description>An intricate synthetic gemstone used for storage on unmodifiable, lasting data. Generally used to store secrets, as without the correct decoding key there is no way to know how to read the data structure back out.</Description>
+                                    <Icon>
+                                        <Name>Oryx/uf_split/uf_items/gem_sapphire</Name>
+                                    </Icon>
+                                </AddItem>
+                                <SetSprite>
+                                    <Sprite>
+                                        <Name>Oryx/uf_split/uf_items/chest_silver_empty</Name>
+                                        <DrawActualSize>true</DrawActualSize>
+                                    </Sprite>
+                                </SetSprite>
+                                <SetEnabled Enabled="false">Open</SetEnabled>
+                            </Group>
+                        </OnActivate>
+                    </EnvironmentData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>.9</Row>
+                <Row>9t</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <GotCrystal>
+
+            <Message>You take the crystal back to the client, who thanks you for your ruthless efficiency. She quickly shoos you out with instructions to talk to her secretary about the reward.</Message>
+            <Reward>200</Reward>
+
+            <Conditions>
+                <HasItem>Data Crystal</HasItem>
+            </Conditions>
+        </GotCrystal>
+
+        <NoCrystal>
+
+            <Message>Without the crystal in hand the clients secretary won't even let you up the stairs to meet her.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <HasItem Not="true">Data Crystal</HasItem>
+            </Conditions>
+        </NoCrystal>
+
+    </Outputs>
+
+</Quest>

@@ -1,0 +1,45 @@
+<Item>
+    <Name>Medkit</Name>
+    <Description>A small box filled with nanobots. When triggered and placed on a wound the bots will swarm over it providing battlefield care. Though effective it is no substitute for a real doctor.</Description>
+    <Icon>
+        <Name>Oryx/Custom/items/medkit</Name>
+    </Icon>
+    <Value>200</Value>
+    <Ability>
+        <Active>
+            <Name>Use Medkit</Name>
+            <Description>Heal the target with the medkit</Description>
+
+            <Cooldown>20</Cooldown>
+            <CooldownType>Attack</CooldownType>
+
+            <Range>1</Range>
+
+            <Icon>
+                <Name>Oryx/Custom/items/medkit</Name>
+            </Icon>
+
+            <HitSprite>
+                <Name>EffectSprites/Heal/Heal</Name>
+                <UpdateRate>0.05</UpdateRate>
+                <Colour><RGB>0,255,0</RGB></Colour>
+                <SingleSprite>true</SingleSprite>
+                <Sound><Name>Explosion</Name></Sound>
+            </HitSprite>
+
+            <HitType><Ally/></HitType>
+
+            <Effect>
+                <Heal>15</Heal>
+                <Status>
+                    <Duration>3</Duration>
+                    <Events>
+                        <OnTurn>
+                            <Heal>5</Heal>
+                        </OnTurn>
+                    </Events>
+                </Status>
+            </Effect>
+        </Active>
+    </Ability>
+</Item>

@@ -623,7 +623,8 @@ public class HubScreen implements Screen, InputProcessor
 					{
 						marketContent.clear();
 
-						marketContent.add( item.createTable( skin ) ).expand().fill();
+						ScrollPane scrollPane1 = new ScrollPane( item.createTable( skin ), skin );
+						marketContent.add( scrollPane1 ).expand().fill();
 						marketContent.row();
 
 						if ( Global.Funds >= item.value )
@@ -728,7 +729,8 @@ public class HubScreen implements Screen, InputProcessor
 					{
 						stashContent.clear();
 
-						stashContent.add( item.createTable( skin ) ).expand().fill();
+						ScrollPane scrollPane1 = new ScrollPane( item.createTable( skin ), skin );
+						stashContent.add( scrollPane1 ).expand().fill();
 						stashContent.row();
 
 						TextButton sell = new TextButton( "Sell for " + item.value, skin );

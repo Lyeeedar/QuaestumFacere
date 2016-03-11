@@ -486,7 +486,6 @@ public class HubScreen implements Screen, InputProcessor
 				}
 				else if (tabPanel.getSelectedIndex() == 3)
 				{
-					//createLocation( locationHelper );
 					keyboardHelper = locationHelper;
 				}
 

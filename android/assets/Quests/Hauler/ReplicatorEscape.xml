@@ -3,7 +3,7 @@
     <Name>Replicator Escape</Name>
     <Description>The Jerico was carrying a replicator core beacon and it somehow got activated, converting a significant portion of the cargo and crew into replicators. Get in there and turn it off.</Description>
     <Reward>200</Reward>
-    <Difficulty>2</Difficulty>
+    <Difficulty>3</Difficulty>
     <Icon>
         <Name>Icons/Action</Name>
     </Icon>

@@ -1059,7 +1059,6 @@ public class Global
 
 		public static Statistic[] ScaleValues = {
 			Statistic.ATTACK,
-			Statistic.DEFENSE,
 			Statistic.VITALITY
 		};
 

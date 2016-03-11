@@ -1,0 +1,86 @@
+<Quest>
+    <Name>Belter Protest</Name>
+    <Description>A group of belters have taken over Greenus station, and are demanding changes in pay and compensation and suchlike. There is some valuable research data on the station that is at risk of being destroyed as tensions rise, so a preemptive strike has been requested. Get onto the station, find the research data and return it.</Description>
+    <Reward>150</Reward>
+    <Difficulty>2</Difficulty>
+    <Icon>
+        <Name>Icons/Gather</Name>
+    </Icon>
+    <Faction>Belter</Faction>
+    <Level>Station</Level>
+    <LevelText>Greenus (Research Station)</LevelText>
+
+    <Rooms>
+        <Room>
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>T</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/terminal</Name>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                        <OnActivate>
+                            <Group Name="Get Data">
+                                <SetEnabled Enabled="false">Get Data</SetEnabled>
+                                <AddItem>
+                                    <Name>Science Data</Name>
+                                    <Description>A compressed data orb containing all the research this station has been performing.</Description>
+                                    <Icon>
+                                        <Name>Oryx/uf_split/uf_items/crystal_cloud</Name>
+                                    </Icon>
+                                </AddItem>
+                            </Group>
+                        </OnActivate>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=".">
+                    <Char>t</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/table</Name>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                    </EnvironmentData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>######</Row>
+                <Row>#sTtt#</Row>
+                <Row>#....#</Row>
+                <Row>#t..t#</Row>
+                <Row>#t..t#</Row>
+                <Row>###+##</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <GotData>
+
+            <Message>You deliver the science data back to the client, receiving their thanks and payment in return.</Message>
+            <Reward>150</Reward>
+
+            <Conditions>
+                <HasItem>Science Data</HasItem>
+            </Conditions>
+        </GotData>
+
+        <NoData>
+
+            <Message>Without the data in hand you have nothing to get a payment for.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <HasItem Not="true">Science Data</HasItem>
+            </Conditions>
+        </NoData>
+
+    </Outputs>
+
+</Quest>

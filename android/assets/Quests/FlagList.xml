@@ -5,9 +5,15 @@
 	<leftengines>
 		<true/>
 	</leftengines>
+	<nodata>
+		<true/>
+	</nodata>
 	<nocrystal>
 		<true/>
 	</nocrystal>
+	<nocore>
+		<true/>
+	</nocore>
 	<nohead>
 		<true/>
 	</nohead>
@@ -18,12 +24,18 @@
 	<gotcrystal>
 		<true/>
 	</gotcrystal>
+	<gotcore>
+		<true/>
+	</gotcore>
 	<gothead>
 		<true/>
 	</gothead>
 	<disabledengines>
 		<true/>
 	</disabledengines>
+	<gotdata>
+		<true/>
+	</gotdata>
 	<beaconenabled>
 		<true/>
 	</beaconenabled>

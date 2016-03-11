@@ -45,5 +45,6 @@
 
     <Statistics>
         <Speed>2</Speed>
+        <Vitality>val+5</Vitality>
     </Statistics>
 </Entity>

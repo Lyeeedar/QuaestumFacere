@@ -480,7 +480,9 @@ public final class Room
 
 		// Do furthest
 		{
-			Array<Feature> features = faction.features.get( FeaturePlacementType.FURTHEST );
+			Array<Feature> features = new Array<Feature>(  );
+			features.addAll( faction.features.get( FeaturePlacementType.FURTHEST ) );
+			features.addAll( dfp.features.get( FeaturePlacementType.FURTHEST ) );
 
 			for ( Feature f : features )
 			{
@@ -531,7 +533,9 @@ public final class Room
 
 		// Do wall
 		{
-			Array<Feature> features = faction.features.get( FeaturePlacementType.WALL );
+			Array<Feature> features = new Array<Feature>(  );
+			features.addAll( faction.features.get( FeaturePlacementType.WALL ) );
+			features.addAll( dfp.features.get( FeaturePlacementType.WALL ) );
 
 			for ( Feature f : features )
 			{
@@ -597,7 +601,9 @@ public final class Room
 
 		// Do centre
 		{
-			Array<Feature> features = faction.features.get( FeaturePlacementType.CENTRE );
+			Array<Feature> features = new Array<Feature>(  );
+			features.addAll( faction.features.get( FeaturePlacementType.CENTRE ) );
+			features.addAll( dfp.features.get( FeaturePlacementType.CENTRE ) );
 
 			for ( Feature f : features )
 			{
@@ -663,7 +669,9 @@ public final class Room
 
 		// Do any
 		{
-			Array<Feature> features = faction.features.get( FeaturePlacementType.ANY );
+			Array<Feature> features = new Array<Feature>(  );
+			features.addAll( faction.features.get( FeaturePlacementType.ANY ) );
+			features.addAll( dfp.features.get( FeaturePlacementType.ANY ) );
 
 			for ( Feature f : features )
 			{

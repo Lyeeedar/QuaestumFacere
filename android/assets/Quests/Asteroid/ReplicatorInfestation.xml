@@ -1,0 +1,303 @@
+<Quest>
+
+    <Name>Replicator Infestation</Name>
+    <Description>A transport ship carrying a replicator beacon seems to have managed to activate it. Soon after it crashed into the asteroid 'Baseen'. It seems the replicator mass has subsequently been multiplying, and a core hind has formed. Get in there and take it's core.</Description>
+    <Reward>350</Reward>
+    <Difficulty>4</Difficulty>
+    <Icon>
+        <Name>Icons/Hunt</Name>
+    </Icon>
+    <Faction>Replicator</Faction>
+    <Level>Asteroid</Level>
+    <LevelText>214 Baseen (B-type Asteroid)</LevelText>
+
+    <Rooms>
+        <Room Count="3">
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>b</Char>
+                    <EnvironmentData>
+                        <Name>Beacon</Name>
+
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/ReplicatorBeaconActive</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+
+                        <OnActivate>
+                            <Group Name="Disable Beacon">
+                                <SetEnabled Enabled="false">Disable Beacon</SetEnabled>
+                                <SetEnabled Enabled="false">Spawn</SetEnabled>
+                                <SetSprite>
+                                    <Sprite>
+                                        <Name>Oryx/Custom/terrain/ReplicatorBeaconInactive</Name>
+                                        <DrawActualSize>true</DrawActualSize>
+                                    </Sprite>
+                                </SetSprite>
+                            </Group>
+                        </OnActivate>
+                        <OnTurn>
+                            <Group Name="Spawn">
+                                <SpawnEntity Delay="25" Num="10">Enemies/Replicator/Scuttler</SpawnEntity>
+                            </Group>
+                        </OnTurn>
+                    </EnvironmentData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>...</Row>
+                <Row>.b.</Row>
+                <Row>...</Row>
+            </Rows>
+        </Room>
+        <Room>
+            <Symbols>
+                <Symbol>
+                    <Char>,</Char>
+                    <TileData>
+                        <Opaque>false</Opaque>
+                        <Passable>true</Passable>
+                        <Sprite>
+                            <Name>Oryx/uf_split/uf_terrain/floor_extra_16</Name>
+                        </Sprite>
+                    </TileData>
+                </Symbol>
+
+                <Symbol>
+                    <Char>w</Char>
+                    <TileData>
+                        <Opaque>true</Opaque>
+                        <Passable>false</Passable>
+
+                        <TilingSprite>
+                            <Name>Wall</Name>
+                            <Top>
+                                <Name>Oryx/Custom/terrain/RustWallTop</Name>
+                            </Top>
+                            <Front>
+                                <Name>Oryx/Custom/terrain/RustWallFront</Name>
+                            </Front>
+                            <Overhang>
+                                <Name>Oryx/Custom/terrain/RustWallOverhang</Name>
+                            </Overhang>
+                        </TilingSprite>
+
+                    </TileData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>+</Char>
+                    <EnvironmentData>
+                        <Type>Door</Type>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>c</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/uf_split/uf_terrain/crate</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>l</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/locker</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>f</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/flightcomputer</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>v</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/monitor</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>b</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/bunk</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>e</Char>
+                    <EnvironmentData>
+                        <Name>engine</Name>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/enginepipeoff</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>t</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/safe</Name>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                        <OnActivate>
+                            <Group Name="Open">
+                                <Conditions FailMessage="You need a safecracker to open this">
+                                    <HasItem>Safecracker</HasItem>
+                                </Conditions>
+                                <Actions>
+                                    <SetEnabled Enabled="false">Open</SetEnabled>
+                                    <AddItem>
+                                        <Name>Gemstone</Name>
+                                        <Description>A rare looking gemstone. It should be easy to find a buyer for this.</Description>
+                                        <Category>Treasure</Category>
+                                        <Icon>
+                                            <Name>Oryx/uf_split/uf_items/gem_amethyst</Name>
+                                        </Icon>
+                                        <Value>100</Value>
+                                    </AddItem>
+                                </Actions>
+                            </Group>
+                        </OnActivate>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>1</Char>
+                    <EntityData>1</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>2</Char>
+                    <EntityData>2</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>3</Char>
+                    <EntityData>3</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>4</Char>
+                    <EntityData>4</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>5</Char>
+                    <EntityData>5</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>6</Char>
+                    <EntityData>6</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>7</Char>
+                    <EntityData>7</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>8</Char>
+                    <EntityData>8</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>9</Char>
+                    <EntityData>9</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>B</Char>
+                    <EntityData Extends="Enemies/Replicator/Boss">
+                        <Inventory>
+                            <Item>
+                                <Name>Replicator Core</Name>
+                                <Description>The core of a replicator core mind. Very useful to the research and development of artificial intelligence, which is why people continue to carry around as dangerous an item as a replicator beacon.</Description>
+                                <Icon>
+                                    <Name>Oryx/uf_split/uf_items/gem_ruby</Name>
+                                </Icon>
+                            </Item>
+                        </Inventory>
+                    </EntityData>
+                </Symbol>
+            </Symbols>
+            <Rows>
+                <Row>.........wwwwww</Row>
+                <Row>.....4,,,wvvvvw</Row>
+                <Row>.wl,..w,,wffffw</Row>
+                <Row>.wb,,.+,,+,399w</Row>
+                <Row>.w,56,w,,w,,,,w</Row>
+                <Row>.wwwwww+wwwwwww</Row>
+                <Row>wtcc,,3,,cc,,,w</Row>
+                <Row>w,,2,,,,,5,,,,w</Row>
+                <Row>w,,,ccc,,cc,B9w</Row>
+                <Row>w4,,c,,,,cc9,,w</Row>
+                <Row>www+w,,w+ww+www</Row>
+                <Row>#we,w,,,,lw,ew#</Row>
+                <Row>#we,w.,9..w1ew#</Row>
+                <Row>#we2w..,..w,ew#</Row>
+                <Row>#####..########</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <GotCore>
+
+            <Message>You leave the asteroid, signalling to the client that you have the core. Soon after the acknowledgement is beamed back, and a group of ships open fire on the infested asteroid.</Message>
+            <Reward>350</Reward>
+
+            <Conditions>
+                <HasItem>Replicator Core</HasItem>
+            </Conditions>
+        </GotCore>
+
+        <NoCore>
+
+            <Message>You leave the asteroid, signalling to the client that you could not find the core. Soon after the acknowledgement is beamed back, indicating disappointment, and a group of ships open fire on the infested asteroid.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <HasItem Not="true">Replicator Core</HasItem>
+            </Conditions>
+        </NoCore>
+
+    </Outputs>
+
+</Quest>

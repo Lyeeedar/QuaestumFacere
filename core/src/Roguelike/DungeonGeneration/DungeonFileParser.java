@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import Roguelike.Util.FastEnumMap;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import Roguelike.AssetManager;
@@ -403,6 +404,9 @@ public class DungeonFileParser
 	public CorridorStyle corridorStyle = new CorridorStyle();
 
 	// ----------------------------------------------------------------------
+	public FastEnumMap<FactionParser.FeaturePlacementType, Array<FactionParser.Feature>> features = new FastEnumMap<FactionParser.FeaturePlacementType, Array<FactionParser.Feature>>( FactionParser.FeaturePlacementType.class );
+
+	// ----------------------------------------------------------------------
 	public RoomGenerator preprocessor;
 
 	// ----------------------------------------------------------------------
@@ -601,6 +605,22 @@ public class DungeonFileParser
 			for ( Element ambientSound : ambientElement.getChildrenByName( "Sound" ) )
 			{
 				ambientSounds.add( RepeatingSoundEffect.parse( ambientSound ) );
+			}
+		}
+
+		for ( FactionParser.FeaturePlacementType type : FactionParser.FeaturePlacementType.values() )
+		{
+			features.put( type, new Array<FactionParser.Feature>() );
+		}
+
+		Element featuresElement = xmlElement.getChildByName( "Features" );
+		if (featuresElement != null)
+		{
+			for (int i = 0; i < featuresElement.getChildCount(); i++)
+			{
+				Element featureEl = featuresElement.getChild( i );
+				FactionParser.Feature feature = FactionParser.Feature.load(featureEl);
+				features.get( feature.type ).add( feature );
 			}
 		}
 

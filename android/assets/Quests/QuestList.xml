@@ -3,9 +3,11 @@
 
 	<Quest Difficulty="2" Reward="200">Explorer/BelterMutiny</Quest>
 	<Quest Difficulty="2" Reward="200">Explorer/EngineDisable</Quest>
-	<Quest Difficulty="2" Reward="200">Hauler/ReplicatorEscape</Quest>
+	<Quest Difficulty="2" Reward="150">Station/ScienceData</Quest>
 
 	<Quest Difficulty="3" Reward="350">Hauler/PirateHunt</Quest>
+	<Quest Difficulty="3" Reward="200">Hauler/ReplicatorEscape</Quest>
 
+	<Quest Difficulty="4" Reward="350">Asteroid/ReplicatorInfestation</Quest>
 	<Quest Difficulty="4" Reward="350">Cruiser/HostageSituation</Quest>
 </Quests>

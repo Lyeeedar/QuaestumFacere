@@ -29,10 +29,10 @@
             <Red>1</Red>
             <Green>1</Green>
             <Blue>1</Blue>
-            <Alpha>0.8</Alpha>
+            <Alpha>0.9</Alpha>
         </Colour>
 
-        <Intensity>4</Intensity>
+        <Intensity>5</Intensity>
     </Light>
 
 </Entity>

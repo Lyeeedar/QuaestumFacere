@@ -3,9 +3,9 @@
     <Generator>Static</Generator>
 
     <Ambient>
-        <Red>0.04</Red>
-        <Green>0.1</Green>
-        <Blue>0.1</Blue>
+        <Red>0.06</Red>
+        <Green>0.62</Green>
+        <Blue>0.67</Blue>
     </Ambient>
 
     <Sound>

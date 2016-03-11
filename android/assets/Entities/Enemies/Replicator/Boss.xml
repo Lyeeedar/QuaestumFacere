@@ -1,0 +1,21 @@
+<Entity Extends="Enemies/Replicator/ReplicatorBase">
+    <Sprite>
+        <Name>Oryx/Custom/heroes/spiderboss</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Statistics>
+        <Attack>val+3</Attack>
+        <Defense>val+5</Defense>
+        <Vitality>val+4</Vitality>
+    </Statistics>
+
+    <Inventory>
+        <Equipment>
+            <Wep>
+                <Slot>Weapon</Slot>
+                <Type>LaserRifle</Type>
+            </Wep>
+        </Equipment>
+    </Inventory>
+</Entity>

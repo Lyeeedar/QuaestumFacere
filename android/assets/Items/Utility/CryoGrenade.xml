@@ -30,7 +30,7 @@
                 <Colour><RGB>0,150,255</RGB></Colour>
                 <UpdateRate>0.05</UpdateRate>
                 <SingleSprite>true</SingleSprite>
-                <Sound><Name>Explosion</Name></Sound>
+                <Sound><Name>ExplosionFire</Name></Sound>
             </HitSprite>
 
             <HitType><Any/></HitType>

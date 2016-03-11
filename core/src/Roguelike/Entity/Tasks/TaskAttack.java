@@ -253,6 +253,12 @@ public class TaskAttack extends AbstractTask
 		{
 			GameTile tile = itr.next();
 
+			if (tile == null)
+			{
+				itr.remove();
+				continue;
+			}
+
 			boolean matchFound = false;
 
 			// Remove not visible

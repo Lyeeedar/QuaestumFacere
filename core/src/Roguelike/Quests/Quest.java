@@ -38,6 +38,7 @@ public final class Quest
 	public String levelText;
 	public Global.Rarity rarity;
 	public int difficulty;
+	public String music;
 
 	public String path;
 	public Array<AbstractQuestInput> inputs = new Array<AbstractQuestInput>(  );
@@ -89,6 +90,7 @@ public final class Quest
 		level = xml.get( "Level" );
 		levelText = xml.get( "LevelText" );
 		difficulty = xml.getInt( "Difficulty" );
+		music = xml.get( "Music" );
 
 		rarity = Global.Rarity.valueOf( xml.get("Rarity", "Common").toUpperCase() );
 

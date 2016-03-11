@@ -146,7 +146,7 @@ public class DungeonFileParser
 		public String faction;
 		public boolean addFactionFeatures = true;
 		public AbstractRoomGenerator generator;
-		public String placementHint;
+		public String[] placementHint;
 
 		public boolean lockRotation = false;
 		public boolean skipPlacingCorridor = false;
@@ -160,11 +160,7 @@ public class DungeonFileParser
 			room.spawnEquation = xml.getAttribute( "Condition", room.spawnEquation ).toLowerCase();
 			room.spawnEquation = xml.getAttribute( "Count", room.spawnEquation ).toLowerCase();
 
-			room.placementHint = xml.get( "PlacementHint", null );
-			if (room.placementHint != null)
-			{
-				room.placementHint = room.placementHint.toLowerCase();
-			}
+			room.placementHint = xml.get( "PlacementHint", "" ).toLowerCase().split( "," );
 
 			room.faction = xml.get( "Faction", null );
 
@@ -314,7 +310,8 @@ public class DungeonFileParser
 
 			if ( s == null )
 			{
-				throw new RuntimeException( "Attempted to use undefined symbol: " + c );
+				//throw new RuntimeException( "Attempted to use undefined symbol '" + c + "'" );
+				s = symbolMap.get( '.' );
 			}
 
 			return s;

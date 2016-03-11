@@ -305,7 +305,24 @@ public class StaticLevelGenerator extends AbstractDungeonGenerator
 
 			for (RoomLocationData locationData : roomLocations)
 			{
-				if (room.roomData.placementHint == null || room.roomData.placementHint.length() == 0 || locationData.key.equalsIgnoreCase( room.roomData.placementHint ))
+				boolean matches = false;
+				if (room.roomData.placementHint.length > 0)
+				{
+					for (String hint : room.roomData.placementHint)
+					{
+						if (locationData.key.equalsIgnoreCase( hint ))
+						{
+							matches = true;
+							break;
+						}
+					}
+				}
+				else
+				{
+					matches = true;
+				}
+
+				if (matches)
 				{
 					if (room.width <= locationData.width && room.height <= locationData.height)
 					{

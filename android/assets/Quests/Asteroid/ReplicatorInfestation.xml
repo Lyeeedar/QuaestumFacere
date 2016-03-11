@@ -10,6 +10,7 @@
     <Faction>Replicator</Faction>
     <Level>Asteroid</Level>
     <LevelText>214 Baseen (B-type Asteroid)</LevelText>
+    <Music>Controlled Chaos</Music>
 
     <Rooms>
         <Room Count="3">

@@ -10,6 +10,7 @@
     <Faction>Worm</Faction>
     <Level>Asteroid</Level>
     <LevelText>672 Egeria (B-type Asteroid)</LevelText>
+    <Music>Crypto</Music>
 
     <Rooms>
         <Room>

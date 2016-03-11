@@ -9,6 +9,7 @@
     <Faction>Belter</Faction>
     <Level>Station</Level>
     <LevelText>Greenus (Research Station)</LevelText>
+    <Music>Decisions</Music>
 
     <Rooms>
         <Room>
@@ -55,6 +56,7 @@
                 <Row>#t..t#</Row>
                 <Row>#t..t#</Row>
                 <Row>###+##</Row>
+                <Row>##..##</Row>
             </Rows>
         </Room>
     </Rooms>

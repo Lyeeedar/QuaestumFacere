@@ -14,6 +14,7 @@
     <Faction>Pirate</Faction>
     <Level>Cruiser</Level>
     <LevelText>Leana (X series Cruiser)</LevelText>
+    <Music>Decisions</Music>
 
     <Rooms>
         <Room>
@@ -45,7 +46,7 @@
             </Symbols>
 
             <Rows>
-                <Row>n.9.9.9</Row>
+                <Row>n.9.9</Row>
             </Rows>
         </Room>
     </Rooms>

@@ -1,0 +1,303 @@
+<Quest>
+
+    <Name>Pirate Base</Name>
+    <Description>Intelligence indicates the location of an asteroid pirates are using as a base to launch attacks from. Get in there, take the head of the pirate leader, and get out.</Description>
+    <Reward>400</Reward>
+    <Difficulty>4</Difficulty>
+    <Icon>
+        <Name>Icons/Hunt</Name>
+    </Icon>
+    <Faction>Worm</Faction>
+    <Level>Asteroid</Level>
+    <LevelText>111 Ventri (B-type Asteroid)</LevelText>
+    <Music>Controlled Chaos</Music>
+
+    <Rooms>
+        <Room>
+            <Faction>Pirate</Faction>
+            <Symbols>
+                <Symbol>
+                    <Char>,</Char>
+                    <TileData>
+                        <Opaque>false</Opaque>
+                        <Passable>true</Passable>
+                        <Sprite>
+                            <Name>Oryx/uf_split/uf_terrain/floor_extra_16</Name>
+                        </Sprite>
+                    </TileData>
+                </Symbol>
+
+                <Symbol>
+                    <Char>w</Char>
+                    <TileData>
+                        <Opaque>true</Opaque>
+                        <Passable>false</Passable>
+
+                        <TilingSprite>
+                            <Name>Wall</Name>
+                            <Top>
+                                <Name>Oryx/Custom/terrain/RustWallTop</Name>
+                            </Top>
+                            <Front>
+                                <Name>Oryx/Custom/terrain/RustWallFront</Name>
+                            </Front>
+                            <Overhang>
+                                <Name>Oryx/Custom/terrain/RustWallOverhang</Name>
+                            </Overhang>
+                        </TilingSprite>
+
+                    </TileData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>+</Char>
+                    <EnvironmentData>
+                        <Type>Door</Type>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>c</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/uf_split/uf_terrain/crate</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>l</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/locker</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>f</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/flightcomputer</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>v</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/monitor</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>b</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/bunk</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>e</Char>
+                    <EnvironmentData>
+                        <Name>engine</Name>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/enginepipe</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                        <Light>
+                            <Colour><RGB>180,200,255</RGB></Colour>
+                            <Intensity>2</Intensity>
+                        </Light>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>s</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/safe</Name>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                        <OnActivate>
+                            <Group Name="Open">
+                                <Conditions FailMessage="You need a safecracker to open this">
+                                    <HasItem>Safecracker</HasItem>
+                                </Conditions>
+                                <Actions>
+                                    <SetEnabled Enabled="false">Open</SetEnabled>
+                                    <AddItem>
+                                        <Name>Gemstone</Name>
+                                        <Description>A rare looking gemstone. It should be easy to find a buyer for this.</Description>
+                                        <Category>Treasure</Category>
+                                        <Icon>
+                                            <Name>Oryx/uf_split/uf_items/gem_amethyst</Name>
+                                        </Icon>
+                                        <Value>100</Value>
+                                    </AddItem>
+                                </Actions>
+                            </Group>
+                        </OnActivate>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=".">
+                    <Char>S</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/terminal</Name>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                        <OnActivate>
+                            <Group Name="Hack">
+                                <Conditions FailMessage="You need backdoors to crack this">
+                                    <HasItem>Backdoors</HasItem>
+                                </Conditions>
+                                <Actions>
+                                    <SetEnabled Enabled="false">Hack</SetEnabled>
+                                    <AddItem>
+                                        <Name>Secrets</Name>
+                                        <Description>A compressed data orb of all the ships flightlogs, passenger details and other details. Should sell well to someone.</Description>
+                                        <Category>Treasure</Category>
+                                        <Icon>
+                                            <Name>Oryx/uf_split/uf_items/crystal_cloud</Name>
+                                        </Icon>
+                                        <Value>75</Value>
+                                    </AddItem>
+                                </Actions>
+                            </Group>
+                        </OnActivate>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>t</Char>
+                    <EnvironmentData>
+                        <Sprite>
+                            <Name>Oryx/Custom/terrain/table</Name>
+                        </Sprite>
+                        <Passable>false</Passable>
+                        <Opaque>false</Opaque>
+                    </EnvironmentData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>1</Char>
+                    <EntityData>1</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>2</Char>
+                    <EntityData>2</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>3</Char>
+                    <EntityData>3</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>4</Char>
+                    <EntityData>4</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>5</Char>
+                    <EntityData>5</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>6</Char>
+                    <EntityData>6</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>7</Char>
+                    <EntityData>7</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>8</Char>
+                    <EntityData>8</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>9</Char>
+                    <EntityData>9</EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>B</Char>
+                    <EntityData Extends="Enemies/Pirate/PirateCaptain">
+                        <Inventory>
+                            <Item>
+                                <Name>Pirate Head</Name>
+                                <Description>The severed head of the pirate captain. Return this to the local authorities to claim the bounty on it.</Description>
+                                <Icon>
+                                    <Name>Oryx/Custom/items/pirate_head</Name>
+                                </Icon>
+                            </Item>
+                        </Inventory>
+                    </EntityData>
+                </Symbol>
+
+                <Symbol Extends=",">
+                    <Char>T</Char>
+                    <EntityData Extends="NPC/Turret">
+                        <Factions>
+                            <Faction>pirate</Faction>
+                        </Factions>
+                    </EntityData>
+                </Symbol>
+
+            </Symbols>
+
+            <Rows>Asteroid/Facility</Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <GotHead>
+
+            <Message>You turn in the head at the local authorities. They thank you for your efforts and pay you the bounty on his head, reminding you to watch your back in case any of his associates decide to get revenge.</Message>
+            <Reward>400</Reward>
+
+            <Conditions>
+                <HasItem>Pirate Head</HasItem>
+            </Conditions>
+        </GotHead>
+
+        <NoHead>
+
+            <Message>You escape the ship without the captains head, and therefore nothing to turn in for a payout.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <HasItem Not="true">Pirate Head</HasItem>
+            </Conditions>
+        </NoHead>
+
+    </Outputs>
+
+</Quest>

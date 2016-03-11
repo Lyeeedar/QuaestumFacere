@@ -1,0 +1,99 @@
+<Quest>
+
+    <Name>Ruin Rescue</Name>
+    <Description>An archeologist has been investigating some strange structures found in the asteroid Seati. However her ship got thrown out to space be rockworms eroding its ancorage point. Get in there and extract her.</Description>
+    <Reward>150</Reward>
+    <Difficulty>2</Difficulty>
+    <Icon>
+        <Name>Icons/Action</Name>
+    </Icon>
+    <Faction>Worm</Faction>
+    <Level>Asteroid</Level>
+    <LevelText>951 Saeti (B-type Asteroid)</LevelText>
+    <Music>Crypto</Music>
+
+    <Rooms>
+        <Room>
+            <Symbols>
+
+                <Symbol>
+                    <Char>w</Char>
+                    <TileData>
+                        <Opaque>true</Opaque>
+                        <Passable>false</Passable>
+
+                        <TilingSprite>
+                            <Name>Wall</Name>
+                            <Top>
+                                <Name>Oryx/uf_split/uf_terrain/wall_ruins_7</Name>
+                            </Top>
+                            <Front>
+                                <Name>Oryx/uf_split/uf_terrain/wall_ruins_15</Name>
+                            </Front>
+                            <Overhang>
+                                <Name>Oryx/uf_split/uf_terrain/wall_ruins_1</Name>
+                            </Overhang>
+                        </TilingSprite>
+
+                    </TileData>
+                </Symbol>
+
+                <Symbol Extends=".">
+                    <Char>a</Char>
+                    <EntityData Extends="NPC/HumanBase">
+                        <Name>Archeologist</Name>
+                        <AI>followPlayer</AI>
+                        <Sprite>
+                            <Name>Oryx/Custom/heroes/blacksmith</Name>
+                            <DrawActualSize>true</DrawActualSize>
+                        </Sprite>
+                        <Dialogue>
+                            <Exclamations>
+                                <SeePlayer>
+                                    <Exclamation>Am I glad to see you!</Exclamation>
+                                </SeePlayer>
+                            </Exclamations>
+                        </Dialogue>
+                    </EntityData>
+                </Symbol>
+            </Symbols>
+            <Rows>
+                <Row>####...###</Row>
+                <Row>#ww.w..w##</Row>
+                <Row>#w..w..w##</Row>
+                <Row>##.w...###</Row>
+                <Row>###....www</Row>
+                <Row>#wwwww.w.w</Row>
+                <Row>#w.a.w.w.w</Row>
+                <Row>#w.....w.w</Row>
+                <Row>#wwwww.w.w</Row>
+                <Row>#######www</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <SavedArcheologist>
+
+            <Message>You leave the asteroid with the archeologist, putting up with her constant excited chattering about the age of the ruins. With no small amount of relief you arrive at the destination, and trade her with the client for your payment.</Message>
+            <Reward>150</Reward>
+
+            <Conditions>
+                <MetaValue Entity="Archeologist">ship</MetaValue>
+            </Conditions>
+        </SavedArcheologist>
+
+        <LeftArcheologist>
+
+            <Message>You leave the asteroid, messaging the client that the archeologist was sadly killed in the escape. The client expresses disappointment, and makes it clear you will receive no payment for the job.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <MetaValue Entity="Archeologist" Not="true">ship</MetaValue>
+            </Conditions>
+        </LeftArcheologist>
+
+    </Outputs>
+
+</Quest>

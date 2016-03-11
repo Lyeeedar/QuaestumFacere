@@ -155,7 +155,7 @@ public class MainMenuScreen implements Screen, InputProcessor
 		stage.getViewport().setScreenWidth( Global.ScreenSize[0] );
 		stage.getViewport().setScreenHeight( Global.ScreenSize[1] );
 
-		Global.changeBGM( "Myst" );
+		Global.changeBGM( "Voice Over Under" );
 	}
 
 	@Override

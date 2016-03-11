@@ -18,6 +18,11 @@
             <Name>Oryx/Custom/items/AmmoStun</Name>
         </Icon>
 
+        <HitSprite>
+            <Name>blank</Name>
+            <Sound><Name>Reload</Name></Sound>
+        </HitSprite>
+
         <HitType><Self/></HitType>
 
         <Effect>

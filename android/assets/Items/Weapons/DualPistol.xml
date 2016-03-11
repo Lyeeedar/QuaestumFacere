@@ -9,7 +9,7 @@
         <Animation><Move/></Animation>
         <UpdateRate>0.1</UpdateRate>
         <Colour><RGB>200,200,200</RGB></Colour>
-        <Sound><Name>Wand</Name></Sound>
+        <Sound><Name>Rifle</Name></Sound>
     </HitSprite>
 
     <HitPattern>

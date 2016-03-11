@@ -207,8 +207,13 @@ public final class GameTile implements PathfindingTile
 		{
 			for ( int y = 0; y < obj.size; y++ )
 			{
-				GameTile tile = level.Grid[ this.x + x ][ this.y + y ];
-				tile.entity = obj;
+				GameTile tile = level.getGameTile( this.x + x, this.y + y );
+
+				if (tile != null)
+				{
+					tile.entity = obj;
+				}
+
 				obj.tile[ x ][ y ] = tile;
 			}
 		}

@@ -1,0 +1,56 @@
+<Quest>
+
+    <Name>Monster Escape</Name>
+    <Description>Three illegal beasts were being transported one of the clients ships. A pirate group hijacked it and managed to release the beasts. Get in there and make sure the creatures are dead so the ship can be recovered.</Description>
+    <Reward>350</Reward>
+    <Difficulty>3</Difficulty>
+    <Icon>
+        <Name>Icons/Hunt</Name>
+    </Icon>
+    <Faction>Pirate</Faction>
+    <Level>Hauler</Level>
+    <LevelText>Granite (X76 class Hauler)</LevelText>
+    <Music>Controlled Chaos</Music>
+
+    <Rooms>
+        <Room Count="3">
+            <PlacementHint>room,engine,hold</PlacementHint>
+
+            <Symbols>
+                <Symbol Extends=".">
+                    <Char>c</Char>
+                    <EntityData>Enemies/Crysalid</EntityData>
+                </Symbol>
+            </Symbols>
+
+            <Rows>
+                <Row>c</Row>
+            </Rows>
+        </Room>
+    </Rooms>
+
+    <Outputs>
+
+        <KilledMonsters>
+
+            <Message>You report back to the client, who sends in a recovery team. A few hours later he returns to you, happy that he was able to recover the ship. He thanks you and sends you off with your payment.</Message>
+            <Reward>350</Reward>
+
+            <Conditions>
+                <EntityAlive Not="true">Crysalid</EntityAlive>
+            </Conditions>
+        </KilledMonsters>
+
+        <MonstersAlive>
+
+            <Message>You report back to the client, who sends in a recovery team. A few hours later he storms back to you furious, shouting about how some of his team was killed by one of the beasts that you failed to kill.</Message>
+            <Reward>0</Reward>
+
+            <Conditions>
+                <EntityAlive>Crysalid</EntityAlive>
+            </Conditions>
+        </MonstersAlive>
+
+    </Outputs>
+
+</Quest>

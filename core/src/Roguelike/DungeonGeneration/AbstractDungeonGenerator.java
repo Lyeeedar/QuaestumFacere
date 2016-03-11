@@ -295,7 +295,7 @@ public abstract class AbstractDungeonGenerator
 		GameTile[][] actualTiles = new GameTile[width][height];
 		Level level = new Level( actualTiles );
 		level.Ambient = dfp.ambient;
-		level.bgmName = dfp.BGM;
+		level.bgmName = quest.music;
 		level.ambientSounds.addAll( dfp.ambientSounds );
 
 		level.fileName = saveLevel.fileName;
@@ -428,18 +428,23 @@ public abstract class AbstractDungeonGenerator
 					if (symbol.entityData instanceof String)
 					{
 						String entityPath = (String)symbol.entityData;
+						FactionParser faction = fp;
+						if (symbol.containingRoom != null && symbol.containingRoom.roomData != null && symbol.containingRoom.roomData.faction != null)
+						{
+							faction = FactionParser.load( symbol.containingRoom.roomData.faction );
+						}
 
 						if ( entityPath.equals( "Boss" ) )
 						{
-							e = GameEntity.load( fp.bosses.get( ran.nextInt( fp.bosses.size ) ) );
+							e = GameEntity.load( faction.bosses.get( ran.nextInt( fp.bosses.size ) ) );
 						}
 						else if ( Global.isNumber( entityPath ) )
 						{
 							int index = Integer.parseInt( entityPath );
 
-							index = (int) ( ( index / 9.0f ) * ( fp.creatures.size - 1 ) );
+							index = (int) ( ( index / 9.0f ) * ( faction.creatures.size - 1 ) );
 
-							e = GameEntity.load( fp.creatures.get( index ).entityName );
+							e = GameEntity.load( faction.creatures.get( index ).entityName );
 						}
 						else
 						{

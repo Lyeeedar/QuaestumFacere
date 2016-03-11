@@ -1,0 +1,33 @@
+<Entity>
+    <Name>Turret</Name>
+
+    <AI>sentry</AI>
+
+    <CanMove>false</CanMove>
+
+    <Sprite>
+        <Name>Oryx/Custom/terrain/turret</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Statistics>
+
+        <Attack>10</Attack>
+        <Defense>50</Defense>
+
+        <Vitality>10</Vitality>
+        <Sight>10</Sight>
+        <Speed>2</Speed>
+
+    </Statistics>
+
+    <Inventory>
+        <Equipment>
+            <Wep>
+                <Slot>Weapon</Slot>
+                <Type>LaserRifle</Type>
+            </Wep>
+        </Equipment>
+    </Inventory>
+
+</Entity>

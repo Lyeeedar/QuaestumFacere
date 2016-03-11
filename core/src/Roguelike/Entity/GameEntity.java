@@ -275,7 +275,7 @@ public class GameEntity extends Entity
 			AI.setData( "EnemyPos", Global.PointPool.obtain().set( damager.tile[ 0 ][ 0 ].x, damager.tile[ 0 ][ 0 ].y ) );
 		}
 
-		if (blood != null)
+		if (blood != null && tile[0][0] != null)
 		{
 			if (dam >= getMaxHP() / 3)
 			{

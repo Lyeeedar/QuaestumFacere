@@ -10,6 +10,7 @@
     <Faction>Belter</Faction>
     <Level>Explorer</Level>
     <LevelText>Silvie (2nd Series Explorer)</LevelText>
+    <Music>Decisions</Music>
 
     <Rooms>
         <Room Count="2">

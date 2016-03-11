@@ -450,6 +450,8 @@ public class LoadoutScreen implements Screen, InputProcessor
 		stage.getViewport().setWorldHeight( Global.Resolution[1] );
 		stage.getViewport().setScreenWidth( Global.ScreenSize[0] );
 		stage.getViewport().setScreenHeight( Global.ScreenSize[1] );
+
+		Global.changeBGM( "Voice Over Under" );
 	}
 
 	@Override

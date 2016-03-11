@@ -10,7 +10,7 @@
             <Name>Use Medkit</Name>
             <Description>Heal the target with the medkit</Description>
 
-            <Cooldown>30</Cooldown>
+            <Cooldown>20</Cooldown>
             <CooldownType>Attack</CooldownType>
 
             <Range>1</Range>

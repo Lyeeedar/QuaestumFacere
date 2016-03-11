@@ -1,0 +1,22 @@
+<Entity>
+    <Name>Crysalid</Name>
+
+    <AI>sentry</AI>
+
+    <Sprite>
+        <Name>Oryx/Custom/heroes/crysalid</Name>
+        <DrawActualSize>true</DrawActualSize>
+    </Sprite>
+
+    <Statistics>
+
+        <Attack>12</Attack>
+        <Defense>40</Defense>
+
+        <Vitality>8</Vitality>
+        <Sight>10</Sight>
+        <Speed>6</Speed>
+
+    </Statistics>
+
+</Entity>

@@ -250,7 +250,7 @@ public class Global
 		QuestManager = new QuestManager();
 		QuestManager.seed = MathUtils.random( Integer.MAX_VALUE-1 );
 		UnlockedItems.clear();
-		Funds = 8;
+		Funds = 238;
 		Market.clear();
 		Missions.clear();
 

@@ -25,6 +25,7 @@
 
     <CorridorStyle>
         <PathStyle>Straight</PathStyle>
+        <Width>2</Width>
     </CorridorStyle>
 
     <Symbols>
@@ -103,8 +104,8 @@
 
     <Rooms>
         <Padding Condition="rnd(3)+2" >
-            <Width>5</Width>
-            <Height>5</Height>
+            <Width>7</Width>
+            <Height>7</Height>
         </Padding>
     </Rooms>
 
@@ -120,7 +121,7 @@
                 <Opaque>false</Opaque>
             </EnvironmentData>
 
-            <Coverage>5</Coverage>
+            <Coverage>10</Coverage>
         </Feature>
 
         <Feature>
@@ -134,7 +135,7 @@
                 <Opaque>false</Opaque>
             </EnvironmentData>
 
-            <Coverage>3</Coverage>
+            <Coverage>10</Coverage>
         </Feature>
     </Features>
 </Level>

@@ -20,6 +20,11 @@
 
         <HitType><Self/></HitType>
 
+        <HitSprite>
+            <Name>blank</Name>
+            <Sound><Name>Reload</Name></Sound>
+        </HitSprite>
+
         <Effect>
             <Status>
                 <Name>Cryo Ammo</Name>

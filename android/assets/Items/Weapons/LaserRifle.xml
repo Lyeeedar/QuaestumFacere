@@ -7,7 +7,7 @@
         <Animation><Stretch/></Animation>
         <UpdateRate>0.1</UpdateRate>
         <Colour><RGB>255,0,0</RGB></Colour>
-        <Sound><Name>Wand</Name></Sound>
+        <Sound><Name>Laser</Name></Sound>
     </HitSprite>
 
     <HitPattern>

@@ -332,10 +332,15 @@ public class HubScreen implements Screen, InputProcessor
 				Global.QuestManager.count++;
 				Global.QuestManager.seed++;
 
-				if (Global.QuestManager.count == 2)
+				if (Global.QuestManager.count == 1)
 				{
 					Global.QuestManager.difficulty++;
 					Global.QuestManager.count = 0;
+
+					if (Global.QuestManager.difficulty > Global.QuestManager.availableQuests.get( Global.QuestManager.availableQuests.size-1 ).difficulty)
+					{
+						Global.QuestManager.difficulty = Global.QuestManager.availableQuests.get( Global.QuestManager.availableQuests.size-1 ).difficulty;
+					}
 				}
 
 				Global.fillMarket();
@@ -928,6 +933,8 @@ public class HubScreen implements Screen, InputProcessor
 		stage.getViewport().setWorldHeight( Global.Resolution[1] );
 		stage.getViewport().setScreenWidth( Global.ScreenSize[0] );
 		stage.getViewport().setScreenHeight( Global.ScreenSize[1] );
+
+		Global.changeBGM( "Voice Over Under" );
 	}
 
 	@Override

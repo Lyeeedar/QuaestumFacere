@@ -46,7 +46,7 @@ public class OptionsScreen implements Screen, InputProcessor
 	{
 		skin = Global.loadSkin();
 
-		background = AssetManager.loadTexture( "Sprites/GUI/background.png" );
+		background = AssetManager.loadTexture( "Sprites/Unpacked/background.png" );
 		background.setWrap( Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat );
 
 		stage = new Stage( new ScreenViewport() );

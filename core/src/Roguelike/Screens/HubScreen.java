@@ -48,7 +48,7 @@ public class HubScreen implements Screen, InputProcessor
 
 	public void create()
 	{
-		background = AssetManager.loadTexture( "Sprites/GUI/background.png" );
+		background = AssetManager.loadTexture( "Sprites/Unpacked/background.png" );
 		background.setWrap( Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat );
 
 		stage = new Stage( new ScreenViewport() );

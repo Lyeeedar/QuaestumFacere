@@ -37,14 +37,14 @@
 
             <Effect>
                 <Damage>
-                    <Attack>25</Attack>
+                    <Attack>12</Attack>
                 </Damage>
             </Effect>
         </Active>
     </Abilities>
 
     <Statistics>
-        <Speed>2</Speed>
+        <Speed>1</Speed>
         <Vitality>val+5</Vitality>
     </Statistics>
 </Entity>

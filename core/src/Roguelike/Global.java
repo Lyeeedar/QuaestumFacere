@@ -257,7 +257,7 @@ public class Global
 		Random ran = new Random(QuestManager.seed);
 		Item weapon = TreasureGenerator.itemFromRecipe( TreasureGenerator.recipeList.weaponRecipes.get( ran.nextInt( TreasureGenerator.recipeList.weaponRecipes.size-1 ) ), 1, ran );
 		Item armour = TreasureGenerator.itemFromRecipe( TreasureGenerator.recipeList.armourRecipes.get( ran.nextInt( TreasureGenerator.recipeList.armourRecipes.size-1 ) ), 1, ran );
-		Item medkit = Item.load( "Utility/medkit" );
+		Item medkit = Item.load( "Utility/Medkit" );
 		medkit.category = Item.ItemCategory.UTILITY;
 		medkit.slot = Item.EquipmentSlot.UTILITY_1;
 

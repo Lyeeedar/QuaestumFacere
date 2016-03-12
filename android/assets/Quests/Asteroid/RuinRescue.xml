@@ -43,6 +43,9 @@
                     <EntityData Extends="NPC/HumanBase">
                         <Name>Archeologist</Name>
                         <AI>followPlayer</AI>
+                        <Factions>
+                            <Faction>worm</Faction>
+                        </Factions>
                         <Sprite>
                             <Name>Oryx/Custom/heroes/blacksmith</Name>
                             <DrawActualSize>true</DrawActualSize>

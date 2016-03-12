@@ -305,7 +305,7 @@ public class GameEntity extends Entity
 
 					GameTile bloodTile = tile[ 0 ][ 0 ].level.getGameTile( p );
 
-					if (bloodTile.getPassable( travelType, this ))
+					if (bloodTile != null && bloodTile.getPassable( travelType, this ))
 					{
 						Field field = Field.load( blood );
 						field.spawnSpeed = 0.05f;

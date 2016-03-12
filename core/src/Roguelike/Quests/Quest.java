@@ -140,7 +140,7 @@ public final class Quest
 
 		try
 		{
-			xml = reader.parse( Gdx.files.internal( "Levels/ship.xml" ) );
+			xml = reader.parse( Gdx.files.internal( "Levels/Ship.xml" ) );
 		}
 		catch ( IOException e )
 		{

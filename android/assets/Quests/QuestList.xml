@@ -1,10 +1,12 @@
 <Quests>
 	<Quest Difficulty="1" Reward="100">Asteroid/CrystalGather</Quest>
 
+	<Quest Difficulty="2" Reward="150">Asteroid/RuinRescue</Quest>
 	<Quest Difficulty="2" Reward="200">Explorer/BelterMutiny</Quest>
 	<Quest Difficulty="2" Reward="200">Explorer/EngineDisable</Quest>
 	<Quest Difficulty="2" Reward="150">Station/ScienceData</Quest>
 
+	<Quest Difficulty="3" Reward="350">Hauler/MonsterEscape</Quest>
 	<Quest Difficulty="3" Reward="350">Hauler/PirateHunt</Quest>
 	<Quest Difficulty="3" Reward="200">Hauler/ReplicatorEscape</Quest>
 

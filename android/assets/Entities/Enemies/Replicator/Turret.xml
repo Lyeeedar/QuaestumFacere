@@ -8,7 +8,7 @@
         <Equipment>
             <Wep>
                 <Slot>Weapon</Slot>
-                <Type>LaserRifle</Type>
+                <Type>Laser</Type>
             </Wep>
         </Equipment>
     </Inventory>

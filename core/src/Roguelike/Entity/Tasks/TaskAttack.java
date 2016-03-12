@@ -362,7 +362,7 @@ public class TaskAttack extends AbstractTask
 		}
 	}
 
-	private void doAttack( Array<GameTile> hitTiles, final GameEntity entity, Item weapon )
+	private void doAttack( Array<GameTile> hitTiles, final GameEntity entity, final Item weapon )
 	{
 		final GameTile source = entity.tile[0][0];
 
@@ -587,9 +587,12 @@ public class TaskAttack extends AbstractTask
 								entity.attack( hitEnvEntity, dir );
 							}
 
-							if ( sound != null )
+							if ( sound != null  )
 							{
-								sound.play( hitTile );
+								if (weapon == null || weapon.wepDef == null || weapon.wepDef.hitType != Item.WeaponDefinition.HitType.ALL)
+								{
+									sound.play( hitTile );
+								}
 							}
 						}
 					};
@@ -633,6 +636,12 @@ public class TaskAttack extends AbstractTask
 //
 //				}
 			}
+		}
+
+		final SoundInstance sound = hitEffect.sound;
+		if (sound != null)
+		{
+			sound.play( entity.tile[0][0] );
 		}
 
 //		if ( weapon != null && weapon.wepDef != null && weapon.wepDef.hitType == Item.WeaponDefinition.HitType.ALL )

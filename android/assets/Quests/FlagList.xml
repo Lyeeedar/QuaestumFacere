@@ -5,12 +5,21 @@
 	<leftengines>
 		<true/>
 	</leftengines>
+	<savedarcheologist>
+		<true/>
+	</savedarcheologist>
 	<nodata>
 		<true/>
 	</nodata>
+	<monstersalive>
+		<true/>
+	</monstersalive>
 	<nocrystal>
 		<true/>
 	</nocrystal>
+	<killedmonsters>
+		<true/>
+	</killedmonsters>
 	<nocore>
 		<true/>
 	</nocore>
@@ -30,6 +39,9 @@
 	<gothead>
 		<true/>
 	</gothead>
+	<leftarcheologist>
+		<true/>
+	</leftarcheologist>
 	<disabledengines>
 		<true/>
 	</disabledengines>
